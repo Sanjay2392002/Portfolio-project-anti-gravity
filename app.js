@@ -1,24 +1,28 @@
 /* -----------------------------------------
-   1. STATE MANAGEMENT & DUAL FETCH ENGINE (BACKEND + BEHANCE)
+   1. GLOBAL STATE & FALLBACK PROJECTS
    ----------------------------------------- */
-let activeProjects = []; // Holds works uploaded via personal Admin Panel database
-let behanceProjects = []; // Holds live Behance fetched works
+let activeProjects = []; // Personal works from Admin Panel database
+let behanceProjects = []; // Sync projects from Behance RSS Feed
 
-// Map categories to section IDs
-const categoryMapping = {
-    'food': 'food',
-    'jewelry': 'jewelry',
-    'tech': 'tech'
-};
+const CATEGORIES = [
+    "Logo Designs",
+    "Brand Identity",
+    "Social Media Designs",
+    "Print Designs",
+    "Packaging Designs",
+    "Advertising Campaigns",
+    "Product Mockups",
+    "UI UX Designs",
+    "Web Designs",
+    "Creative Photography",
+    "3D & AI Visuals",
+    "Personal Projects"
+];
 
-// Tracks active showcase slide indices per section
-const activeIndices = {
-    'food': 0,
-    'jewelry': 0,
-    'tech': 0
-};
+// Tracks the slide index of the active project showing per category
+const categoryActiveIndices = {};
 
-// Default seed projects (in case backend fetch fails before initialization)
+// Highly polished sample projects representing various categories
 const fallbackProjects = [
     {
         id: "sola-coffee-1234",
@@ -28,9 +32,10 @@ const fallbackProjects = [
         year: "2026",
         duration: "5 Weeks",
         tools: "Adobe Illustrator, Figma",
-        focus: "Geometric alignment, brand story, food styling",
+        focus: "Geometric alignment, brand story, logo design",
         output: "Logo mark, package label, identity guide",
         concept: "SOLA is a premium, sustainable coffee brand. The logo mark simplifies the shape of a sun rising over a coffee bean. The geometry is built using strict mathematical proportions. A dark slate background combined with custom gold-leaf embossing creates a premium and trustworthy visual appearance.",
+        client: "Sola Coffee Co. (Concept)",
         swatches: ["#0A0F14", "#FFDF79", "#00D2C4", "#F0F3F5"],
         typography: [
             { name: "Wordmark", font: "Outfit Medium", size: "36px" },
@@ -48,6 +53,7 @@ const fallbackProjects = [
         focus: "Material realism, tactile packaging, organic styling",
         output: "Skincare cosmetic box, amber glass bottle, label design",
         concept: "Skin Alchemy is a luxury organic skincare and lifestyle line. The packaging design emphasizes raw materials and minimalist graphics. Using a matte black glass bottle paired with a rough-textured box, the tactile experience is premium. Embossed botanical line art and high contrast typography emphasize organic simplicity.",
+        client: "Skin Alchemy Lab",
         swatches: ["#120E0A", "#E59050", "#DFD3C3", "#F6F4F2"],
         typography: [
             { name: "Title Font", font: "Playfair Display Italic", size: "28px" },
@@ -65,6 +71,7 @@ const fallbackProjects = [
         focus: "Grid systems, high-end typography, catalog design",
         output: "Uncoated paper catalog spread, branding brochure",
         concept: "Inspired by Swiss architecture and minimal geometry, this project represents a luxury editorial print catalog for a modern jewelry startup. The layout follows a strict, asymmetrical grid system, allowing ample breathing room (white space) to showcase brutalist architecture photography and minimal jewelry lines.",
+        client: "Aura Fine Jewelry",
         swatches: ["#EADEC9", "#202022", "#CFB584", "#959599"],
         typography: [
             { name: "Heading", font: "Playfair Display Regular", size: "48px" },
@@ -74,14 +81,15 @@ const fallbackProjects = [
     {
         id: "neon-beat-1234",
         category: "tech",
-        title: "Neon Beat Music Platform",
+        title: "Neon Beat Web App UX",
         img: "/assets/images/social_poster.jpg",
         year: "2026",
         duration: "2 Weeks",
-        tools: "Adobe Photoshop, Illustrator",
-        focus: "Vibrant compositions, tech platforms, campaign design",
-        output: "Social media posters, App store screenshots, Banner templates",
+        tools: "Figma, Adobe Photoshop",
+        focus: "UI design, interface structure, digital vectors",
+        output: "Web App dashboard, landing page templates, user flow",
         concept: "The concept was centered around capturing the retro-futuristic energy of a modern web3 music platform startup. We combined vibrant neon pinks and teals with custom vector artwork, creating abstract geometric layout systems. A high-contrast sans-serif font ensures high legibility, while floating elements convey motion and sound waves.",
+        client: "Neon Beat DAO",
         swatches: ["#FF007A", "#00F0FF", "#0C0817", "#9C95AB"],
         typography: [
             { name: "Headline", font: "Outfit ExtraBold", size: "72px" },
@@ -90,7 +98,9 @@ const fallbackProjects = [
     }
 ];
 
-// Helper: Resolve dynamic production API base URL
+/* -----------------------------------------
+   2. API CONFIGURATION & CORE FETCHING
+   ----------------------------------------- */
 const getApiUrl = (endpoint) => {
     const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     if (isLocal) {
@@ -100,157 +110,310 @@ const getApiUrl = (endpoint) => {
     return `${savedBackendUrl.replace(/\/$/, '')}${endpoint}`;
 };
 
-// Load active database projects from Express API backend
+// Fetch personal dashboard database projects
 const loadActiveProjects = async () => {
     try {
         const response = await fetch(getApiUrl('/api/projects'));
         if (!response.ok) throw new Error("Backend connection failed");
         activeProjects = await response.json();
     } catch (e) {
-        console.warn("Could not load from backend. Using static seeds.", e);
+        console.warn("Could not load from backend. Defaulting to fallback seeds.", e);
         activeProjects = [...fallbackProjects];
     }
-    renderAllSections();
-};
-
-const getProjectById = (projectId) => {
-    // Check local backend list or Behance feed list
-    return activeProjects.find(p => p.id === projectId) || behanceProjects.find(p => p.guid === projectId);
+    renderCategoryShowcases();
 };
 
 /* -----------------------------------------
-   2. DYNAMIC LAYOUT RENDERING SYSTEM
+   3. EDITORIAL CLASSIFIER ENGINE
    ----------------------------------------- */
-const renderCategorySection = (category) => {
-    const sectionId = categoryMapping[category];
-    if (!sectionId) return;
+const classifyProject = (p) => {
+    const title = (p.title || "").toLowerCase();
+    const concept = (p.concept || p.description || "").toLowerCase();
+    const dbCategory = (p.category || "").toLowerCase(); // 'food', 'jewelry', 'tech'
+    const tools = (p.tools || (p.categories || []).join(", ") || "").toLowerCase();
+    const focus = (p.focus || "").toLowerCase();
+    const output = (p.output || "").toLowerCase();
 
-    const categoryProjects = activeProjects.filter(p => p.category === category);
-    
-    // Select HTML target nodes
-    const descEl = document.getElementById(`${sectionId}-desc`);
-    const focusEl = document.getElementById(`${sectionId}-meta-focus`);
-    const outputEl = document.getElementById(`${sectionId}-meta-output`);
-    const btnEl = document.getElementById(`${sectionId}-btn`);
-    const imgEl = document.getElementById(`${sectionId}-img`);
-    const overlayTagEl = document.getElementById(`${sectionId}-overlay-tag`);
-    const overlayTitleEl = document.getElementById(`${sectionId}-overlay-title`);
-    const thumbTrack = document.getElementById(`${sectionId}-thumbnails`);
-    const cardEl = document.getElementById(`${sectionId}-card`);
-
-    if (categoryProjects.length === 0) {
-        // Display placeholder clean empty state
-        if (descEl) descEl.textContent = "No works uploaded yet in this category. Visit the Admin Panel to add your design!";
-        if (focusEl) focusEl.textContent = "N/A";
-        if (outputEl) outputEl.textContent = "N/A";
-        if (btnEl) btnEl.style.display = 'none';
-        if (imgEl) imgEl.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='100%25' height='100%25' fill='%23faf9f5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Outfit' fill='%236e7178' font-size='14'%3EEmpty Category%3C/text%3E%3C/svg%3E";
-        if (overlayTitleEl) overlayTitleEl.textContent = "Showcase Empty";
-        if (thumbTrack) thumbTrack.innerHTML = '';
-        return;
-    }
-
-    // Keep activeIndex within bounds
-    let activeIdx = activeIndices[category];
-    if (activeIdx >= categoryProjects.length) {
-        activeIdx = 0;
-        activeIndices[category] = 0;
-    }
-
-    const proj = categoryProjects[activeIdx];
-
-    // Populating DOM elements
-    if (descEl) descEl.textContent = proj.concept;
-    if (focusEl) focusEl.textContent = proj.focus;
-    if (outputEl) outputEl.textContent = proj.output;
-    
-    if (btnEl) {
-        btnEl.style.display = 'inline-flex';
-        btnEl.setAttribute('data-project', proj.id);
+    // 1. Logo Designs
+    if (title.includes("logo") || title.includes("logotype") || title.includes("wordmark") || title.includes("mark") || focus.includes("logo") || focus.includes("identity mark")) {
+        return "Logo Designs";
     }
     
-    if (imgEl) {
-        imgEl.src = proj.img;
-        imgEl.alt = proj.title + " mockup image";
-    }
-    
-    if (overlayTagEl) overlayTagEl.textContent = proj.category.toUpperCase();
-    if (overlayTitleEl) overlayTitleEl.textContent = proj.title;
-    if (cardEl) {
-        cardEl.setAttribute('data-project', proj.id);
+    // 2. Packaging Designs
+    if (title.includes("package") || title.includes("packaging") || title.includes("box") || title.includes("label") || title.includes("bottle") || title.includes("jar") || title.includes("can") || output.includes("package") || output.includes("box") || output.includes("bottle") || output.includes("label")) {
+        return "Packaging Designs";
     }
 
-    // Build dots indicator track for section switching
-    if (thumbTrack) {
-        thumbTrack.innerHTML = '';
-        if (categoryProjects.length > 1) {
-            categoryProjects.forEach((p, idx) => {
-                const dot = document.createElement('button');
-                dot.className = `thumb-dot ${idx === activeIdx ? 'active' : ''}`;
-                dot.setAttribute('aria-label', `View ${p.title}`);
-                
-                dot.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (idx === activeIdx) return;
-                    switchSectionWithTransition(category, idx);
-                });
-                
-                thumbTrack.appendChild(dot);
-            });
+    // 3. UI UX Designs
+    if (title.includes("ui") || title.includes("ux") || title.includes("app") || title.includes("interface") || title.includes("wireframe") || concept.includes("ui/ux") || concept.includes("user experience") || concept.includes("figma") || tools.includes("figma")) {
+        return "UI UX Designs";
+    }
+
+    // 4. Web Designs
+    if (title.includes("web") || title.includes("website") || title.includes("landing") || title.includes("homepage") || concept.includes("web design") || concept.includes("landing page")) {
+        return "Web Designs";
+    }
+
+    // 5. Social Media Designs
+    if (title.includes("social") || title.includes("instagram") || title.includes("feed") || title.includes("post") || title.includes("banner") || title.includes("ads") || output.includes("social") || output.includes("instagram") || output.includes("banner")) {
+        return "Social Media Designs";
+    }
+
+    // 6. Print Designs
+    if (title.includes("print") || title.includes("brochure") || title.includes("catalog") || title.includes("magazine") || title.includes("editorial") || title.includes("book") || title.includes("flyer") || title.includes("poster") || output.includes("print") || output.includes("brochure") || output.includes("catalog") || output.includes("editorial") || output.includes("poster")) {
+        return "Print Designs";
+    }
+
+    // 7. 3D & AI Visuals
+    if (title.includes("3d") || title.includes("render") || title.includes("c4d") || title.includes("blender") || title.includes("ai ") || title.includes("midjourney") || concept.includes("3d") || concept.includes("render") || tools.includes("cinema 4d") || tools.includes("blender") || tools.includes("midjourney")) {
+        return "3D & AI Visuals";
+    }
+
+    // 8. Brand Identity
+    if (title.includes("brand") || title.includes("branding") || title.includes("identity") || title.includes("guidelines") || concept.includes("branding") || concept.includes("identity") || focus.includes("brand") || focus.includes("identity")) {
+        return "Brand Identity";
+    }
+
+    // 9. Advertising Campaigns
+    if (title.includes("campaign") || title.includes("advertise") || title.includes("advertising") || title.includes("ad ") || concept.includes("campaign") || concept.includes("marketing")) {
+        return "Advertising Campaigns";
+    }
+
+    // 10. Product Mockups
+    if (title.includes("mockup") || title.includes("mock-up") || title.includes("presentation") || output.includes("mockup") || concept.includes("mockup")) {
+        return "Product Mockups";
+    }
+
+    // 11. Creative Photography
+    if (title.includes("photo") || title.includes("photography") || title.includes("camera") || title.includes("shoot") || concept.includes("photography") || concept.includes("photo")) {
+        return "Creative Photography";
+    }
+
+    // Fallbacks using original backend category labels
+    if (dbCategory === "tech") {
+        return "UI UX Designs";
+    } else if (dbCategory === "food") {
+        return "Packaging Designs";
+    } else if (dbCategory === "jewelry") {
+        return "Brand Identity";
+    }
+
+    return "Personal Projects";
+};
+
+// Groups combined projects flat list by their 12 categories
+const getProjectsByCategory = () => {
+    const grouped = {};
+    CATEGORIES.forEach(cat => grouped[cat] = []);
+
+    const seen = new Set();
+    const all = [];
+
+    activeProjects.forEach(p => {
+        if (!seen.has(p.id)) {
+            seen.add(p.id);
+            all.push({ ...p, isBehance: false });
         }
-    }
+    });
+
+    behanceProjects.forEach(p => {
+        const id = p.guid || p.link;
+        if (!seen.has(id)) {
+            seen.add(id);
+            all.push({ ...p, id, isBehance: true });
+        }
+    });
+
+    all.forEach(p => {
+        const cat = classifyProject(p);
+        grouped[cat].push(p);
+    });
+
+    return { grouped, all };
 };
 
-const switchSectionWithTransition = (category, targetIdx) => {
-    const infoContainer = document.querySelector(`#${category} .section-info`);
-    const cardEl = document.getElementById(`${category}-card`);
+/* -----------------------------------------
+   4. DYNAMIC SHOWCASE RENDERING
+   ----------------------------------------- */
+const renderCategoryShowcases = () => {
+    const container = document.getElementById('categories-container');
+    if (!container) return;
 
-    if (infoContainer && cardEl) {
-        infoContainer.classList.add('project-switching');
-        cardEl.classList.add('project-switching');
+    const { grouped } = getProjectsByCategory();
+    container.innerHTML = '';
+
+    let visibleIndex = 1;
+
+    CATEGORIES.forEach(categoryName => {
+        const projects = grouped[categoryName];
+        if (!projects || projects.length === 0) return; // Hide unpopulated categories
+
+        // Initialize active category index
+        if (categoryActiveIndices[categoryName] === undefined) {
+            categoryActiveIndices[categoryName] = 0;
+        }
         
-        setTimeout(() => {
-            activeIndices[category] = targetIdx;
-            renderCategorySection(category);
-            infoContainer.classList.remove('project-switching');
-            cardEl.classList.remove('project-switching');
-        }, 300);
-    } else {
-        activeIndices[category] = targetIdx;
-        renderCategorySection(category);
-    }
-};
+        let activeIdx = categoryActiveIndices[categoryName];
+        if (activeIdx >= projects.length) {
+            activeIdx = 0;
+            categoryActiveIndices[categoryName] = 0;
+        }
 
-const renderAllSections = () => {
-    Object.keys(categoryMapping).forEach(category => {
-        renderCategorySection(category);
+        const currentProj = projects[activeIdx];
+        const serialStr = visibleIndex.toString().padStart(2, '0');
+        visibleIndex++;
+
+        // Parsing project details
+        const isBehance = currentProj.isBehance;
+        const coverImg = parseCoverImage(currentProj);
+        const cleanDesc = parseCleanDescription(currentProj);
+        const year = currentProj.year || (currentProj.pubDate ? new Date(currentProj.pubDate).getFullYear() : '2026');
+        const toolsUsed = currentProj.tools || (currentProj.categories || []).join(", ") || "Illustrator, Photoshop";
+        const focusArea = currentProj.focus || "Visual Composition";
+        const outputFormat = currentProj.output || "Digital Showcase";
+        const id = currentProj.id || currentProj.guid;
+
+        const sectionDiv = document.createElement('div');
+        sectionDiv.className = 'category-showcase-section';
+        sectionDiv.setAttribute('id', `cat-${categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`);
+
+        // Left pane details indicators
+        let indicatorsHtml = '';
+        if (projects.length > 1) {
+            indicatorsHtml = `<div class="category-indicator-track">`;
+            projects.forEach((_, idx) => {
+                indicatorsHtml += `<button class="thumb-dot ${idx === activeIdx ? 'active' : ''}" data-category="${categoryName}" data-index="${idx}" aria-label="View Project ${idx + 1}"></button>`;
+            });
+            indicatorsHtml += `</div>`;
+        }
+
+        sectionDiv.innerHTML = `
+            <div class="category-header">
+                <span class="category-number">${serialStr}.</span>
+                <h3 class="category-heading">${categoryName}</h3>
+            </div>
+            
+            <div class="category-split-layout">
+                <!-- Details Pane -->
+                <div class="project-details-pane" id="pane-details-${categoryName.replace(/\s+/g, '')}">
+                    <span class="proj-meta-tag">${isBehance ? 'Behance Live' : 'Personal Studio'}</span>
+                    <h4 class="proj-title">${currentProj.title}</h4>
+                    <p class="proj-desc">${cleanDesc}</p>
+                    
+                    <div class="proj-specs-grid">
+                        <div class="spec-cell">
+                            <span class="spec-cell-label">Tools Used</span>
+                            <span class="spec-cell-val">${toolsUsed}</span>
+                        </div>
+                        <div class="spec-cell">
+                            <span class="spec-cell-label">Year</span>
+                            <span class="spec-cell-val">${year}</span>
+                        </div>
+                        <div class="spec-cell">
+                            <span class="spec-cell-label">Focus Area</span>
+                            <span class="spec-cell-val">${focusArea}</span>
+                        </div>
+                        <div class="spec-cell">
+                            <span class="spec-cell-label">Deliverable</span>
+                            <span class="spec-cell-val">${outputFormat}</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-outline view-project-btn" data-project-id="${id}">
+                        View Case Study
+                        <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19"/>
+                        </svg>
+                    </button>
+                    
+                    ${indicatorsHtml}
+                </div>
+                
+                <!-- Visual Pane -->
+                <div class="project-visual-pane">
+                    <div class="project-img-wrapper" id="pane-visual-${categoryName.replace(/\s+/g, '')}" data-project-id="${id}">
+                        <img src="${coverImg}" alt="${currentProj.title} cover" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(sectionDiv);
+    });
+
+    // Event hooks for switching slides inside each category
+    container.querySelectorAll('.thumb-dot').forEach(dot => {
+        dot.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const cat = dot.getAttribute('data-category');
+            const idx = parseInt(dot.getAttribute('data-index'), 10);
+            switchCategoryProject(cat, idx);
+        });
+    });
+
+    // Event hooks for opening full modal case study
+    container.querySelectorAll('.view-project-btn, .project-img-wrapper').forEach(element => {
+        element.addEventListener('click', () => {
+            const id = element.getAttribute('data-project-id');
+            if (id) openProjectModal(id);
+        });
     });
 };
 
+const switchCategoryProject = (categoryName, targetIdx) => {
+    const safeCatId = categoryName.replace(/\s+/g, '');
+    const detailsPane = document.getElementById(`pane-details-${safeCatId}`);
+    const visualPane = document.getElementById(`pane-visual-${safeCatId}`);
+
+    if (detailsPane && visualPane) {
+        detailsPane.classList.add('project-switching');
+        visualPane.classList.add('project-switching');
+        
+        setTimeout(() => {
+            categoryActiveIndices[categoryName] = targetIdx;
+            renderCategoryShowcases();
+            
+            const newDetails = document.getElementById(`pane-details-${safeCatId}`);
+            const newVisual = document.getElementById(`pane-visual-${safeCatId}`);
+            if (newDetails && newVisual) {
+                newDetails.classList.remove('project-switching');
+                newVisual.classList.remove('project-switching');
+                
+                // Micro GSAP slide-fade reveals
+                gsap.fromTo(newDetails.querySelectorAll('.proj-title, .proj-desc, .proj-specs-grid, .btn'), 
+                    { opacity: 0, y: 15 }, 
+                    { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: "power2.out" }
+                );
+                gsap.fromTo(newVisual.querySelector('img'),
+                    { opacity: 0, scale: 1.04 },
+                    { opacity: 1, scale: 1, duration: 0.7, ease: "power2.out" }
+                );
+            }
+        }, 300);
+    } else {
+        categoryActiveIndices[categoryName] = targetIdx;
+        renderCategoryShowcases();
+    }
+};
+
 /* -----------------------------------------
-   3. BEHANCE FEED FETCHING INTEGRATION (LOGOS MASONRY)
+   5. BEHANCE FEED SYSTEM
    ----------------------------------------- */
 const fetchBehanceProjects = async (username) => {
-    const grid = document.getElementById('behance-projects-grid');
-    if (!grid) return;
-
-    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-size: 0.95rem; padding: 3rem 0;">Fetching live projects from Behance...</div>';
-
     try {
         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         let items = [];
 
         if (isLocal) {
-            // Fetch via local development proxy configuration (vite.config.js) to bypass Cloudflare
+            // Fetch via local proxy to bypass Cloudflare constraints
             const response = await fetch(`/api-behance/feeds/user?username=${username}`);
-            if (!response.ok) throw new Error(`Proxy status: ${response.status}`);
+            if (!response.ok) throw new Error(`Proxy error: ${response.status}`);
             
             const xmlText = await response.text();
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlText, "text/xml");
             
-            const parserError = xmlDoc.querySelector("parsererror");
-            if (parserError) throw new Error("XML Feed structure parsing error.");
+            if (xmlDoc.querySelector("parsererror")) throw new Error("XML feed parsing exception");
 
             const rawItems = Array.from(xmlDoc.getElementsByTagName("item"));
             items = rawItems.map(item => {
@@ -268,11 +431,12 @@ const fetchBehanceProjects = async (username) => {
                 };
             });
         } else {
-            // Production static deployments fallback using rss2json
+            // Production deployment static request proxying using rss2json
             const rssUrl = `https://www.behance.net/feeds/user?username=${username}`;
             const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
             const data = await response.json();
-            if (data.status !== 'ok') throw new Error(data.message || "Failed to load via parser api.");
+            if (data.status !== 'ok') throw new Error(data.message || "RSS converter failed");
+            
             items = data.items.map(item => ({
                 title: item.title,
                 link: item.link,
@@ -283,105 +447,307 @@ const fetchBehanceProjects = async (username) => {
             }));
         }
 
-        if (items.length === 0) {
-            grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:#d11a2a; font-size:0.95rem; padding:4rem 0;">No logo projects found on this profile.</div>`;
-            return;
+        behanceProjects = items;
+    } catch (e) {
+        console.error("Could not sync Behance Feed:", e);
+    }
+    renderCategoryShowcases();
+};
+
+/* -----------------------------------------
+   6. PARSING & EXTRACTION HELPERS
+   ----------------------------------------- */
+const parseCleanDescription = (p) => {
+    if (!p.description) return p.concept || "No description text provided.";
+    let clean = p.concept || p.description.replace(/<[^>]*>/g, ' ');
+    clean = clean.replace(/\s+/g, ' ').trim();
+    return clean.length > 260 ? clean.substring(0, 260) + "..." : clean;
+};
+
+const parseCoverImage = (p) => {
+    if (p.img) return p.img;
+    const imgRegex = /<img[^>]+src="([^">]+)"/;
+    const match = p.description ? p.description.match(imgRegex) : null;
+    return match ? match[1] : p.thumbnail || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'300\'%3E%3Crect fill=\'%23faf9f5\' width=\'100%25\' height=\'100%25\'/%3E%3C/svg%3E';
+};
+
+const extractImagesFromDescription = (descriptionHtml) => {
+    if (!descriptionHtml) return [];
+    const div = document.createElement('div');
+    div.innerHTML = descriptionHtml;
+    const imgs = div.querySelectorAll('img');
+    const urls = [];
+    imgs.forEach(img => {
+        let src = img.getAttribute('src');
+        if (src && !src.includes('clear.gif') && !src.includes('analytics')) {
+            urls.push(src);
+        }
+    });
+    return urls;
+};
+
+/* -----------------------------------------
+   7. CASE STUDY MODAL MANAGEMENT
+   ----------------------------------------- */
+const renderModalGallery = (images) => {
+    const galleryContainer = document.getElementById('modal-image-gallery');
+    if (!galleryContainer) return;
+    
+    galleryContainer.innerHTML = '';
+    
+    if (!images || images.length === 0) {
+        galleryContainer.style.display = 'none';
+        return;
+    }
+    
+    galleryContainer.style.display = 'grid';
+
+    images.forEach((imgUrl, index) => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        
+        // Dynamically alternate layout grid weights to simulate editorial magazine sheets
+        const pattern = index % 5;
+        if (pattern === 0) {
+            item.classList.add('full-width');
+        } else if (pattern === 1 || pattern === 2) {
+            item.classList.add('two-col');
+        } else {
+            item.classList.add('three-col');
+        }
+        
+        item.innerHTML = `<img src="${imgUrl}" alt="Case layout ${index + 1}" loading="lazy" class="gallery-fit-img">`;
+        galleryContainer.appendChild(item);
+    });
+};
+
+const updateModalNavButtons = (currentId) => {
+    const { all } = getProjectsByCategory();
+    const navFooter = document.querySelector('.modal-navigation-footer');
+    
+    if (all.length <= 1) {
+        if (navFooter) navFooter.style.display = 'none';
+        return;
+    }
+    if (navFooter) navFooter.style.display = 'grid';
+
+    const idx = all.findIndex(p => (p.id || p.guid) === currentId);
+    if (idx === -1) return;
+
+    const prevIdx = (idx - 1 + all.length) % all.length;
+    const nextIdx = (idx + 1) % all.length;
+
+    const prevProj = all[prevIdx];
+    const nextProj = all[nextIdx];
+
+    const prevId = prevProj.id || prevProj.guid;
+    const nextId = nextProj.id || nextProj.guid;
+
+    const prevTitleEl = document.getElementById('modal-prev-title');
+    const nextTitleEl = document.getElementById('modal-next-title');
+    
+    if (prevTitleEl) prevTitleEl.textContent = prevProj.title;
+    if (nextTitleEl) nextTitleEl.textContent = nextProj.title;
+
+    const prevBtn = document.getElementById('modal-prev-project');
+    const nextBtn = document.getElementById('modal-next-project');
+
+    // Clone buttons to dump previous click event listeners
+    const newPrevBtn = prevBtn.cloneNode(true);
+    const newNextBtn = nextBtn.cloneNode(true);
+
+    prevBtn.parentNode.replaceChild(newPrevBtn, prevBtn);
+    nextBtn.parentNode.replaceChild(newNextBtn, nextBtn);
+
+    newPrevBtn.addEventListener('click', () => transitionModalContent(prevId));
+    newNextBtn.addEventListener('click', () => transitionModalContent(nextId));
+};
+
+const loadModalData = (projectId) => {
+    const { all } = getProjectsByCategory();
+    const data = all.find(p => (p.id || p.guid) === projectId);
+    if (!data) return;
+
+    const isBehance = data.isBehance;
+    const coverUrl = parseCoverImage(data);
+    const cleanDesc = data.concept || (data.description ? data.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() : "No concept narrative documented.");
+    const year = data.year || (data.pubDate ? new Date(data.pubDate).getFullYear() : '2026');
+    const toolsUsed = data.tools || (data.categories || []).join(", ") || "Illustrator, Photoshop";
+    const duration = data.duration || "Completed Feed Project";
+    const client = data.client || (isBehance ? "Behance Case Study" : "Personal Concept Studio");
+
+    // Map DOM selectors
+    const modalImg = document.getElementById('modal-img');
+    const modalCat = document.getElementById('modal-cat');
+    const modalTitle = document.getElementById('modal-title');
+    const modalYear = document.getElementById('modal-year');
+    const modalDuration = document.getElementById('modal-duration');
+    const modalTools = document.getElementById('modal-tools');
+    const modalConcept = document.getElementById('modal-concept-text');
+    const modalSwatches = document.getElementById('modal-swatches');
+    const modalTypo = document.getElementById('modal-typo');
+    const modalBehanceLink = document.getElementById('modal-behance-link');
+    const modalSpecsSection = document.getElementById('modal-specs-section');
+    const modalClient = document.getElementById('modal-client');
+
+    if (modalImg) {
+        modalImg.src = coverUrl;
+        modalImg.alt = data.title;
+    }
+    if (modalCat) modalCat.textContent = isBehance ? "Behance Case" : `Category: ${classifyProject(data)}`;
+    if (modalTitle) modalTitle.textContent = data.title;
+    if (modalYear) modalYear.textContent = year;
+    if (modalDuration) modalDuration.textContent = duration;
+    if (modalTools) modalTools.textContent = toolsUsed;
+    if (modalConcept) modalConcept.textContent = cleanDesc;
+    if (modalClient) modalClient.textContent = client;
+
+    if (isBehance && modalBehanceLink) {
+        modalBehanceLink.href = data.link;
+        modalBehanceLink.style.display = 'inline-flex';
+    } else if (modalBehanceLink) {
+        modalBehanceLink.style.display = 'none';
+    }
+
+    // Render design systems for personal database works
+    if (!isBehance) {
+        if (modalSpecsSection) modalSpecsSection.style.display = 'block';
+        
+        if (modalSwatches) {
+            modalSwatches.innerHTML = '';
+            const swatches = data.swatches || ["#0044FF", "#C85A32", "#FAF9F5", "#141518"];
+            swatches.forEach(color => {
+                const swatchGrp = document.createElement('div');
+                swatchGrp.className = 'swatch-group';
+                swatchGrp.innerHTML = `
+                    <div class="swatch" style="background-color: ${color}"></div>
+                    <span class="swatch-label">${color}</span>
+                `;
+                modalSwatches.appendChild(swatchGrp);
+            });
         }
 
-        behanceProjects = items;
-        grid.innerHTML = ''; // Clear loading message
-
-        behanceProjects.forEach(item => {
-            // Extract the high quality cover image from description HTML
-            const imgRegex = /<img[^>]+src="([^">]+)"/;
-            const match = item.description.match(imgRegex);
-            const imageUrl = match ? match[1] : item.thumbnail || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'300\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f4f4f4\'/%3E%3C/svg%3E';
-            const dateStr = item.pubDate ? new Date(item.pubDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long' }) : '';
-
-            const card = document.createElement('a');
-            card.href = item.link;
-            card.target = '_blank';
-            card.className = 'behance-card';
-            card.innerHTML = `
-                <div class="behance-img-wrapper">
-                    <img src="${imageUrl}" class="behance-img" alt="${item.title}" loading="lazy">
-                </div>
-                <div class="behance-info">
-                    <div>
-                        <h4 class="behance-proj-title">${item.title}</h4>
-                        <span class="behance-proj-date">${dateStr}</span>
-                    </div>
-                    <span class="behance-link-btn">
-                        View Project
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </span>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-
-    } catch (e) {
-        console.error(e);
-        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #d11a2a; font-size: 0.95rem; padding: 3rem 0;">
-            Failed to connect to Behance Feed. <br><br>
-            <span style="font-size:0.8rem; color:var(--text-muted);">Error Details: ${e.message}</span>
-        </div>`;
+        if (modalTypo) {
+            modalTypo.innerHTML = '';
+            const typography = data.typography || [
+                { name: "Heading Typography", font: "Outfit SemiBold", size: "72px" },
+                { name: "Editorial Body", font: "Playfair Display Regular", size: "16px" }
+            ];
+            typography.forEach(spec => {
+                const typoRow = document.createElement('div');
+                typoRow.className = 'typo-row';
+                typoRow.innerHTML = `
+                    <span class="typo-font">${spec.name}: ${spec.font}</span>
+                    <span class="typo-sample">AaBbCc (${spec.size})</span>
+                `;
+                modalTypo.appendChild(typoRow);
+            });
+        }
+    } else {
+        if (modalSpecsSection) modalSpecsSection.style.display = 'none';
     }
+
+    // Extract and render Behance descriptions containing image tracks
+    if (isBehance && data.description) {
+        const descImages = extractImagesFromDescription(data.description);
+        // Omit first image to avoid duplicates with main cover
+        if (descImages.length > 1) {
+            renderModalGallery(descImages.slice(1));
+        } else {
+            renderModalGallery([]);
+        }
+    } else {
+        renderModalGallery([]);
+    }
+
+    updateModalNavButtons(projectId);
 };
 
-// Helper: Parse description text from HTML
-const parseCleanDescription = (proj) => {
-    if (!proj.description) return "No description details provided.";
-    let clean = proj.concept || proj.description.replace(/<[^>]*>/g, ' ');
-    clean = clean.replace(/\s+/g, ' ').trim();
-    return clean.length > 320 ? clean.substring(0, 320) + "..." : clean;
+const transitionModalContent = (targetId) => {
+    const caseStudyEl = document.querySelector('.modal-case-study');
+    if (!caseStudyEl) return;
+
+    gsap.to(caseStudyEl, {
+        opacity: 0,
+        y: -15,
+        duration: 0.35,
+        ease: "power2.in",
+        onComplete: () => {
+            loadModalData(targetId);
+            const modalBackdrop = document.getElementById('project-modal');
+            if (modalBackdrop) modalBackdrop.scrollTop = 0;
+            
+            gsap.to(caseStudyEl, {
+                opacity: 1,
+                y: 0,
+                duration: 0.55,
+                ease: "power2.out"
+            });
+        }
+    });
 };
 
-// Helper: Parse the cover image
-const parseCoverImage = (proj) => {
-    if (proj.img) return proj.img; // Local backend image link
-    const imgRegex = /<img[^>]+src="([^">]+)"/;
-    const match = proj.description.match(imgRegex);
-    return match ? match[1] : proj.thumbnail || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'300\'%3E%3Crect fill=\'%23faf9f5\'/%3E%3C/svg%3E';
+const openProjectModal = (projectId) => {
+    const modal = document.getElementById('project-modal');
+    if (!modal) return;
+
+    loadModalData(projectId);
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    if (window.lenis) {
+        window.lenis.stop();
+    }
+
+    gsap.fromTo(modal.querySelector('.modal-wrapper'),
+        { opacity: 0, y: 25 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
+    );
 };
 
-// Helper: Dynamic Color Swatch extraction (uses average color block extraction on local canvas)
-const extractPaletteFromImage = (imgSrc) => {
-    return new Promise((resolve) => {
-        const img = new Image();
-        img.crossOrigin = "Anonymous";
-        img.onload = () => {
-            try {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = 4;
-                canvas.height = 1;
-                ctx.drawImage(img, 0, 0, 4, 1);
-                const imgData = ctx.getImageData(0, 0, 4, 1).data;
-                const colors = [];
-                for (let i = 0; i < 4; i++) {
-                    const r = imgData[i * 4];
-                    const g = imgData[i * 4 + 1];
-                    const b = imgData[i * 4 + 2];
-                    const hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
-                    colors.push(hex);
-                }
-                resolve(colors);
-            } catch (e) {
-                resolve(["#0044FF", "#C85A32", "#FAF9F5", "#141518"]);
+const closeProjectModal = () => {
+    const modal = document.getElementById('project-modal');
+    if (!modal || !modal.classList.contains('open')) return;
+
+    gsap.to(modal.querySelector('.modal-wrapper'), {
+        opacity: 0,
+        y: 20,
+        duration: 0.4,
+        ease: "power2.in",
+        onComplete: () => {
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+
+            if (window.lenis) {
+                window.lenis.start();
             }
-        };
-        img.onerror = () => {
-            resolve(["#0044FF", "#C85A32", "#FAF9F5", "#141518"]);
-        };
-        img.src = imgSrc;
+        }
+    });
+};
+
+const initProjectModal = () => {
+    const closeBtn = document.querySelector('.modal-close');
+    const modal = document.getElementById('project-modal');
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeProjectModal);
+    }
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeProjectModal();
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeProjectModal();
     });
 };
 
 /* -----------------------------------------
-   4. SETTINGS DRAWER CONTROLLER
+   8. SETTINGS DRAWER CONTROLLER
    ----------------------------------------- */
 const initSettingsDrawer = () => {
     const drawer = document.getElementById('settings-drawer');
@@ -415,7 +781,6 @@ const initSettingsDrawer = () => {
         if (e.target === drawer) closeDrawer();
     });
 
-    // Check saved URL or default user
     const savedUrl = localStorage.getItem('behance_profile_url');
     const urlToLoad = savedUrl || 'https://www.behance.net/sanjayuiuxgd';
     const activeUsername = extractUsername(urlToLoad);
@@ -424,7 +789,6 @@ const initSettingsDrawer = () => {
         urlInput.value = urlToLoad;
     }
 
-    // Check saved backend URL
     const savedBackendUrl = localStorage.getItem('production_api_url') || '';
     if (backendInput) {
         backendInput.value = savedBackendUrl;
@@ -434,42 +798,30 @@ const initSettingsDrawer = () => {
         demoBanner.style.display = 'block';
     }
 
-    // Save and sync Behance
     if (saveBtn && urlInput) {
         saveBtn.addEventListener('click', async () => {
             const inputVal = urlInput.value.trim();
             if (inputVal) {
                 const username = extractUsername(inputVal);
                 localStorage.setItem('behance_profile_url', inputVal);
-                
                 if (demoBanner) demoBanner.style.display = 'none';
-                
                 closeDrawer();
                 await fetchBehanceProjects(username);
             }
         });
     }
 
-    // Save backend production URL
     if (saveBackendBtn && backendInput) {
         saveBackendBtn.addEventListener('click', () => {
             const backendVal = backendInput.value.trim();
             localStorage.setItem('production_api_url', backendVal);
-            showNotification('Backend URL saved successfully! Reloading...');
+            alert('Backend URL saved successfully! Reloading...');
             closeDrawer();
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
+            setTimeout(() => window.location.reload(), 800);
         });
     }
 
-    // Load initial feed
     fetchBehanceProjects(activeUsername);
-};
-
-// Simple notification alert helper
-const showNotification = (msg) => {
-    alert(msg);
 };
 
 const extractUsername = (input) => {
@@ -481,7 +833,7 @@ const extractUsername = (input) => {
 };
 
 /* -----------------------------------------
-   5. CUSTOM CURSOR CONTROLLER
+   9. INTERACTION DECORATIONS (CURSOR, SCROLL, FORMS)
    ----------------------------------------- */
 const initCustomCursor = () => {
     const cursor = document.querySelector('.custom-cursor');
@@ -489,17 +841,13 @@ const initCustomCursor = () => {
     
     if (!cursor || !cursorDot) return;
 
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
-    let dotX = 0;
-    let dotY = 0;
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+    let dotX = 0, dotY = 0;
 
     window.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-        
         if (!document.body.classList.contains('cursor-active')) {
             document.body.classList.add('cursor-active');
         }
@@ -510,21 +858,19 @@ const initCustomCursor = () => {
     });
 
     const animateCursor = () => {
-        cursorX += (mouseX - cursorX) * 0.15;
-        cursorY += (mouseY - cursorY) * 0.15;
-        
-        dotX += (mouseX - dotX) * 0.3;
-        dotY += (mouseY - dotY) * 0.3;
+        cursorX += (mouseX - cursorX) * 0.12;
+        cursorY += (mouseY - cursorY) * 0.12;
+        dotX += (mouseX - dotX) * 0.25;
+        dotY += (mouseY - dotY) * 0.25;
 
         cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
         cursorDot.style.transform = `translate3d(${dotX}px, ${dotY}px, 0) translate(-50%, -50%)`;
 
         requestAnimationFrame(animateCursor);
     };
-    
     requestAnimationFrame(animateCursor);
 
-    const hoverTargets = 'a, button, input, select, textarea, .visual-card, .dot-link, .thumb-dot, .behance-card';
+    const hoverTargets = 'a, button, input, select, textarea, .project-img-wrapper, .dot-link, .thumb-dot';
     document.body.addEventListener('mouseenter', (e) => {
         if (e.target.matches && e.target.matches(hoverTargets)) {
             cursor.classList.add('hovered');
@@ -538,40 +884,27 @@ const initCustomCursor = () => {
     }, true);
 };
 
-/* -----------------------------------------
-   6. INTERSECTION OBSERVER (ACTIVE SECTIONS)
-   ----------------------------------------- */
 const initIntersectionObserver = () => {
-    const sections = document.querySelectorAll('.section');
+    const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
     const dotLinks = document.querySelectorAll('.dot-link');
     
-    const options = {
-        root: null,
-        threshold: 0.45
-    };
-
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const sectionId = entry.target.getAttribute('id');
-                const themeName = entry.target.getAttribute('data-theme');
-                
-                sections.forEach(sec => sec.classList.remove('active-section'));
-                entry.target.classList.add('active-section');
-                
-                document.body.setAttribute('data-active-theme', themeName);
                 
                 navLinks.forEach(link => {
-                    if (link.getAttribute('data-sec') === sectionId) {
+                    const href = link.getAttribute('href');
+                    if (href === `#${sectionId}`) {
                         link.classList.add('active');
-                    } else {
+                    } else if (!(href === '#about-resume' && sectionId === 'about')) {
                         link.classList.remove('active');
                     }
                 });
                 
                 dotLinks.forEach(dot => {
-                    if (dot.getAttribute('data-sec') === sectionId) {
+                    if (dot.getAttribute('href') === `#${sectionId}`) {
                         dot.classList.add('active');
                     } else {
                         dot.classList.remove('active');
@@ -579,147 +912,145 @@ const initIntersectionObserver = () => {
                 });
             }
         });
-    }, options);
+    }, { threshold: 0.25 });
 
-    sections.forEach(section => {
-        observer.observe(section);
-    });
+    sections.forEach(section => observer.observe(section));
 };
 
-/* -----------------------------------------
-   7. CASE STUDY MODAL MANAGEMENT
-   ----------------------------------------- */
-const initProjectModal = () => {
-    const modal = document.getElementById('project-modal');
-    const closeBtn = document.querySelector('.modal-close');
+const initHeroTextAnimation = () => {
+    const textEl = document.getElementById('hero-dynamic-text');
+    if (!textEl) return;
 
-    if (!modal) return;
+    const words = [
+        "PORTFOLIO",
+        "SANJAY MURUGESAN",
+        "VISUAL DESIGNER",
+        "CREATIVE DESIGNER",
+        "LOGO DESIGNER",
+        "SOCIAL MEDIA DESIGNER",
+        "UI DESIGNER"
+    ];
+    let currentIndex = 0;
 
-    const modalImg = document.getElementById('modal-img');
-    const modalCat = document.getElementById('modal-cat');
-    const modalTitle = document.getElementById('modal-title');
-    const modalYear = document.getElementById('modal-year');
-    const modalDuration = document.getElementById('modal-duration');
-    const modalTools = document.getElementById('modal-tools');
-    const modalConcept = document.getElementById('modal-concept-text');
-    const modalSwatches = document.getElementById('modal-swatches');
-    const modalTypo = document.getElementById('modal-typo');
-    const modalBehanceLink = document.getElementById('modal-behance-link');
+    const cycleText = () => {
+        currentIndex = (currentIndex + 1) % words.length;
+        const nextWord = words[currentIndex];
 
-    const openModal = async (projectId) => {
-        const data = getProjectById(projectId);
-        if (!data) return;
-
-        const isBehance = data.link !== undefined;
-        const coverUrl = parseCoverImage(data);
-        const cleanDesc = parseCleanDescription(data);
-        const year = data.year || (data.pubDate ? new Date(data.pubDate).getFullYear() : '2026');
-
-        // Load details
-        modalImg.src = coverUrl;
-        modalImg.alt = data.title;
-        modalCat.textContent = isBehance ? "Behance Case Study" : `Personal Database - ${data.category.toUpperCase()}`;
-        modalTitle.textContent = data.title;
-        modalYear.textContent = year;
-        modalDuration.textContent = data.duration || "Completed Feed Project";
-        modalTools.textContent = data.tools || (data.categories || []).join(", ") || "Illustrator, Photoshop";
-        modalConcept.textContent = cleanDesc;
-        
-        if (isBehance && modalBehanceLink) {
-            modalBehanceLink.href = data.link;
-            modalBehanceLink.style.display = 'inline-flex';
-        } else if (modalBehanceLink) {
-            modalBehanceLink.style.display = 'none';
-        }
-
-        modal.classList.add('open');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-
-        // Extract palette dynamically
-        const extractedSwatches = data.swatches || await extractPaletteFromImage(coverUrl);
-        modalSwatches.innerHTML = '';
-        extractedSwatches.forEach(color => {
-            const swatchGrp = document.createElement('div');
-            swatchGrp.className = 'swatch-group';
-            
-            const swatch = document.createElement('div');
-            swatch.className = 'swatch';
-            swatch.style.backgroundColor = color;
-            
-            const label = document.createElement('span');
-            label.className = 'swatch-label';
-            label.textContent = color;
-            
-            swatchGrp.appendChild(swatch);
-            swatchGrp.appendChild(label);
-            modalSwatches.appendChild(swatchGrp);
-        });
-
-        // Typography specimens
-        modalTypo.innerHTML = '';
-        const typoSpecimen = data.typography || [
-            { name: "Headline Typography", font: "Outfit SemiBold", size: "64px" },
-            { name: "Editorial Body", font: "Playfair Display Regular", size: "16px" }
-        ];
-
-        typoSpecimen.forEach(spec => {
-            const typoRow = document.createElement('div');
-            typoRow.className = 'typo-row';
-            
-            const nameSpan = document.createElement('span');
-            nameSpan.className = 'typo-font';
-            nameSpan.textContent = `${spec.name}: ${spec.font}`;
-            
-            const sizeSpan = document.createElement('span');
-            sizeSpan.className = 'typo-sample';
-            sizeSpan.textContent = `AaBbCc (${spec.size})`;
-            
-            typoRow.appendChild(nameSpan);
-            typoRow.appendChild(sizeSpan);
-            modalTypo.appendChild(typoRow);
+        gsap.to(textEl, {
+            y: -15,
+            opacity: 0,
+            duration: 0.4,
+            ease: "power2.in",
+            onComplete: () => {
+                textEl.textContent = nextWord;
+                gsap.set(textEl, { y: 15 });
+                gsap.to(textEl, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: "power2.out"
+                });
+            }
         });
     };
 
-    const closeModal = () => {
-        modal.classList.remove('open');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-    };
+    setInterval(cycleText, 3000);
+};
 
-    document.body.addEventListener('click', (e) => {
-        const cardTrigger = e.target.closest('.visual-card');
-        const btnTrigger = e.target.closest('.view-project-btn');
-        
-        if (cardTrigger) {
-            const id = cardTrigger.getAttribute('data-project') || cardTrigger.getAttribute('data-guid');
-            if (id) openModal(id);
-        } else if (btnTrigger) {
-            const id = btnTrigger.getAttribute('data-project') || btnTrigger.getAttribute('data-guid');
-            if (id) openModal(id);
-        }
+const initScrollSystem = () => {
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true
+    });
+    window.lenis = lenis;
+
+    function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Sync Lenis with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    // Shrink header on scroll
+    const header = document.querySelector('.site-header');
+    if (header) {
+        ScrollTrigger.create({
+            start: "top -50",
+            onToggle: (self) => {
+                if (self.isActive) {
+                    header.style.height = "68px";
+                    header.style.backgroundColor = "rgba(250, 250, 247, 0.96)";
+                } else {
+                    header.style.height = "80px";
+                    header.style.backgroundColor = "rgba(250, 250, 247, 0.85)";
+                }
+            }
+        });
+    }
+
+    // Dynamic Image Parallax effect
+    gsap.utils.toArray('.hero-portrait-img, .about-portrait-img, .project-img-wrapper img').forEach(img => {
+        gsap.to(img, {
+            yPercent: 8,
+            ease: "none",
+            scrollTrigger: {
+                trigger: img.parentNode,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            }
+        });
     });
 
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    // Fade reveal blocks
+    gsap.utils.toArray('.section-num, .section-title, .about-bio, .about-grid, .category-showcase-section, .contact-content').forEach(section => {
+        gsap.fromTo(section, 
+            { opacity: 0, y: 25 },
+            { 
+                opacity: 1, 
+                y: 0, 
+                duration: 0.8, 
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 88%",
+                    toggleActions: "play none none none"
+                }
+            }
+        );
     });
 };
 
-/* -----------------------------------------
-   8. MOBILE MENU & FORM SUBMISSION
-   ----------------------------------------- */
+const initSmoothScrollClicks = () => {
+    document.querySelectorAll('.main-nav a, .side-nav-dots a, .back-to-top a, .hero-actions a').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+            const href = anchor.getAttribute('href');
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target && window.lenis) {
+                    window.lenis.scrollTo(target, { offset: href === '#about-resume' ? -50 : 0 });
+                } else if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    });
+};
+
 const initHeaderAndForms = () => {
     const menuToggle = document.querySelector('.menu-toggle');
     const mainNav = document.querySelector('.main-nav');
     
     if (menuToggle && mainNav) {
         const headerActions = document.querySelector('.header-actions');
-        const mediaQuery = window.matchMedia('(max-width: 991px)');
         
         const handleTabletChange = (e) => {
             if (e.matches) {
@@ -729,18 +1060,16 @@ const initHeaderAndForms = () => {
             } else {
                 if (mainNav && headerActions && mainNav.contains(headerActions)) {
                     const headerContainer = document.querySelector('.header-container');
-                    if (headerContainer) {
-                        headerContainer.insertBefore(headerActions, menuToggle);
+                    const menuToggleBtn = document.querySelector('.menu-toggle');
+                    if (headerContainer && menuToggleBtn) {
+                        headerContainer.insertBefore(headerActions, menuToggleBtn);
                     }
                 }
             }
         };
-        
-        if (mediaQuery.addEventListener) {
-            mediaQuery.addEventListener('change', handleTabletChange);
-        } else if (mediaQuery.addListener) {
-            mediaQuery.addListener(handleTabletChange);
-        }
+
+        const mediaQuery = window.matchMedia('(max-width: 991px)');
+        mediaQuery.addEventListener('change', handleTabletChange);
         handleTabletChange(mediaQuery);
 
         menuToggle.addEventListener('click', () => {
@@ -748,9 +1077,9 @@ const initHeaderAndForms = () => {
             const bars = menuToggle.querySelectorAll('.bar');
             if (bars.length >= 3) {
                 if (mainNav.classList.contains('mobile-open')) {
-                    bars[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                    bars[0].style.transform = 'rotate(45deg) translate(4px, 4px)';
                     bars[1].style.transform = 'scale(0)';
-                    bars[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
+                    bars[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
                 } else {
                     bars[0].style.transform = 'none';
                     bars[1].style.transform = 'none';
@@ -759,8 +1088,7 @@ const initHeaderAndForms = () => {
             }
         });
 
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
+        document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', () => {
                 if (mainNav.classList.contains('mobile-open')) {
                     menuToggle.click();
@@ -782,8 +1110,8 @@ const initHeaderAndForms = () => {
 
             setTimeout(() => {
                 submitBtn.innerHTML = 'Message Sent ✓';
-                submitBtn.style.backgroundColor = 'var(--accent-color)';
-                submitBtn.style.color = '#ffffff';
+                submitBtn.style.backgroundColor = '#246B4E';
+                submitBtn.style.color = '#FFFFFF';
                 
                 alert('Thank you! Your message was sent successfully.');
                 form.reset();
@@ -795,13 +1123,13 @@ const initHeaderAndForms = () => {
                     submitBtn.style.color = '';
                     submitBtn.style.opacity = '';
                 }, 3000);
-            }, 1500);
+            }, 1200);
         });
     }
 };
 
 /* -----------------------------------------
-   9. GLOBAL INITIALIZATION
+   10. GLOBAL SYSTEM LOADER
    ----------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
     loadActiveProjects();
@@ -810,4 +1138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initIntersectionObserver();
     initProjectModal();
     initHeaderAndForms();
+    initHeroTextAnimation();
+    initScrollSystem();
+    initSmoothScrollClicks();
 });
