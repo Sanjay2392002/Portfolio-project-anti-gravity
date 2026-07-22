@@ -1,471 +1,388 @@
-/* -----------------------------------------
-   1. GLOBAL STATE & FALLBACK PROJECTS
-   ----------------------------------------- */
-let activeProjects = []; // Personal works from Admin Panel database
-let behanceProjects = []; // Sync projects from Behance RSS Feed
-let activeModalProjectId = null;
+/* =============================================================
+   1. STATE
+   ============================================================= */
+let allProjects      = [];
+let activeModalId    = null;
+let siteCategories   = [];
 
-const CATEGORIES = [
-    "Logo Designs",
-    "Brand Identity",
-    "Social Media Designs",
-    "Print Designs",
-    "Packaging Designs",
-    "Advertising Campaigns",
-    "Product Mockups",
-    "UI UX Designs",
-    "Web Designs",
-    "Creative Photography",
-    "3D & AI Visuals",
-    "Personal Projects"
-];
-
-// Tracks the slide index of the active project showing per category
-const categoryActiveIndices = {};
-
-// Highly polished sample projects representing various categories
-const fallbackProjects = [
-    {
-        id: "sola-coffee-1234",
-        category: "food",
-        title: "Sola Organic Coffee Mark",
-        img: "/assets/images/logo_showcase.jpg",
-        year: "2026",
-        duration: "5 Weeks",
-        tools: "Adobe Illustrator, Figma",
-        focus: "Geometric alignment, brand story, logo design",
-        output: "Logo mark, package label, identity guide",
-        concept: "SOLA is a premium, sustainable coffee brand. The logo mark simplifies the shape of a sun rising over a coffee bean. The geometry is built using strict mathematical proportions. A dark slate background combined with custom gold-leaf embossing creates a premium and trustworthy visual appearance.",
-        client: "Sola Coffee Co. (Concept)",
-        swatches: ["#0A0F14", "#FFDF79", "#00D2C4", "#F0F3F5"],
-        typography: [
-            { name: "Wordmark", font: "Outfit Medium", size: "36px" },
-            { name: "Sub-brand", font: "Outfit Light", size: "12px" }
-        ]
-    },
-    {
-        id: "skin-alchemy-1234",
-        category: "jewelry",
-        title: "Skin Alchemy Packaging",
-        img: "/assets/images/package_box.jpg",
-        year: "2026",
-        duration: "3 Weeks",
-        tools: "Cinema 4D, Photoshop",
-        focus: "Material realism, tactile packaging, organic styling",
-        output: "Skincare cosmetic box, amber glass bottle, label design",
-        concept: "Skin Alchemy is a luxury organic skincare and lifestyle line. The packaging design emphasizes raw materials and minimalist graphics. Using a matte black glass bottle paired with a rough-textured box, the tactile experience is premium. Embossed botanical line art and high contrast typography emphasize organic simplicity.",
-        client: "Skin Alchemy Lab",
-        swatches: ["#120E0A", "#E59050", "#DFD3C3", "#F6F4F2"],
-        typography: [
-            { name: "Title Font", font: "Playfair Display Italic", size: "28px" },
-            { name: "Description", font: "Outfit Regular", size: "14px" }
-        ]
-    },
-    {
-        id: "aura-jewelry-1234",
-        category: "jewelry",
-        title: "Aura Luxury Editorial Catalog",
-        img: "/assets/images/print_layout.jpg",
-        year: "2025",
-        duration: "4 Weeks",
-        tools: "Adobe InDesign, Photoshop",
-        focus: "Grid systems, high-end typography, catalog design",
-        output: "Uncoated paper catalog spread, branding brochure",
-        concept: "Inspired by Swiss architecture and minimal geometry, this project represents a luxury editorial print catalog for a modern jewelry startup. The layout follows a strict, asymmetrical grid system, allowing ample breathing room (white space) to showcase brutalist architecture photography and minimal jewelry lines.",
-        client: "Aura Fine Jewelry",
-        swatches: ["#EADEC9", "#202022", "#CFB584", "#959599"],
-        typography: [
-            { name: "Heading", font: "Playfair Display Regular", size: "48px" },
-            { name: "Body Text", font: "Outfit Light", size: "15px" }
-        ]
-    },
-    {
-        id: "neon-beat-1234",
-        category: "tech",
-        title: "Neon Beat Web App UX",
-        img: "/assets/images/social_poster.jpg",
-        year: "2026",
-        duration: "2 Weeks",
-        tools: "Figma, Adobe Photoshop",
-        focus: "UI design, interface structure, digital vectors",
-        output: "Web App dashboard, landing page templates, user flow",
-        concept: "The concept was centered around capturing the retro-futuristic energy of a modern web3 music platform startup. We combined vibrant neon pinks and teals with custom vector artwork, creating abstract geometric layout systems. A high-contrast sans-serif font ensures high legibility, while floating elements convey motion and sound waves.",
-        client: "Neon Beat DAO",
-        swatches: ["#FF007A", "#00F0FF", "#0C0817", "#9C95AB"],
-        typography: [
-            { name: "Headline", font: "Outfit ExtraBold", size: "72px" },
-            { name: "Body Text", font: "Outfit Regular", size: "16px" }
-        ]
-    }
-];
-
-/* -----------------------------------------
-   2. API CONFIGURATION & CORE FETCHING
-   ----------------------------------------- */
-const getApiUrl = (endpoint) => {
-    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    if (isLocal) {
-        return endpoint;
-    }
-    const savedBackendUrl = localStorage.getItem('production_api_url') || '';
-    return `${savedBackendUrl.replace(/\/$/, '')}${endpoint}`;
+/* =============================================================
+   2. API HELPERS
+   ============================================================= */
+const api = (endpoint) => {
+    const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    if (isLocal) return endpoint;
+    const base = (localStorage.getItem('production_api_url') || '').replace(/\/$/, '');
+    return `${base}${endpoint}`;
 };
 
-// Fetch personal dashboard database projects
-const loadActiveProjects = async () => {
+const apiFetch = async (endpoint, opts = {}) => {
+    const res = await fetch(api(endpoint), opts);
+    if (!res.ok) throw new Error(`API ${endpoint} → ${res.status}`);
+    return res.json();
+};
+
+/* =============================================================
+   3. PROFILE / SITE CONTENT LOADING
+   ============================================================= */
+const loadSiteContent = async () => {
     try {
-        const response = await fetch(getApiUrl('/api/projects'));
-        if (!response.ok) throw new Error("Backend connection failed");
-        activeProjects = await response.json();
+        const site = await apiFetch('/api/site');
+        applySiteContent(site);
     } catch (e) {
-        console.warn("Could not load from backend. Defaulting to fallback seeds.", e);
-        activeProjects = [...fallbackProjects];
+        console.warn('Site content fallback:', e.message);
     }
-    renderCategoryShowcases();
 };
 
-// Fetch dynamic profile details (Hero, About, Contact)
+const applySiteContent = (site) => {
+    if (!site) return;
+
+    /* Logo */
+    const logoEl = document.getElementById('logo-text-val');
+    if (logoEl && site.logo) logoEl.textContent = site.logo;
+
+    /* Nav CTA */
+    const navCta = document.getElementById('nav-cta');
+    if (navCta && site.navCta) navCta.textContent = site.navCta;
+
+    /* Nav links */
+    if (site.nav && Array.isArray(site.nav)) {
+        const navList = document.getElementById('nav-list');
+        if (navList) {
+            navList.innerHTML = site.nav.map((item, i) => `
+                <li><a href="${item.href}" class="nav-link${i === 0 ? ' active' : ''}"
+                       data-sec="${item.href.replace('#', '')}">${item.label}</a></li>
+            `).join('');
+            /* Re-bind nav click close on mobile */
+            navList.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    const nav = document.getElementById('main-nav');
+                    if (nav?.classList.contains('mobile-open')) {
+                        document.getElementById('menu-toggle')?.click();
+                    }
+                });
+            });
+        }
+    }
+
+    /* Projects section */
+    if (site.projects) {
+        const el = (id) => document.getElementById(id);
+        if (site.projects.sectionBadge) {
+            const b = el('projects-badge');
+            if (b) b.textContent = site.projects.sectionBadge;
+        }
+        if (site.projects.title) {
+            const t = el('projects-title');
+            if (t) {
+                t.childNodes[0].textContent = site.projects.title + ' ';
+            }
+        }
+        if (site.projects.titleItalic) {
+            const ti = el('projects-title-italic');
+            if (ti) ti.textContent = site.projects.titleItalic;
+        }
+        if (site.projects.categories) {
+            siteCategories = site.projects.categories;
+        }
+    }
+
+    /* Footer */
+    if (site.footer) {
+        const cp = document.getElementById('footer-copyright');
+        if (cp && site.footer.copyright) cp.textContent = site.footer.copyright;
+        const ty = document.getElementById('footer-thank-you');
+        if (ty && site.footer.thankYouText) ty.textContent = site.footer.thankYouText;
+    }
+
+    /* Contact form categories */
+    if (site.contactForm?.categories) {
+        const sel = document.getElementById('form-category');
+        if (sel) {
+            sel.innerHTML = '<option value="" disabled selected>Select an option</option>';
+            site.contactForm.categories.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.value;
+                opt.textContent = c.label;
+                sel.appendChild(opt);
+            });
+        }
+    }
+};
+
 const loadProfileDetails = async () => {
     try {
-        const response = await fetch(getApiUrl('/api/profile'));
-        if (!response.ok) throw new Error("Profile retrieval failed");
-        const profile = await response.json();
-        renderProfileData(profile);
+        const profile = await apiFetch('/api/profile');
+        applyProfile(profile);
     } catch (e) {
-        console.warn("Could not load profile from backend. Using static fallback page content.", e);
+        console.warn('Profile fallback:', e.message);
     }
 };
 
-const renderProfileData = (profile) => {
-    if (!profile) return;
-    
-    // 1. Hero Section
-    if (profile.hero) {
-        const heroSubtitle = document.querySelector('.hero-subtitle');
-        if (heroSubtitle && profile.hero.subtitle) heroSubtitle.textContent = profile.hero.subtitle;
-        
-        const heroDynamicText = document.getElementById('hero-dynamic-text');
-        if (heroDynamicText && profile.hero.title) heroDynamicText.textContent = profile.hero.title;
-        
-        const heroDesc = document.querySelector('.hero-description');
-        if (heroDesc && profile.hero.description) heroDesc.textContent = profile.hero.description;
-        
+const applyProfile = (p) => {
+    if (!p) return;
+
+    /* ── Hero ── */
+    if (p.hero) {
+        const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
+        set('hero-badge', p.hero.badge);
+        set('hero-dynamic-text', p.hero.title);
+        set('hero-desc', p.hero.description);
+
         const heroImg = document.getElementById('hero-portrait-img');
-        if (heroImg && profile.hero.portrait) heroImg.src = profile.hero.portrait;
+        if (heroImg && p.hero.portrait) heroImg.src = p.hero.portrait;
+
+        const ctaP = document.getElementById('hero-cta-primary');
+        if (ctaP && p.hero.ctaPrimary) ctaP.textContent = p.hero.ctaPrimary;
+        const ctaS = document.getElementById('hero-cta-secondary');
+        if (ctaS && p.hero.ctaSecondary) ctaS.textContent = p.hero.ctaSecondary;
+
+        // Kick off text cycling with the loaded title
+        if (p.hero.title) initHeroTextCycle(p.hero.title);
     }
-    
-    // 2. About Section
-    if (profile.about) {
-        const aboutTitle = document.getElementById('about-section-title');
-        if (aboutTitle && profile.about.title) {
-            aboutTitle.innerHTML = profile.about.title;
+
+    /* ── About ── */
+    if (p.about) {
+        const badge = document.getElementById('about-badge');
+        if (badge && p.about.sectionBadge) badge.textContent = p.about.sectionBadge;
+
+        const titleEl = document.getElementById('about-section-title');
+        if (titleEl) {
+            const main   = p.about.title   || 'About';
+            const italic = p.about.titleItalic || '';
+            titleEl.innerHTML = `${main} <br><span class="serif-italic">${italic}</span>`;
         }
-        
-        const aboutBio = document.getElementById('about-bio');
-        if (aboutBio && profile.about.bio) aboutBio.textContent = profile.about.bio;
-        
+
+        const bioEl = document.getElementById('about-bio');
+        if (bioEl && p.about.bio) bioEl.textContent = p.about.bio;
+
         const aboutImg = document.getElementById('about-portrait-img');
-        if (aboutImg && profile.about.portrait) aboutImg.src = profile.about.portrait;
-        
+        if (aboutImg && p.about.portrait) aboutImg.src = p.about.portrait;
+
         const resumeBtn = document.getElementById('btn-download-resume');
-        if (resumeBtn && profile.about.resumeUrl) {
-            resumeBtn.href = profile.about.resumeUrl;
+        if (resumeBtn) {
+            if (p.about.resumeUrl) {
+                resumeBtn.href = p.about.resumeUrl;
+                resumeBtn.removeAttribute('tabindex');
+            } else {
+                resumeBtn.style.opacity = '0.4';
+                resumeBtn.style.pointerEvents = 'none';
+            }
+            if (p.about.resumeLabel) {
+                resumeBtn.childNodes[0].textContent = p.about.resumeLabel;
+            }
         }
-        
-        // Experience Timeline
-        const expList = document.getElementById('about-experience-list');
-        if (expList && profile.about.experience) {
-            expList.innerHTML = profile.about.experience.map(item => `
+
+        /* Experience */
+        const expEl = document.getElementById('about-experience-list');
+        if (expEl && p.about.experience?.length) {
+            expEl.innerHTML = p.about.experience.map(i => `
                 <li>
-                    <span class="timeline-date">${item.date}</span>
-                    <span class="timeline-role">${item.role}</span>
-                    <span class="timeline-company">${item.company}</span>
-                </li>
-            `).join('');
+                    <span class="timeline-date">${i.date}</span>
+                    <span class="timeline-role">${i.role}</span>
+                    <span class="timeline-company">${i.company}</span>
+                </li>`).join('');
         }
-        
-        // Education Timeline
-        const eduList = document.getElementById('about-education-list');
-        if (eduList && profile.about.education) {
-            eduList.innerHTML = profile.about.education.map(item => `
+
+        /* Education */
+        const eduEl = document.getElementById('about-education-list');
+        if (eduEl && p.about.education?.length) {
+            eduEl.innerHTML = p.about.education.map(i => `
                 <li>
-                    <span class="timeline-date">${item.date}</span>
-                    <span class="timeline-role">${item.role}</span>
-                    <span class="timeline-company">${item.company}</span>
-                </li>
-            `).join('');
+                    <span class="timeline-date">${i.date}</span>
+                    <span class="timeline-role">${i.role}</span>
+                    <span class="timeline-company">${i.company}</span>
+                </li>`).join('');
         }
-        
-        // Capabilities tags
-        const capList = document.getElementById('about-capabilities-list');
-        if (capList && profile.about.capabilities) {
-            capList.innerHTML = profile.about.capabilities.map(cap => `
-                <span class="skill-tag">${cap}</span>
-            `).join('');
+
+        /* Capabilities */
+        const capEl = document.getElementById('about-capabilities-list');
+        if (capEl && p.about.capabilities?.length) {
+            capEl.innerHTML = p.about.capabilities.map(c =>
+                `<span class="skill-tag">${c}</span>`).join('');
         }
-        
-        // Software directory
-        const softList = document.getElementById('about-software-list');
-        if (softList && profile.about.software) {
-            softList.innerHTML = profile.about.software.map(soft => `
-                <div class="software-item" title="${soft.name}">
-                    <span class="soft-icon">${soft.key}</span>
-                    <span class="soft-name">${soft.name}</span>
-                </div>
-            `).join('');
+
+        /* Software */
+        const softEl = document.getElementById('about-software-list');
+        if (softEl && p.about.software?.length) {
+            softEl.innerHTML = p.about.software.map(s =>
+                `<div class="software-item" title="${s.name}">
+                    <span class="soft-icon">${s.key}</span>
+                    <span class="soft-name">${s.name}</span>
+                </div>`).join('');
         }
     }
-    
-    // 3. Contact Section
-    if (profile.contact) {
-        const mailLink = document.getElementById('contact-email');
-        if (mailLink && profile.contact.email) {
-            mailLink.href = `mailto:${profile.contact.email}`;
-            mailLink.textContent = profile.contact.email;
+
+    /* ── Contact ── */
+    if (p.contact) {
+        const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
+
+        const badge = document.getElementById('contact-badge');
+        if (badge && p.contact.sectionBadge) badge.textContent = p.contact.sectionBadge;
+
+        const heading = document.getElementById('contact-heading');
+        if (heading) {
+            const main   = p.contact.title   || "Let's shape your";
+            const italic = p.contact.titleItalic || 'vision.';
+            heading.innerHTML = `${main} <br><span class="serif-italic" id="contact-heading-italic">${italic}</span>`;
         }
-        
-        const phoneLink = document.getElementById('contact-phone');
-        if (phoneLink && profile.contact.phone) {
-            phoneLink.href = `tel:${profile.contact.phone.replace(/\s+/g, '')}`;
-            phoneLink.textContent = profile.contact.phone;
+
+        const desc = document.getElementById('contact-desc');
+        if (desc && p.contact.description) desc.textContent = p.contact.description;
+
+        const emailEl = document.getElementById('contact-email');
+        if (emailEl && p.contact.email) {
+            emailEl.href        = `mailto:${p.contact.email}`;
+            emailEl.textContent = p.contact.email;
         }
-        
-        const locSpan = document.getElementById('contact-location');
-        if (locSpan && profile.contact.location) {
-            locSpan.textContent = profile.contact.location;
+
+        const phoneEl = document.getElementById('contact-phone');
+        if (phoneEl && p.contact.phone) {
+            phoneEl.href        = `tel:${p.contact.phone.replace(/\s+/g, '')}`;
+            phoneEl.textContent = p.contact.phone;
         }
-        
-        // Social networks
-        if (profile.contact.socials) {
-            const soc = profile.contact.socials;
-            
-            const bLink = document.getElementById('behance-link');
-            if (bLink && soc.behance) bLink.href = soc.behance;
-            
-            const lLink = document.getElementById('linkedin-link');
-            if (lLink && soc.linkedin) lLink.href = soc.linkedin;
-            
-            const iLink = document.getElementById('instagram-link');
-            if (iLink && soc.instagram) iLink.href = soc.instagram;
-            
-            const dLink = document.getElementById('dribbble-link');
-            if (dLink && soc.dribbble) dLink.href = soc.dribbble;
-            
-            const gLink = document.getElementById('github-link');
-            if (gLink && soc.github) gLink.href = soc.github;
+
+        set('contact-location', p.contact.location);
+
+        /* Socials — rebuild dynamically so hidden ones vanish */
+        if (p.contact.socials) {
+            const container = document.getElementById('social-links-container');
+            if (container) {
+                const socMap = [
+                    ['behance',   'Behance',   'behance-link'],
+                    ['linkedin',  'LinkedIn',  'linkedin-link'],
+                    ['instagram', 'Instagram', 'instagram-link'],
+                    ['dribbble',  'Dribbble',  'dribbble-link'],
+                    ['github',    'GitHub',    'github-link']
+                ];
+                container.innerHTML = '';
+                socMap.forEach(([key, label, id]) => {
+                    const url = p.contact.socials[key];
+                    if (url) {
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.target = '_blank';
+                        a.rel = 'noopener noreferrer';
+                        a.id = id;
+                        a.className = 'social-link link-hover';
+                        a.textContent = label;
+                        container.appendChild(a);
+                    }
+                });
+            }
         }
     }
 };
 
-/* -----------------------------------------
-   3. EDITORIAL CLASSIFIER ENGINE
-   ----------------------------------------- */
-const classifyProject = (p) => {
-    const title = (p.title || "").toLowerCase();
-    const concept = (p.concept || p.description || "").toLowerCase();
-    const dbCategory = (p.category || "").toLowerCase(); // 'food', 'jewelry', 'tech'
-    const tools = (p.tools || (p.categories || []).join(", ") || "").toLowerCase();
-    const focus = (p.focus || "").toLowerCase();
-    const output = (p.output || "").toLowerCase();
+/* =============================================================
+   4. PROJECTS LOADING & RENDERING
+   ============================================================= */
+const FALLBACK_CATEGORIES = [
+    'Logo Designs', 'Brand Identity', 'Social Media Designs', 'Print Designs',
+    'Packaging Designs', 'Advertising Campaigns', 'Product Mockups',
+    'UI UX Designs', 'Web Designs', 'Creative Photography', '3D & AI Visuals', 'Personal Projects'
+];
 
-    // 1. Logo Designs
-    if (title.includes("logo") || title.includes("logotype") || title.includes("wordmark") || title.includes("mark") || focus.includes("logo") || focus.includes("identity mark")) {
-        return "Logo Designs";
+const loadProjects = async () => {
+    try {
+        allProjects = await apiFetch('/api/projects');
+    } catch (e) {
+        console.warn('Using fallback projects:', e.message);
+        allProjects = [];
     }
-    
-    // 2. Packaging Designs
-    if (title.includes("package") || title.includes("packaging") || title.includes("box") || title.includes("label") || title.includes("bottle") || title.includes("jar") || title.includes("can") || output.includes("package") || output.includes("box") || output.includes("bottle") || output.includes("label")) {
-        return "Packaging Designs";
-    }
-
-    // 3. UI UX Designs
-    if (title.includes("ui") || title.includes("ux") || title.includes("app") || title.includes("interface") || title.includes("wireframe") || concept.includes("ui/ux") || concept.includes("user experience") || concept.includes("figma") || tools.includes("figma")) {
-        return "UI UX Designs";
-    }
-
-    // 4. Web Designs
-    if (title.includes("web") || title.includes("website") || title.includes("landing") || title.includes("homepage") || concept.includes("web design") || concept.includes("landing page")) {
-        return "Web Designs";
-    }
-
-    // 5. Social Media Designs
-    if (title.includes("social") || title.includes("instagram") || title.includes("feed") || title.includes("post") || title.includes("banner") || title.includes("ads") || output.includes("social") || output.includes("instagram") || output.includes("banner")) {
-        return "Social Media Designs";
-    }
-
-    // 6. Print Designs
-    if (title.includes("print") || title.includes("brochure") || title.includes("catalog") || title.includes("magazine") || title.includes("editorial") || title.includes("book") || title.includes("flyer") || title.includes("poster") || output.includes("print") || output.includes("brochure") || output.includes("catalog") || output.includes("editorial") || output.includes("poster")) {
-        return "Print Designs";
-    }
-
-    // 7. 3D & AI Visuals
-    if (title.includes("3d") || title.includes("render") || title.includes("c4d") || title.includes("blender") || title.includes("ai ") || title.includes("midjourney") || concept.includes("3d") || concept.includes("render") || tools.includes("cinema 4d") || tools.includes("blender") || tools.includes("midjourney")) {
-        return "3D & AI Visuals";
-    }
-
-    // 8. Brand Identity
-    if (title.includes("brand") || title.includes("branding") || title.includes("identity") || title.includes("guidelines") || concept.includes("branding") || concept.includes("identity") || focus.includes("brand") || focus.includes("identity")) {
-        return "Brand Identity";
-    }
-
-    // 9. Advertising Campaigns
-    if (title.includes("campaign") || title.includes("advertise") || title.includes("advertising") || title.includes("ad ") || concept.includes("campaign") || concept.includes("marketing")) {
-        return "Advertising Campaigns";
-    }
-
-    // 10. Product Mockups
-    if (title.includes("mockup") || title.includes("mock-up") || title.includes("presentation") || output.includes("mockup") || concept.includes("mockup")) {
-        return "Product Mockups";
-    }
-
-    // 11. Creative Photography
-    if (title.includes("photo") || title.includes("photography") || title.includes("camera") || title.includes("shoot") || concept.includes("photography") || concept.includes("photo")) {
-        return "Creative Photography";
-    }
-
-    // Fallbacks using original backend category labels
-    if (dbCategory === "tech") {
-        return "UI UX Designs";
-    } else if (dbCategory === "food") {
-        return "Packaging Designs";
-    } else if (dbCategory === "jewelry") {
-        return "Brand Identity";
-    }
-
-    return "Personal Projects";
+    renderProjects();
 };
 
-// Groups combined projects flat list by their 12 categories
-const getProjectsByCategory = () => {
+const getCategories = () => siteCategories.length ? siteCategories : FALLBACK_CATEGORIES;
+
+const groupByCategory = () => {
+    const cats = getCategories();
     const grouped = {};
-    CATEGORIES.forEach(cat => grouped[cat] = []);
-
-    const seen = new Set();
-    const all = [];
-
-    activeProjects.forEach(p => {
-        if (!seen.has(p.id)) {
-            seen.add(p.id);
-            all.push({ ...p, isBehance: false });
+    cats.forEach(c => (grouped[c] = []));
+    allProjects.forEach(p => {
+        const cat = p.category || 'Personal Projects';
+        if (grouped[cat] !== undefined) grouped[cat].push(p);
+        else {
+            /* Try fuzzy match */
+            const match = cats.find(c => c.toLowerCase() === cat.toLowerCase());
+            if (match) grouped[match].push(p);
+            else grouped['Personal Projects']?.push(p);
         }
     });
-
-    behanceProjects.forEach(p => {
-        const id = p.guid || p.link;
-        if (!seen.has(id)) {
-            seen.add(id);
-            all.push({ ...p, id, isBehance: true });
-        }
-    });
-
-    all.forEach(p => {
-        const cat = classifyProject(p);
-        grouped[cat].push(p);
-    });
-
-    return { grouped, all };
+    return grouped;
 };
 
-/* -----------------------------------------
-   4. DYNAMIC SHOWCASE RENDERING
-   ----------------------------------------- */
-/* -----------------------------------------
-   4. DYNAMIC SHOWCASE RENDERING
-   ----------------------------------------- */
-const renderCategoryShowcases = () => {
+const renderProjects = () => {
     const container = document.getElementById('categories-container');
     if (!container) return;
 
-    const { grouped } = getProjectsByCategory();
+    const grouped  = groupByCategory();
     container.innerHTML = '';
 
-    let visibleIndex = 1;
+    let visIdx = 1;
 
-    CATEGORIES.forEach(categoryName => {
-        const projects = grouped[categoryName];
-        if (!projects || projects.length === 0) return; // Hide unpopulated categories
+    Object.entries(grouped).forEach(([catName, projects]) => {
+        if (!projects.length) return;
 
-        const serialStr = visibleIndex.toString().padStart(2, '0');
-        visibleIndex++;
+        const serialStr  = visIdx.toString().padStart(2, '0');
+        const safeId     = catName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        visIdx++;
 
-        // Category container
-        const categoryDiv = document.createElement('div');
-        categoryDiv.className = 'category-showcase-section';
-        categoryDiv.setAttribute('id', `cat-${categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`);
+        const section = document.createElement('div');
+        section.className = 'category-showcase-section';
+        section.id = `cat-${safeId}`;
 
-        // Category Header
-        let htmlContent = `
+        let html = `
             <div class="category-header">
                 <span class="category-number">${serialStr}.</span>
-                <h3 class="category-heading">${categoryName}</h3>
+                <h3 class="category-heading">${catName}</h3>
             </div>
             <div class="category-editorial-grid">
         `;
 
-        // Render each project in the category
         projects.forEach((proj, idx) => {
-            const isBehance = proj.isBehance;
-            const coverImg = parseCoverImage(proj);
-            const cleanDesc = parseCleanDescription(proj);
-            const year = proj.year || (proj.pubDate ? new Date(proj.pubDate).getFullYear() : '2026');
-            const toolsUsed = proj.tools || (proj.categories || []).join(", ") || "Illustrator, Photoshop";
-            const focusArea = proj.focus || "Visual Composition";
-            const outputFormat = proj.output || "Digital Showcase";
-            const id = proj.id || proj.guid;
+            const img   = proj.img || '';
+            const desc  = proj.concept
+                ? proj.concept.substring(0, 220) + (proj.concept.length > 220 ? '...' : '')
+                : 'No concept narrative.';
+            const year  = proj.year || '2026';
 
-            // Determine editorial layout column span class based on index
-            // This creates a beautiful staggered magazine look (some full-width, some split, some square)
-            let layoutClass = 'project-card-standard';
-            if (idx % 3 === 0) {
-                layoutClass = 'project-card-wide';
-            } else if (idx % 3 === 1) {
-                layoutClass = 'project-card-portrait';
-            } else {
-                layoutClass = 'project-card-square';
-            }
+            let layout = 'project-card-standard';
+            if (idx % 3 === 0)      layout = 'project-card-wide';
+            else if (idx % 3 === 1) layout = 'project-card-portrait';
+            else                    layout = 'project-card-square';
 
-            // Build swatches display if present
-            let swatchesHtml = '';
-            if (!isBehance && proj.swatches && proj.swatches.length > 0) {
-                swatchesHtml = `<div class="project-card-swatches">`;
-                proj.swatches.forEach(color => {
-                    swatchesHtml += `<span class="card-swatch-dot" style="background-color: ${color};" title="${color}"></span>`;
-                });
-                swatchesHtml += `</div>`;
-            }
+            const swatchHtml = (proj.swatches?.length)
+                ? `<div class="project-card-swatches">
+                    ${proj.swatches.map(c => `<span class="card-swatch-dot" style="background:${c};" title="${c}"></span>`).join('')}
+                   </div>`
+                : '';
 
-            htmlContent += `
-                <div class="project-editorial-card ${layoutClass}" data-project-id="${id}">
+            html += `
+                <div class="project-editorial-card ${layout}">
                     <div class="project-card-inner">
-                        <div class="project-img-wrapper" data-project-id="${id}">
-                            <img src="${coverImg}" alt="${proj.title} cover" loading="lazy" class="optimized-project-img">
+                        <div class="project-img-wrapper" data-project-id="${proj.id}">
+                            <img src="${img}" alt="${proj.title}" loading="lazy" class="optimized-project-img">
                             <div class="project-img-overlay">
                                 <span class="project-view-badge">View Case</span>
                             </div>
                         </div>
                         <div class="project-card-info">
                             <div class="project-card-meta">
-                                <span class="proj-meta-tag">${isBehance ? 'Behance Live' : 'Personal Studio'}</span>
+                                <span class="proj-meta-tag">Personal Studio</span>
                                 <span class="proj-meta-year">${year}</span>
                             </div>
                             <h4 class="proj-title">${proj.title}</h4>
-                            <p class="proj-desc">${cleanDesc}</p>
-                            
+                            <p class="proj-desc">${desc}</p>
                             <div class="proj-card-specs">
-                                <span><strong>Tools:</strong> ${toolsUsed}</span>
-                                <span><strong>Focus:</strong> ${focusArea}</span>
+                                <span><strong>Tools:</strong> ${proj.tools || '—'}</span>
+                                <span><strong>Focus:</strong> ${proj.focus || '—'}</span>
                             </div>
-                            
-                            ${swatchesHtml}
-
+                            ${swatchHtml}
                             <div class="project-card-actions">
-                                <button class="btn btn-sm btn-outline view-case-btn" data-project-id="${id}">
+                                <button class="btn btn-sm btn-outline view-case-btn"
+                                        data-project-id="${proj.id}">
                                     Case Study
                                 </button>
-                                ${isBehance ? `
-                                <a href="${proj.link}" target="_blank" class="btn btn-sm btn-secondary behance-direct-btn" onclick="event.stopPropagation();">
-                                    Behance
-                                </a>` : ''}
                             </div>
                         </div>
                     </div>
@@ -473,814 +390,396 @@ const renderCategoryShowcases = () => {
             `;
         });
 
-        htmlContent += `</div>`;
-        categoryDiv.innerHTML = htmlContent;
-        container.appendChild(categoryDiv);
+        html += '</div>';
+        section.innerHTML = html;
+        container.appendChild(section);
     });
 
-    // Add scroll animations using GSAP ScrollTrigger for cards reveal
-    animateProjectsEntrance();
+    if (container.children.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center;color:var(--text-muted);padding:5rem 0;">
+                <p style="font-size:1.1rem;font-weight:600;margin-bottom:0.5rem;">No projects yet.</p>
+                <p style="font-size:0.9rem;">Add projects from the <a href="admin.html" style="text-decoration:underline;">Admin Panel</a>.</p>
+            </div>`;
+        return;
+    }
 
-    // Event hooks for opening full modal case study
-    container.querySelectorAll('.project-img-wrapper, .view-case-btn').forEach(element => {
-        element.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const id = element.getAttribute('data-project-id');
-            if (id) openProjectModal(id);
-        });
-    });
-};
-
-const animateProjectsEntrance = () => {
+    /* GSAP entrance animations */
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-        const cards = document.querySelectorAll('.project-editorial-card');
-        cards.forEach((card, index) => {
+        container.querySelectorAll('.project-editorial-card').forEach(card => {
             gsap.fromTo(card,
-                { opacity: 0, y: 30 },
+                { opacity: 0, y: 28 },
                 {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: card,
-                        start: "top 92%",
-                        toggleActions: "play none none none"
-                    }
-                }
-            );
+                    opacity: 1, y: 0, duration: 0.75, ease: 'power2.out',
+                    scrollTrigger: { trigger: card, start: 'top 93%', toggleActions: 'play none none none' }
+                });
         });
+    }
 
-        // Parallax image scrolling inside wrapper
-        const images = document.querySelectorAll('.optimized-project-img');
-        images.forEach(img => {
-            gsap.to(img, {
-                yPercent: 6,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: img.parentElement,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: true
-                }
-            });
+    /* Click events */
+    container.querySelectorAll('[data-project-id]').forEach(el => {
+        el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = el.getAttribute('data-project-id');
+            if (id) openModal(id);
         });
+    });
+};
+
+/* =============================================================
+   5. CASE STUDY MODAL
+   ============================================================= */
+const openModal = (id) => {
+    const modal = document.getElementById('project-modal');
+    if (!modal) return;
+
+    loadModalData(id);
+    history.pushState(null, '', `?project=${encodeURIComponent(id)}`);
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    window.lenis?.stop();
+
+    const wrapper = modal.querySelector('.modal-wrapper');
+    if (typeof gsap !== 'undefined' && wrapper) {
+        gsap.fromTo(wrapper,
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' });
     }
 };
 
-const switchCategoryProject = (categoryName, targetIdx) => {
-    const safeCatId = categoryName.replace(/\s+/g, '');
-    const detailsPane = document.getElementById(`pane-details-${safeCatId}`);
-    const visualPane = document.getElementById(`pane-visual-${safeCatId}`);
+const closeModal = () => {
+    const modal = document.getElementById('project-modal');
+    if (!modal?.classList.contains('open')) return;
 
-    if (detailsPane && visualPane) {
-        detailsPane.classList.add('project-switching');
-        visualPane.classList.add('project-switching');
-        
-        setTimeout(() => {
-            categoryActiveIndices[categoryName] = targetIdx;
-            renderCategoryShowcases();
-            
-            const newDetails = document.getElementById(`pane-details-${safeCatId}`);
-            const newVisual = document.getElementById(`pane-visual-${safeCatId}`);
-            if (newDetails && newVisual) {
-                newDetails.classList.remove('project-switching');
-                newVisual.classList.remove('project-switching');
-                
-                // Micro GSAP slide-fade reveals
-                gsap.fromTo(newDetails.querySelectorAll('.proj-title, .proj-desc, .proj-specs-grid, .btn'), 
-                    { opacity: 0, y: 15 }, 
-                    { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: "power2.out" }
-                );
-                gsap.fromTo(newVisual.querySelector('img'),
-                    { opacity: 0, scale: 1.04 },
-                    { opacity: 1, scale: 1, duration: 0.7, ease: "power2.out" }
-                );
-            }
-        }, 300);
+    const wrapper = modal.querySelector('.modal-wrapper');
+    const done = () => {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        history.pushState(null, '', window.location.pathname);
+        activeModalId = null;
+        window.lenis?.start();
+    };
+
+    if (typeof gsap !== 'undefined' && wrapper) {
+        gsap.to(wrapper, { opacity: 0, y: 15, duration: 0.35, ease: 'power2.in', onComplete: done });
     } else {
-        categoryActiveIndices[categoryName] = targetIdx;
-        renderCategoryShowcases();
+        done();
     }
 };
 
-/* -----------------------------------------
-   5. BEHANCE FEED SYSTEM
-   ----------------------------------------- */
-const fetchBehanceProjects = async (username) => {
-    try {
-        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        let items = [];
+const loadModalData = (id) => {
+    const proj = allProjects.find(p => p.id === id);
+    if (!proj) return;
+    activeModalId = id;
 
-        if (isLocal) {
-            // Fetch via local proxy to bypass Cloudflare constraints
-            const response = await fetch(`/api-behance/feeds/user?username=${username}`);
-            if (!response.ok) throw new Error(`Proxy error: ${response.status}`);
-            
-            const xmlText = await response.text();
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-            
-            if (xmlDoc.querySelector("parsererror")) throw new Error("XML feed parsing exception");
+    const $ = (elId) => document.getElementById(elId);
 
-            const rawItems = Array.from(xmlDoc.getElementsByTagName("item"));
-            items = rawItems.map(item => {
-                const title = item.getElementsByTagName("title")[0]?.textContent || "";
-                const link = item.getElementsByTagName("link")[0]?.textContent || "";
-                const pubDate = item.getElementsByTagName("pubDate")[0]?.textContent || "";
-                const description = item.getElementsByTagName("description")[0]?.textContent || "";
-                return {
-                    title,
-                    link,
-                    pubDate,
-                    description,
-                    categories: ["Behance"],
-                    guid: link
-                };
-            });
-        } else {
-            // Production deployment static request proxying using rss2json
-            const rssUrl = `https://www.behance.net/feeds/user?username=${username}`;
-            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
-            const data = await response.json();
-            if (data.status !== 'ok') throw new Error(data.message || "RSS converter failed");
-            
-            items = data.items.map(item => ({
-                title: item.title,
-                link: item.link,
-                pubDate: item.pubDate,
-                description: item.description,
-                categories: item.categories || ["Behance"],
-                guid: item.guid || item.link
-            }));
-        }
+    if ($('modal-img'))      { $('modal-img').src = proj.img || ''; $('modal-img').alt = proj.title; }
+    if ($('modal-cat'))        $('modal-cat').textContent = proj.category || 'Project';
+    if ($('modal-title'))      $('modal-title').textContent = proj.title;
+    if ($('modal-client'))     $('modal-client').textContent = proj.client || 'Personal Concept';
+    if ($('modal-year'))       $('modal-year').textContent = proj.year || '—';
+    if ($('modal-duration'))   $('modal-duration').textContent = proj.duration || '—';
+    if ($('modal-tools'))      $('modal-tools').textContent = proj.tools || '—';
+    if ($('modal-focus'))      $('modal-focus').textContent = proj.focus || '—';
+    if ($('modal-output'))     $('modal-output').textContent = proj.output || '—';
+    if ($('modal-concept-text')) $('modal-concept-text').textContent = proj.concept || 'No concept narrative.';
 
-        behanceProjects = items;
-    } catch (e) {
-        console.error("Could not sync Behance Feed:", e);
+    /* Swatches */
+    const swatchesEl = $('modal-swatches');
+    if (swatchesEl) {
+        swatchesEl.innerHTML = '';
+        (proj.swatches || ['#0044FF','#C85A32','#FAF9F5','#141518']).forEach(color => {
+            swatchesEl.insertAdjacentHTML('beforeend', `
+                <div class="swatch-group">
+                    <div class="swatch" style="background:${color};"></div>
+                    <span class="swatch-label">${color}</span>
+                </div>`);
+        });
     }
-    renderCategoryShowcases();
+
+    /* Typography */
+    const typoEl = $('modal-typo');
+    if (typoEl) {
+        typoEl.innerHTML = '';
+        (proj.typography || []).forEach(t => {
+            typoEl.insertAdjacentHTML('beforeend', `
+                <div class="typo-row">
+                    <span class="typo-font">${t.name}: ${t.font}</span>
+                    <span class="typo-sample">AaBbCc (${t.size})</span>
+                </div>`);
+        });
+    }
+
+    /* Modal nav */
+    updateModalNav(id);
+
+    /* Share button */
+    const shareBtn = $('modal-share-btn');
+    if (shareBtn) {
+        const clone = shareBtn.cloneNode(true);
+        shareBtn.parentNode.replaceChild(clone, shareBtn);
+        clone.addEventListener('click', () => {
+            const url = `${location.origin}${location.pathname}?project=${encodeURIComponent(id)}`;
+            navigator.clipboard.writeText(url).then(() => {
+                clone.textContent = 'Link Copied ✓';
+                setTimeout(() => { clone.textContent = 'Share Project'; }, 2000);
+            }).catch(() => {});
+        });
+    }
+
+    /* Scroll modal to top */
+    const modal = document.getElementById('project-modal');
+    if (modal) modal.scrollTop = 0;
 };
 
-/* -----------------------------------------
-   6. PARSING & EXTRACTION HELPERS
-   ----------------------------------------- */
-const parseCleanDescription = (p) => {
-    if (!p.description) return p.concept || "No description text provided.";
-    let clean = p.concept || p.description.replace(/<[^>]*>/g, ' ');
-    clean = clean.replace(/\s+/g, ' ').trim();
-    return clean.length > 260 ? clean.substring(0, 260) + "..." : clean;
-};
-
-const parseCoverImage = (p) => {
-    if (p.img) return p.img;
-    const imgRegex = /<img[^>]+src="([^">]+)"/;
-    const match = p.description ? p.description.match(imgRegex) : null;
-    return match ? match[1] : p.thumbnail || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'300\'%3E%3Crect fill=\'%23faf9f5\' width=\'100%25\' height=\'100%25\'/%3E%3C/svg%3E';
-};
-
-const extractImagesFromDescription = (descriptionHtml) => {
-    if (!descriptionHtml) return [];
-    const div = document.createElement('div');
-    div.innerHTML = descriptionHtml;
-    const imgs = div.querySelectorAll('img');
-    const urls = [];
-    imgs.forEach(img => {
-        let src = img.getAttribute('src');
-        if (src && !src.includes('clear.gif') && !src.includes('analytics')) {
-            urls.push(src);
-        }
-    });
-    return urls;
-};
-
-/* -----------------------------------------
-   7. CASE STUDY MODAL MANAGEMENT
-   ----------------------------------------- */
-const renderModalGallery = (images) => {
-    const galleryContainer = document.getElementById('modal-image-gallery');
-    if (!galleryContainer) return;
-    
-    galleryContainer.innerHTML = '';
-    
-    if (!images || images.length === 0) {
-        galleryContainer.style.display = 'none';
+const updateModalNav = (currentId) => {
+    if (allProjects.length <= 1) {
+        const footer = document.querySelector('.modal-navigation-footer');
+        if (footer) footer.style.display = 'none';
         return;
     }
-    
-    galleryContainer.style.display = 'grid';
+    const footer = document.querySelector('.modal-navigation-footer');
+    if (footer) footer.style.display = 'grid';
 
-    images.forEach((imgUrl, index) => {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        
-        // Dynamically alternate layout grid weights to simulate editorial magazine sheets
-        const pattern = index % 5;
-        if (pattern === 0) {
-            item.classList.add('full-width');
-        } else if (pattern === 1 || pattern === 2) {
-            item.classList.add('two-col');
-        } else {
-            item.classList.add('three-col');
-        }
-        
-        item.innerHTML = `<img src="${imgUrl}" alt="Case layout ${index + 1}" loading="lazy" class="gallery-fit-img">`;
-        galleryContainer.appendChild(item);
-    });
-};
+    const idx  = allProjects.findIndex(p => p.id === currentId);
+    const prev = allProjects[(idx - 1 + allProjects.length) % allProjects.length];
+    const next = allProjects[(idx + 1) % allProjects.length];
 
-const updateModalNavButtons = (currentId) => {
-    const { all } = getProjectsByCategory();
-    const navFooter = document.querySelector('.modal-navigation-footer');
-    
-    if (all.length <= 1) {
-        if (navFooter) navFooter.style.display = 'none';
-        return;
-    }
-    if (navFooter) navFooter.style.display = 'grid';
-
-    const idx = all.findIndex(p => (p.id || p.guid) === currentId);
-    if (idx === -1) return;
-
-    const prevIdx = (idx - 1 + all.length) % all.length;
-    const nextIdx = (idx + 1) % all.length;
-
-    const prevProj = all[prevIdx];
-    const nextProj = all[nextIdx];
-
-    const prevId = prevProj.id || prevProj.guid;
-    const nextId = nextProj.id || nextProj.guid;
-
-    const prevTitleEl = document.getElementById('modal-prev-title');
-    const nextTitleEl = document.getElementById('modal-next-title');
-    
-    if (prevTitleEl) prevTitleEl.textContent = prevProj.title;
-    if (nextTitleEl) nextTitleEl.textContent = nextProj.title;
+    const prevTitle = document.getElementById('modal-prev-title');
+    const nextTitle = document.getElementById('modal-next-title');
+    if (prevTitle) prevTitle.textContent = prev.title;
+    if (nextTitle) nextTitle.textContent = next.title;
 
     const prevBtn = document.getElementById('modal-prev-project');
     const nextBtn = document.getElementById('modal-next-project');
 
-    // Clone buttons to dump previous click event listeners
-    const newPrevBtn = prevBtn.cloneNode(true);
-    const newNextBtn = nextBtn.cloneNode(true);
-
-    prevBtn.parentNode.replaceChild(newPrevBtn, prevBtn);
-    nextBtn.parentNode.replaceChild(newNextBtn, nextBtn);
-
-    newPrevBtn.addEventListener('click', () => transitionModalContent(prevId));
-    newNextBtn.addEventListener('click', () => transitionModalContent(nextId));
+    const replaceBtn = (btn, targetId) => {
+        if (!btn) return;
+        const clone = btn.cloneNode(true);
+        btn.parentNode.replaceChild(clone, btn);
+        clone.addEventListener('click', () => transitionModal(targetId));
+    };
+    replaceBtn(prevBtn, prev.id);
+    replaceBtn(nextBtn, next.id);
 };
 
-const loadModalData = (projectId) => {
-    const { all } = getProjectsByCategory();
-    const data = all.find(p => (p.id || p.guid) === projectId);
-    if (!data) return;
-
-    activeModalProjectId = projectId;
-
-    const isBehance = data.isBehance;
-    const coverUrl = parseCoverImage(data);
-    const cleanDesc = data.concept || (data.description ? data.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() : "No concept narrative documented.");
-    const year = data.year || (data.pubDate ? new Date(data.pubDate).getFullYear() : '2026');
-    const toolsUsed = data.tools || (data.categories || []).join(", ") || "Illustrator, Photoshop";
-    const duration = data.duration || "Completed Feed Project";
-    const client = data.client || (isBehance ? "Behance Case Study" : "Personal Concept Studio");
-
-    // Map DOM selectors
-    const modalImg = document.getElementById('modal-img');
-    const modalCat = document.getElementById('modal-cat');
-    const modalTitle = document.getElementById('modal-title');
-    const modalYear = document.getElementById('modal-year');
-    const modalDuration = document.getElementById('modal-duration');
-    const modalTools = document.getElementById('modal-tools');
-    const modalConcept = document.getElementById('modal-concept-text');
-    const modalSwatches = document.getElementById('modal-swatches');
-    const modalTypo = document.getElementById('modal-typo');
-    const modalBehanceLink = document.getElementById('modal-behance-link');
-    const modalSpecsSection = document.getElementById('modal-specs-section');
-    const modalClient = document.getElementById('modal-client');
-
-    if (modalImg) {
-        modalImg.src = coverUrl;
-        modalImg.alt = data.title;
-    }
-    if (modalCat) modalCat.textContent = isBehance ? "Behance Case" : `Category: ${classifyProject(data)}`;
-    if (modalTitle) modalTitle.textContent = data.title;
-    if (modalYear) modalYear.textContent = year;
-    if (modalDuration) modalDuration.textContent = duration;
-    if (modalTools) modalTools.textContent = toolsUsed;
-    if (modalConcept) modalConcept.textContent = cleanDesc;
-    if (modalClient) modalClient.textContent = client;
-
-    if (isBehance && modalBehanceLink) {
-        modalBehanceLink.href = data.link;
-        modalBehanceLink.style.display = 'inline-flex';
-    } else if (modalBehanceLink) {
-        modalBehanceLink.style.display = 'none';
-    }
-
-    // Render design systems for personal database works
-    if (!isBehance) {
-        if (modalSpecsSection) modalSpecsSection.style.display = 'block';
-        
-        if (modalSwatches) {
-            modalSwatches.innerHTML = '';
-            const swatches = data.swatches || ["#0044FF", "#C85A32", "#FAF9F5", "#141518"];
-            swatches.forEach(color => {
-                const swatchGrp = document.createElement('div');
-                swatchGrp.className = 'swatch-group';
-                swatchGrp.innerHTML = `
-                    <div class="swatch" style="background-color: ${color}"></div>
-                    <span class="swatch-label">${color}</span>
-                `;
-                modalSwatches.appendChild(swatchGrp);
-            });
-        }
-
-        if (modalTypo) {
-            modalTypo.innerHTML = '';
-            const typography = data.typography || [
-                { name: "Heading Typography", font: "Outfit SemiBold", size: "72px" },
-                { name: "Editorial Body", font: "Playfair Display Regular", size: "16px" }
-            ];
-            typography.forEach(spec => {
-                const typoRow = document.createElement('div');
-                typoRow.className = 'typo-row';
-                typoRow.innerHTML = `
-                    <span class="typo-font">${spec.name}: ${spec.font}</span>
-                    <span class="typo-sample">AaBbCc (${spec.size})</span>
-                `;
-                modalTypo.appendChild(typoRow);
-            });
-        }
-    } else {
-        if (modalSpecsSection) modalSpecsSection.style.display = 'none';
-    }
-
-    // Extract and render Behance descriptions containing image tracks
-    if (isBehance && data.description) {
-        const descImages = extractImagesFromDescription(data.description);
-        // Omit first image to avoid duplicates with main cover
-        if (descImages.length > 1) {
-            renderModalGallery(descImages.slice(1));
-        } else {
-            renderModalGallery([]);
-        }
-    } else {
-        renderModalGallery([]);
-    }
-
-    updateModalNavButtons(projectId);
-
-    // Share link button action
-    const shareBtn = document.getElementById('modal-share-link');
-    if (shareBtn) {
-        const newShareBtn = shareBtn.cloneNode(true);
-        shareBtn.parentNode.replaceChild(newShareBtn, shareBtn);
-        newShareBtn.addEventListener('click', () => {
-            const shareUrl = `${window.location.origin}${window.location.pathname}?project=${encodeURIComponent(projectId)}`;
-            navigator.clipboard.writeText(shareUrl).then(() => {
-                newShareBtn.textContent = 'Link Copied ✓';
-                setTimeout(() => { newShareBtn.textContent = 'Share Project'; }, 2000);
-            }).catch(() => {
-                const input = document.createElement('input');
-                input.value = shareUrl;
-                document.body.appendChild(input);
-                input.select();
-                document.execCommand('copy');
-                document.body.removeChild(input);
-                newShareBtn.textContent = 'Link Copied ✓';
-                setTimeout(() => { newShareBtn.textContent = 'Share Project'; }, 2000);
-            });
-        });
-    }
-};
-
-const transitionModalContent = (targetId) => {
-    const caseStudyEl = document.querySelector('.modal-case-study');
-    if (!caseStudyEl) return;
-
-    gsap.to(caseStudyEl, {
-        opacity: 0,
-        y: -15,
-        duration: 0.35,
-        ease: "power2.in",
-        onComplete: () => {
-            loadModalData(targetId);
-            history.pushState(null, '', `?project=${encodeURIComponent(targetId)}`);
-            const modalBackdrop = document.getElementById('project-modal');
-            if (modalBackdrop) modalBackdrop.scrollTop = 0;
-            
-            gsap.to(caseStudyEl, {
-                opacity: 1,
-                y: 0,
-                duration: 0.55,
-                ease: "power2.out"
-            });
-        }
-    });
-};
-
-const openProjectModal = (projectId) => {
-    const modal = document.getElementById('project-modal');
-    if (!modal) return;
-
-    loadModalData(projectId);
-    history.pushState(null, '', `?project=${encodeURIComponent(projectId)}`);
-
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-
-    if (window.lenis) {
-        window.lenis.stop();
-    }
-
-    gsap.fromTo(modal.querySelector('.modal-wrapper'),
-        { opacity: 0, y: 25 },
-        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
-    );
-};
-
-const closeProjectModal = () => {
-    const modal = document.getElementById('project-modal');
-    if (!modal || !modal.classList.contains('open')) return;
-
-    gsap.to(modal.querySelector('.modal-wrapper'), {
-        opacity: 0,
-        y: 20,
-        duration: 0.4,
-        ease: "power2.in",
-        onComplete: () => {
-            modal.classList.remove('open');
-            modal.setAttribute('aria-hidden', 'true');
-            document.body.style.overflow = '';
-            history.pushState(null, '', window.location.pathname);
-            activeModalProjectId = null;
-
-            if (window.lenis) {
-                window.lenis.start();
+const transitionModal = (targetId) => {
+    const study = document.querySelector('.modal-case-study');
+    if (!study) return;
+    if (typeof gsap !== 'undefined') {
+        gsap.to(study, {
+            opacity: 0, y: -12, duration: 0.3, ease: 'power2.in',
+            onComplete: () => {
+                loadModalData(targetId);
+                history.pushState(null, '', `?project=${encodeURIComponent(targetId)}`);
+                gsap.to(study, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
             }
-        }
-    });
+        });
+    } else {
+        loadModalData(targetId);
+    }
 };
 
-const initProjectModal = () => {
+const initModal = () => {
     const closeBtn = document.querySelector('.modal-close');
-    const modal = document.getElementById('project-modal');
+    const modal    = document.getElementById('project-modal');
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (modal)    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
 
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeProjectModal);
-    }
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeProjectModal();
-        });
-    }
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeProjectModal();
-        
-        // Prev/Next project arrows if modal is open
-        if (modal && modal.classList.contains('open')) {
-            if (e.key === 'ArrowLeft') {
-                const prevBtn = document.getElementById('modal-prev-project');
-                if (prevBtn) prevBtn.click();
-            } else if (e.key === 'ArrowRight') {
-                const nextBtn = document.getElementById('modal-next-project');
-                if (nextBtn) nextBtn.click();
-            }
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeModal();
+        if (modal?.classList.contains('open')) {
+            if (e.key === 'ArrowLeft')  document.getElementById('modal-prev-project')?.click();
+            if (e.key === 'ArrowRight') document.getElementById('modal-next-project')?.click();
         }
     });
 };
 
-/* -----------------------------------------
-   8. SETTINGS DRAWER CONTROLLER
-   ----------------------------------------- */
-const initSettingsDrawer = () => {
-    const drawer = document.getElementById('settings-drawer');
-    const toggleBtn = document.getElementById('btn-settings-toggle');
-    const bannerBtn = document.getElementById('banner-settings-btn');
-    const closeBtn = document.querySelector('.settings-drawer-close');
-    const saveBtn = document.getElementById('btn-save-behance-url');
-    const urlInput = document.getElementById('behance-profile-url');
-    const demoBanner = document.getElementById('demo-mode-banner');
-    
-    const saveBackendBtn = document.getElementById('btn-save-backend-url');
-    const backendInput = document.getElementById('production-api-url');
+/* =============================================================
+   6. HERO TEXT CYCLE
+   ============================================================= */
+let heroCycleTimer = null;
 
-    if (!drawer) return;
-
-    const openDrawer = () => {
-        drawer.classList.add('open');
-        drawer.setAttribute('aria-hidden', 'false');
-    };
-
-    const closeDrawer = () => {
-        drawer.classList.remove('open');
-        drawer.setAttribute('aria-hidden', 'true');
-    };
-
-    if (toggleBtn) toggleBtn.addEventListener('click', openDrawer);
-    if (bannerBtn) bannerBtn.addEventListener('click', openDrawer);
-    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-
-    drawer.addEventListener('click', (e) => {
-        if (e.target === drawer) closeDrawer();
-    });
-
-    const savedUrl = localStorage.getItem('behance_profile_url');
-    const urlToLoad = savedUrl || 'https://www.behance.net/sanjayuiuxgd';
-    const activeUsername = extractUsername(urlToLoad);
-    
-    if (urlInput) {
-        urlInput.value = urlToLoad;
-    }
-
-    const savedBackendUrl = localStorage.getItem('production_api_url') || '';
-    if (backendInput) {
-        backendInput.value = savedBackendUrl;
-    }
-
-    if (!savedUrl && demoBanner) {
-        demoBanner.style.display = 'block';
-    }
-
-    if (saveBtn && urlInput) {
-        saveBtn.addEventListener('click', async () => {
-            const inputVal = urlInput.value.trim();
-            if (inputVal) {
-                const username = extractUsername(inputVal);
-                localStorage.setItem('behance_profile_url', inputVal);
-                if (demoBanner) demoBanner.style.display = 'none';
-                closeDrawer();
-                await fetchBehanceProjects(username);
-            }
-        });
-    }
-
-    if (saveBackendBtn && backendInput) {
-        saveBackendBtn.addEventListener('click', () => {
-            const backendVal = backendInput.value.trim();
-            localStorage.setItem('production_api_url', backendVal);
-            alert('Backend URL saved successfully! Reloading...');
-            closeDrawer();
-            setTimeout(() => window.location.reload(), 800);
-        });
-    }
-
-    fetchBehanceProjects(activeUsername);
-};
-
-const extractUsername = (input) => {
-    if (!input) return 'sanjayuiuxgd';
-    let clean = input.trim();
-    const urlRegex = /(?:https?:\/\/)?(?:www\.)?behance\.net\/([^\/\?#]+)/i;
-    const match = clean.match(urlRegex);
-    return match ? match[1] : clean;
-};
-
-/* -----------------------------------------
-   9. INTERACTION DECORATIONS (CURSOR, SCROLL, FORMS)
-   ----------------------------------------- */
-const initCustomCursor = () => {
-    const cursor = document.querySelector('.custom-cursor');
-    const cursorDot = document.querySelector('.custom-cursor-dot');
-    
-    if (!cursor || !cursorDot) return;
-
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
-    let dotX = 0, dotY = 0;
-
-    window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        if (!document.body.classList.contains('cursor-active')) {
-            document.body.classList.add('cursor-active');
-        }
-    });
-
-    document.addEventListener('mouseleave', () => {
-        document.body.classList.remove('cursor-active');
-    });
-
-    const animateCursor = () => {
-        cursorX += (mouseX - cursorX) * 0.12;
-        cursorY += (mouseY - cursorY) * 0.12;
-        dotX += (mouseX - dotX) * 0.25;
-        dotY += (mouseY - dotY) * 0.25;
-
-        cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
-        cursorDot.style.transform = `translate3d(${dotX}px, ${dotY}px, 0) translate(-50%, -50%)`;
-
-        requestAnimationFrame(animateCursor);
-    };
-    requestAnimationFrame(animateCursor);
-
-    const hoverTargets = 'a, button, input, select, textarea, .project-img-wrapper, .dot-link, .thumb-dot, .modal-backdrop, .modal-close';
-    document.body.addEventListener('mouseenter', (e) => {
-        if (e.target.matches && e.target.matches(hoverTargets)) {
-            const target = e.target;
-            const textSpan = cursor.querySelector('.cursor-text');
-            
-            if (target.closest('.project-img-wrapper') || target.matches('.project-img-wrapper')) {
-                cursor.classList.add('view-hover');
-                if (textSpan) textSpan.textContent = 'VIEW';
-            } else if (target.closest('.modal-close') || target.matches('.modal-close') || target.matches('.modal-backdrop')) {
-                cursor.classList.add('close-hover');
-                if (textSpan) textSpan.textContent = 'CLOSE';
-            } else {
-                cursor.classList.add('hovered');
-            }
-        }
-    }, true);
-
-    document.body.addEventListener('mouseleave', (e) => {
-        if (e.target.matches && e.target.matches(hoverTargets)) {
-            cursor.classList.remove('hovered');
-            cursor.classList.remove('view-hover');
-            cursor.classList.remove('close-hover');
-            const textSpan = cursor.querySelector('.cursor-text');
-            if (textSpan) textSpan.textContent = '';
-        }
-    }, true);
-};
-
-const initIntersectionObserver = () => {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-    const dotLinks = document.querySelectorAll('.dot-link');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const sectionId = entry.target.getAttribute('id');
-                
-                navLinks.forEach(link => {
-                    const href = link.getAttribute('href');
-                    if (href === `#${sectionId}`) {
-                        link.classList.add('active');
-                    } else if (!(href === '#about-resume' && sectionId === 'about')) {
-                        link.classList.remove('active');
-                    }
-                });
-                
-                dotLinks.forEach(dot => {
-                    if (dot.getAttribute('href') === `#${sectionId}`) {
-                        dot.classList.add('active');
-                    } else {
-                        dot.classList.remove('active');
-                    }
-                });
-            }
-        });
-    }, { threshold: 0.25 });
-
-    sections.forEach(section => observer.observe(section));
-};
-
-const initHeroTextAnimation = () => {
-    const textEl = document.getElementById('hero-dynamic-text');
-    if (!textEl) return;
+const initHeroTextCycle = (baseTitle = 'PORTFOLIO') => {
+    const el = document.getElementById('hero-dynamic-text');
+    if (!el) return;
 
     const words = [
-        "PORTFOLIO",
-        "SANJAY MURUGESAN",
-        "VISUAL DESIGNER",
-        "CREATIVE DESIGNER",
-        "LOGO DESIGNER",
-        "SOCIAL MEDIA DESIGNER",
-        "UI DESIGNER"
+        baseTitle,
+        'VISUAL DESIGNER',
+        'BRAND IDENTITY',
+        'LOGO DESIGNER',
+        'UI/UX DESIGNER',
+        'ART DIRECTOR'
     ];
-    let currentIndex = 0;
+    let idx = 0;
 
-    const cycleText = () => {
-        currentIndex = (currentIndex + 1) % words.length;
-        const nextWord = words[currentIndex];
+    if (heroCycleTimer) clearInterval(heroCycleTimer);
 
-        gsap.to(textEl, {
-            y: -15,
-            opacity: 0,
-            duration: 0.4,
-            ease: "power2.in",
-            onComplete: () => {
-                textEl.textContent = nextWord;
-                gsap.set(textEl, { y: 15 });
-                gsap.to(textEl, {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.6,
-                    ease: "power2.out"
-                });
-            }
-        });
-    };
-
-    setInterval(cycleText, 3000);
+    heroCycleTimer = setInterval(() => {
+        idx = (idx + 1) % words.length;
+        if (typeof gsap !== 'undefined') {
+            gsap.to(el, {
+                y: -14, opacity: 0, duration: 0.35, ease: 'power2.in',
+                onComplete: () => {
+                    el.textContent = words[idx];
+                    gsap.fromTo(el,
+                        { y: 14, opacity: 0 },
+                        { y: 0,  opacity: 1, duration: 0.5, ease: 'power2.out' });
+                }
+            });
+        } else {
+            el.textContent = words[idx];
+        }
+    }, 3000);
 };
 
-const initScrollSystem = () => {
+/* =============================================================
+   7. CUSTOM CURSOR
+   ============================================================= */
+const initCursor = () => {
+    const cursor    = document.querySelector('.custom-cursor');
+    const cursorDot = document.querySelector('.custom-cursor-dot');
+    if (!cursor || !cursorDot) return;
+
+    let mX = 0, mY = 0, cX = 0, cY = 0, dX = 0, dY = 0;
+
+    window.addEventListener('mousemove', e => {
+        mX = e.clientX; mY = e.clientY;
+        document.body.classList.add('cursor-active');
+    });
+
+    document.addEventListener('mouseleave', () => document.body.classList.remove('cursor-active'));
+
+    const tick = () => {
+        cX += (mX - cX) * 0.12; cY += (mY - cY) * 0.12;
+        dX += (mX - dX) * 0.25; dY += (mY - dY) * 0.25;
+        cursor.style.transform    = `translate3d(${cX}px,${cY}px,0) translate(-50%,-50%)`;
+        cursorDot.style.transform = `translate3d(${dX}px,${dY}px,0) translate(-50%,-50%)`;
+        requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+
+    const targets = 'a,button,input,select,textarea,.project-img-wrapper,.dot-link';
+    document.body.addEventListener('mouseenter', e => {
+        if (!e.target.matches) return;
+        const txt = cursor.querySelector('.cursor-text');
+        if (e.target.closest('.project-img-wrapper') || e.target.matches('.project-img-wrapper')) {
+            cursor.classList.add('view-hover');
+            if (txt) txt.textContent = 'VIEW';
+        } else if (e.target.closest('.modal-close') || e.target.matches('.modal-backdrop')) {
+            cursor.classList.add('close-hover');
+            if (txt) txt.textContent = 'CLOSE';
+        } else if (e.target.matches(targets)) {
+            cursor.classList.add('hovered');
+        }
+    }, true);
+
+    document.body.addEventListener('mouseleave', e => {
+        if (!e.target.matches) return;
+        cursor.classList.remove('hovered', 'view-hover', 'close-hover');
+        const txt = cursor.querySelector('.cursor-text');
+        if (txt) txt.textContent = '';
+    }, true);
+};
+
+/* =============================================================
+   8. SCROLL SYSTEM (Lenis + GSAP)
+   ============================================================= */
+const initScroll = () => {
     const lenis = new Lenis({
         duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true
     });
     window.lenis = lenis;
 
-    function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-    }
+    const raf = time => { lenis.raf(time); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
 
-    // Sync Lenis with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-    });
+    gsap.ticker.add(time => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
 
-    // Dynamic Header show-on-up/hide-on-down & scroll progress indicator
+    /* Header auto-hide & shrink */
     const header = document.querySelector('.site-header');
     let lastScroll = 0;
 
-    lenis.on('scroll', (e) => {
-        const currentScroll = e.scroll;
-        
+    lenis.on('scroll', e => {
+        const cur = e.scroll;
         if (header) {
-            if (currentScroll > lastScroll && currentScroll > 150) {
-                // Scrolling down
-                header.classList.add('site-header--hidden');
-            } else {
-                // Scrolling up
-                header.classList.remove('site-header--hidden');
-            }
+            if (cur > lastScroll && cur > 120) header.classList.add('site-header--hidden');
+            else header.classList.remove('site-header--hidden');
 
-            // Shrink header size slightly
-            if (currentScroll > 50) {
-                header.style.height = "68px";
-                header.style.backgroundColor = "rgba(250, 250, 247, 0.98)";
+            if (cur > 40) {
+                header.style.height = '64px';
+                header.style.backgroundColor = 'rgba(250,250,247,0.98)';
             } else {
-                header.style.height = "80px";
-                header.style.backgroundColor = "rgba(250, 250, 247, 0.85)";
+                header.style.height = 'var(--header-h)';
+                header.style.backgroundColor = 'rgba(250,250,247,0.88)';
             }
         }
 
-        // Update progress bar
-        const scrollProgress = document.getElementById('scroll-progress');
-        if (scrollProgress) {
-            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = totalHeight > 0 ? (currentScroll / totalHeight) * 100 : 0;
-            scrollProgress.style.width = `${progress}%`;
+        /* Progress bar */
+        const bar = document.getElementById('scroll-progress');
+        if (bar) {
+            const total = document.documentElement.scrollHeight - window.innerHeight;
+            bar.style.width = total > 0 ? `${(cur / total) * 100}%` : '0%';
         }
 
-        lastScroll = currentScroll;
+        lastScroll = cur;
     });
 
-    // Dynamic Image Parallax effect
-    gsap.utils.toArray('.hero-portrait-img, .about-portrait-img, .project-img-wrapper img').forEach(img => {
+    /* Portrait parallax */
+    gsap.utils.toArray('.hero-portrait-img,.about-portrait-img').forEach(img => {
         gsap.to(img, {
-            yPercent: 8,
-            ease: "none",
-            scrollTrigger: {
-                trigger: img.parentNode,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true
-            }
+            yPercent: 8, ease: 'none',
+            scrollTrigger: { trigger: img.parentNode, start: 'top bottom', end: 'bottom top', scrub: true }
         });
     });
 
-    // Fade reveal blocks
-    gsap.utils.toArray('.section-num, .section-title, .about-bio, .about-grid, .category-showcase-section, .contact-content').forEach(section => {
-        gsap.fromTo(section, 
-            { opacity: 0, y: 25 },
-            { 
-                opacity: 1, 
-                y: 0, 
-                duration: 0.8, 
-                ease: "power2.out",
-                scrollTrigger: {
-                    trigger: section,
-                    start: "top 88%",
-                    toggleActions: "play none none none"
-                }
-            }
-        );
+    /* Fade reveal */
+    gsap.utils.toArray('.section-badge,.section-title,.about-bio,.about-grid,.contact-content').forEach(el => {
+        gsap.fromTo(el,
+            { opacity: 0, y: 22 },
+            { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out',
+              scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' } });
     });
 };
 
-const initSmoothScrollClicks = () => {
-    document.querySelectorAll('.main-nav a, .side-nav-dots a, .back-to-top a, .hero-actions a').forEach(anchor => {
-        anchor.addEventListener('click', (e) => {
-            const href = anchor.getAttribute('href');
-            if (href.startsWith('#')) {
+/* =============================================================
+   9. HEADER, MOBILE NAV, FORMS
+   ============================================================= */
+const initHeader = () => {
+    const toggle   = document.getElementById('menu-toggle');
+    const nav      = document.getElementById('main-nav');
+    const bars     = toggle?.querySelectorAll('.bar');
+
+    if (toggle && nav) {
+        toggle.addEventListener('click', () => {
+            const open = nav.classList.toggle('mobile-open');
+            if (bars?.length >= 3) {
+                bars[0].style.transform = open ? 'rotate(45deg) translate(4px,4px)' : 'none';
+                bars[1].style.opacity   = open ? '0' : '1';
+                bars[2].style.transform = open ? 'rotate(-45deg) translate(5px,-5px)' : 'none';
+            }
+        });
+    }
+};
+
+const initSmoothLinks = () => {
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const href = a.getAttribute('href');
+            const target = document.querySelector(href);
+            if (target) {
                 e.preventDefault();
-                const target = document.querySelector(href);
-                if (target && window.lenis) {
-                    window.lenis.scrollTo(target, { offset: href === '#about-resume' ? -50 : 0 });
-                } else if (target) {
+                if (window.lenis) {
+                    window.lenis.scrollTo(target, { offset: href === '#about-resume' ? -40 : 0 });
+                } else {
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
             }
@@ -1288,177 +787,79 @@ const initSmoothScrollClicks = () => {
     });
 };
 
-const initHeaderAndForms = () => {
-    const menuToggle = document.querySelector('.menu-toggle');
-    const mainNav = document.querySelector('.main-nav');
-    
-    if (menuToggle && mainNav) {
-        const headerActions = document.querySelector('.header-actions');
-        
-        const handleTabletChange = (e) => {
-            if (e.matches) {
-                if (mainNav && headerActions && !mainNav.contains(headerActions)) {
-                    mainNav.appendChild(headerActions);
-                }
-            } else {
-                if (mainNav && headerActions && mainNav.contains(headerActions)) {
-                    const headerContainer = document.querySelector('.header-container');
-                    const menuToggleBtn = document.querySelector('.menu-toggle');
-                    if (headerContainer && menuToggleBtn) {
-                        headerContainer.insertBefore(headerActions, menuToggleBtn);
-                    }
-                }
-            }
-        };
+const initIntersectionObserver = () => {
+    const sections  = document.querySelectorAll('section[id]');
+    const navLinks  = document.querySelectorAll('.nav-link');
+    const dotLinks  = document.querySelectorAll('.dot-link');
 
-        const mediaQuery = window.matchMedia('(max-width: 991px)');
-        mediaQuery.addEventListener('change', handleTabletChange);
-        handleTabletChange(mediaQuery);
-
-        menuToggle.addEventListener('click', () => {
-            mainNav.classList.toggle('mobile-open');
-            const bars = menuToggle.querySelectorAll('.bar');
-            if (bars.length >= 3) {
-                if (mainNav.classList.contains('mobile-open')) {
-                    bars[0].style.transform = 'rotate(45deg) translate(4px, 4px)';
-                    bars[1].style.transform = 'scale(0)';
-                    bars[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-                } else {
-                    bars[0].style.transform = 'none';
-                    bars[1].style.transform = 'none';
-                    bars[2].style.transform = 'none';
-                }
-            }
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const id = entry.target.id;
+            navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
+            dotLinks.forEach(d => d.classList.toggle('active', d.getAttribute('href') === `#${id}`));
         });
+    }, { threshold: 0.25 });
 
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                if (mainNav.classList.contains('mobile-open')) {
-                    menuToggle.click();
-                }
-            });
-        });
-    }
+    sections.forEach(s => obs.observe(s));
+};
 
+const initContactForm = () => {
     const form = document.getElementById('portfolio-contact-form');
-    if (form) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const submitBtn = document.getElementById('submit-btn');
-            const originalText = submitBtn.innerHTML;
-
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Sending Message...';
-            submitBtn.style.opacity = '0.7';
-
-            setTimeout(() => {
-                submitBtn.innerHTML = 'Message Sent ✓';
-                submitBtn.style.backgroundColor = '#246B4E';
-                submitBtn.style.color = '#FFFFFF';
-                
-                alert('Thank you! Your message was sent successfully.');
-                form.reset();
-
-                setTimeout(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.style.backgroundColor = '';
-                    submitBtn.style.color = '';
-                    submitBtn.style.opacity = '';
-                }, 3000);
-            }, 1200);
-        });
-    }
-};
-
-const initHeroAnimations = () => {
-    if (typeof gsap !== 'undefined') {
-        const tl = gsap.timeline();
-        
-        // Setup initial states
-        gsap.set('.hero-subtitle', { opacity: 0, y: 25 });
-        gsap.set('#hero-dynamic-text', { opacity: 0, y: 15 });
-        gsap.set('.hero-description', { opacity: 0, y: 15 });
-        gsap.set('.hero-actions .btn', { opacity: 0, y: 15 });
-        gsap.set('.hero-portrait-frame', { opacity: 0, scale: 0.96 });
-        gsap.set('.scroll-indicator', { opacity: 0, y: 10 });
-
-        tl.to('.hero-subtitle', { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" })
-          .to('#hero-dynamic-text', { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.6")
-          .to('.hero-description', { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.6")
-          .to('.hero-actions .btn', { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.15 }, "-=0.5")
-          .to('.hero-portrait-frame', { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }, "-=0.9")
-          .to('.scroll-indicator', { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.4");
-    }
-};
-
-const initScrollRevealAnimations = () => {
-    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-        // Sections reveal
-        const sections = document.querySelectorAll('section');
-        sections.forEach(sec => {
-            gsap.fromTo(sec, 
-                { opacity: 0, y: 35 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 1,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: sec,
-                        start: "top 88%",
-                        toggleActions: "play none none none"
-                    }
-                }
-            );
-        });
-
-        // Section headings reveal
-        const headings = document.querySelectorAll('.section-title');
-        headings.forEach(heading => {
-            gsap.fromTo(heading,
-                { opacity: 0, y: 20 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: heading,
-                        start: "top 90%",
-                        toggleActions: "play none none none"
-                    }
-                }
-            );
-        });
-    }
-};
-
-/* -----------------------------------------
-   10. GLOBAL SYSTEM LOADER
-   ----------------------------------------- */
-document.addEventListener('DOMContentLoaded', () => {
-    loadActiveProjects();
-    loadProfileDetails();
-    initSettingsDrawer();
-    initCustomCursor();
-    initIntersectionObserver();
-    initProjectModal();
-    initHeaderAndForms();
-    initHeroTextAnimation();
-    initScrollSystem();
-    initSmoothScrollClicks();
-    
-    // Setup dynamic creative reveals
-    initHeroAnimations();
-    initScrollRevealAnimations();
-
-    // Check URL query parameters to auto-open direct-linked case study modal
-    const urlParams = new URLSearchParams(window.location.search);
-    const sharedProjId = urlParams.get('project');
-    if (sharedProjId) {
+    if (!form) return;
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = document.getElementById('submit-btn');
+        const orig = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = 'Sending...';
         setTimeout(() => {
-            openProjectModal(sharedProjId);
-        }, 800);
-    }
+            btn.innerHTML = 'Message Sent ✓';
+            form.reset();
+            setTimeout(() => { btn.disabled = false; btn.innerHTML = orig; }, 3500);
+        }, 1200);
+    });
+};
+
+/* =============================================================
+   10. HERO ANIMATIONS (entrance)
+   ============================================================= */
+const initHeroAnimations = () => {
+    if (typeof gsap === 'undefined') return;
+    const tl = gsap.timeline();
+    gsap.set(['.hero-badge','#hero-dynamic-text','.hero-desc','.hero-actions .btn','.hero-portrait-frame','.scroll-indicator'],
+             { opacity: 0, y: 20 });
+    tl.to('.hero-badge',           { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+      .to('#hero-dynamic-text',    { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+      .to('.hero-desc',            { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+      .to('.hero-actions .btn',    { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.15 }, '-=0.5')
+      .to('.hero-portrait-frame',  { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: 'power2.out' }, '-=0.9')
+      .to('.scroll-indicator',     { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.4');
+};
+
+/* =============================================================
+   11. INIT
+   ============================================================= */
+document.addEventListener('DOMContentLoaded', async () => {
+    /* Load data first */
+    await Promise.allSettled([
+        loadSiteContent(),
+        loadProfileDetails(),
+        loadProjects()
+    ]);
+
+    /* UI systems */
+    initModal();
+    initCursor();
+    initHeader();
+    initIntersectionObserver();
+    initContactForm();
+    initHeroAnimations();
+    initHeroTextCycle();
+    initScroll();
+    initSmoothLinks();
+
+    /* Direct-link project via URL param */
+    const param = new URLSearchParams(location.search).get('project');
+    if (param) setTimeout(() => openModal(param), 800);
 });

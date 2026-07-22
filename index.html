@@ -3,50 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Premium minimal editorial graphic design portfolio synced live using a Behance profile as the single source of truth.">
+    <meta name="description" content="Premium graphic design portfolio — brand identity, editorial layout, packaging, and digital experiences by Sanjay Murugesan.">
     <title>Graphic Design Portfolio | Sanjay Murugesan</title>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght=0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    
-    <!-- GSAP & Lenis Smooth Scroll -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- GSAP & Lenis -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Scroll Progress Indicator -->
+    <!-- Scroll Progress -->
     <div class="scroll-progress-bar" id="scroll-progress"></div>
 
     <!-- Custom Cursor -->
     <div class="custom-cursor"><span class="cursor-text"></span></div>
     <div class="custom-cursor-dot"></div>
 
-    <!-- Navigation Header -->
-    <header class="site-header">
+    <!-- ─── HEADER ─── -->
+    <header class="site-header" id="site-header">
         <div class="header-container">
             <a href="#" class="logo-text" id="header-logo">
-                <span class="logo-dot"></span>DESIGN.PORTFOLIO
+                <span class="logo-dot"></span>
+                <span id="logo-text-val">DESIGN.PORTFOLIO</span>
             </a>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="#hero" class="nav-link active" data-sec="hero">Home</a></li>
-                    <li><a href="#about" class="nav-link" data-sec="about">About</a></li>
-                    <li><a href="#projects" class="nav-link" data-sec="projects">Projects</a></li>
-                    <li><a href="#contact" class="nav-link" data-sec="contact">Contact</a></li>
-                    <li><a href="#about-resume" class="nav-link" data-sec="about">Resume</a></li>
+            <nav class="main-nav" id="main-nav">
+                <ul id="nav-list">
+                    <li><a href="#hero"    class="nav-link active" data-sec="hero">Home</a></li>
+                    <li><a href="#about"   class="nav-link"        data-sec="about">About</a></li>
+                    <li><a href="#projects"class="nav-link"        data-sec="projects">Projects</a></li>
+                    <li><a href="#contact" class="nav-link"        data-sec="contact">Contact</a></li>
+                    <li><a href="#about-resume" class="nav-link"   data-sec="about">Resume</a></li>
                 </ul>
             </nav>
             <div class="header-actions">
-                <button class="btn btn-sm btn-outline" id="btn-settings-toggle">Sync Behance</button>
-                <a href="#contact" class="btn btn-sm btn-primary">Let's Work</a>
+                <a href="#contact" class="btn btn-sm btn-primary" id="nav-cta">Let's Work</a>
             </div>
-            <button class="menu-toggle" aria-label="Toggle Menu">
+            <button class="menu-toggle" aria-label="Toggle Menu" id="menu-toggle">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -54,274 +54,256 @@
         </div>
     </header>
 
-    <!-- Side Navigation Dot Indicator -->
+    <!-- Side Nav Dots -->
     <div class="side-nav-dots">
-        <a href="#hero" class="dot-link active" data-sec="hero" aria-label="Home section"></a>
-        <a href="#about" class="dot-link" data-sec="about" aria-label="About section"></a>
-        <a href="#projects" class="dot-link" data-sec="projects" aria-label="Projects section"></a>
-        <a href="#contact" class="dot-link" data-sec="contact" aria-label="Contact section"></a>
+        <a href="#hero"     class="dot-link active" data-sec="hero"     aria-label="Home"></a>
+        <a href="#about"    class="dot-link"         data-sec="about"    aria-label="About"></a>
+        <a href="#projects" class="dot-link"         data-sec="projects" aria-label="Projects"></a>
+        <a href="#contact"  class="dot-link"         data-sec="contact"  aria-label="Contact"></a>
     </div>
 
-    <!-- Demo Sync Banner -->
-    <div id="demo-mode-banner" style="display: none; position: fixed; bottom: 0; left: 0; width: 100%; padding: 0.8rem; background-color: #faf9f5; border-top: 1px solid rgba(0,0,0,0.06); text-align: center; font-size: 0.8rem; z-index: 100; color: #686a73;">
-        Viewing demo Behance profile. <button id="banner-settings-btn" style="background:none; border:none; text-decoration:underline; font-weight:600; color:#141416; cursor:pointer; padding:0; font-family:inherit;">Click here to connect your own profile URL</button>.
-    </div>
+    <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+    <section id="hero" class="hero-section">
+        <div class="hero-content">
+            <div class="hero-left">
+                <p class="hero-badge" id="hero-badge">CREATIVE GRAPHIC DESIGNER</p>
+                <h1 class="hero-title">
+                    <span class="text-reveal-container">
+                        <span class="text-reveal-line" id="hero-dynamic-text">PORTFOLIO</span>
+                    </span>
+                </h1>
+                <p class="hero-desc" id="hero-desc">
+                    Sanjay Murugesan is a visual designer specializing in brand identity, editorial layout,
+                    packaging, and digital experiences. Creating premium designs rooted in precision and modern aesthetics.
+                </p>
+                <div class="hero-actions">
+                    <a href="#projects" class="btn btn-primary"   id="hero-cta-primary">View Showcase</a>
+                    <a href="#contact"  class="btn btn-secondary" id="hero-cta-secondary">Get In Touch</a>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="hero-portrait-frame">
+                    <img src="/assets/images/designer_portrait.jpg"
+                         alt="Designer Portrait"
+                         class="hero-portrait-img"
+                         id="hero-portrait-img">
+                    <div class="portrait-overlay"></div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span class="mouse"><span class="wheel"></span></span>
+            <span class="scroll-text">Scroll</span>
+        </div>
+    </section>
 
-    <!-- Main Container -->
-    <main class="portfolio-container">
+    <!-- ═══════════════════════════ ABOUT ═══════════════════════════ -->
+    <section id="about" class="about-section">
+        <div class="section-content">
+            <span class="section-badge" id="about-badge">01 / Profile</span>
+            <h2 class="section-title" id="about-section-title">
+                About Sanjay <br><span class="serif-italic">Murugesan</span>
+            </h2>
 
-        <!-- HERO SECTION -->
-        <section id="hero" class="section hero-section active-section" data-theme="light-cream">
-            <div class="section-content hero-content">
-                <div class="hero-left">
-                    <p class="hero-subtitle">CREATIVE GRAPHIC DESIGNER</p>
-                    <h1 class="hero-title">
-                        <span class="text-reveal-container">
-                            <span class="text-reveal-line" id="hero-dynamic-text">PORTFOLIO</span>
-                        </span>
-                    </h1>
-                    <p class="hero-description">
-                        Sanjay Murugesan is a visual designer specializing in brand identity, editorial layout, packaging, and digital experiences. Creating premium designs rooted in precision and modern aesthetics.
+            <div class="about-grid">
+                <div class="about-left">
+                    <div class="about-portrait-frame">
+                        <img src="/assets/images/designer_portrait.jpg"
+                             alt="Sanjay Murugesan"
+                             class="about-portrait-img"
+                             id="about-portrait-img">
+                    </div>
+                </div>
+
+                <div class="about-right">
+                    <p class="about-bio" id="about-bio">
+                        I am a multidisciplinary visual designer driven by geometric structure,
+                        typographic elegance, and a devotion to minimal aesthetics.
                     </p>
-                    <div class="hero-actions">
-                        <a href="#projects" class="btn btn-primary">View Showcase</a>
-                        <a href="#contact" class="btn btn-secondary">Get In Touch</a>
-                    </div>
-                </div>
-                <div class="hero-right">
-                    <div class="hero-portrait-frame">
-                        <img src="/assets/images/designer_portrait.jpg" alt="Sanjay Murugesan Portrait" class="hero-portrait-img" id="hero-portrait-img">
-                        <div class="portrait-overlay"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="scroll-indicator">
-                <span class="mouse">
-                    <span class="wheel"></span>
-                </span>
-                <span class="scroll-text">Scroll down</span>
-            </div>
-        </section>
 
-        <!-- ABOUT SECTION -->
-        <section id="about" class="section about-section" data-theme="light-cream">
-            <div class="section-content about-content">
-                <span class="section-num">01 / Profile</span>
-                <h2 class="section-title" id="about-section-title">About Sanjay <br><span class="serif-italic">Murugesan</span></h2>
-                
-                <div class="about-grid">
-                    <div class="about-left">
-                        <div class="about-portrait-frame">
-                            <img src="/assets/images/designer_portrait.jpg" alt="Sanjay Murugesan" class="about-portrait-img" id="about-portrait-img">
+                    <!-- Timeline -->
+                    <div class="about-timeline-grid" id="about-resume">
+                        <div class="timeline-col">
+                            <h3>Experience</h3>
+                            <ul class="timeline-list" id="about-experience-list">
+                                <li>
+                                    <span class="timeline-date">2024 - Present</span>
+                                    <span class="timeline-role">Lead Brand &amp; Identity Designer</span>
+                                    <span class="timeline-company">Independent Studio practice</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="timeline-col">
+                            <h3>Education</h3>
+                            <ul class="timeline-list" id="about-education-list">
+                                <li>
+                                    <span class="timeline-date">2017 - 2020</span>
+                                    <span class="timeline-role">Bachelor of Design (B.Des)</span>
+                                    <span class="timeline-company">National Institute of Design</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="about-right">
-                        <p class="about-bio" id="about-bio">
-                            I am a multidisciplinary visual designer driven by geometric structure, typographic elegance, and a devotion to minimal aesthetics. I translate complex brand concepts into highly functional visual identities, editorial layouts, and tangible packaging layouts. I build systems that bridge the gap between creative storytelling and industrial execution.
-                        </p>
-                        
-                        <!-- Timeline sections: Experience & Education -->
-                        <div class="about-timeline-grid" id="about-resume">
-                            <div class="timeline-col">
-                                <h3>Experience</h3>
-                                <ul class="timeline-list" id="about-experience-list">
-                                    <li>
-                                        <span class="timeline-date">2024 - Present</span>
-                                        <span class="timeline-role">Lead Brand & Identity Designer</span>
-                                        <span class="timeline-company">Independent Studio practice</span>
-                                    </li>
-                                    <li>
-                                        <span class="timeline-date">2022 - 2024</span>
-                                        <span class="timeline-role">Senior Graphic Designer</span>
-                                        <span class="timeline-company">Visual Communications Agency</span>
-                                    </li>
-                                    <li>
-                                        <span class="timeline-date">2020 - 2022</span>
-                                        <span class="timeline-role">Visual UX Designer</span>
-                                        <span class="timeline-company">Digital Experience Agency</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="timeline-col">
-                                <h3>Education</h3>
-                                <ul class="timeline-list" id="about-education-list">
-                                    <li>
-                                        <span class="timeline-date">2017 - 2020</span>
-                                        <span class="timeline-role">Bachelor of Design (B.Des)</span>
-                                        <span class="timeline-company">National Institute of Design</span>
-                                    </li>
-                                    <li>
-                                        <span class="timeline-date">2015 - 2017</span>
-                                        <span class="timeline-role">Creative Communication Certificate</span>
-                                        <span class="timeline-company">Academy of Fine Arts</span>
-                                    </li>
-                                </ul>
+
+                    <!-- Skills & Software -->
+                    <div class="about-skills-section">
+                        <div class="skills-col">
+                            <h3>Core Capabilities</h3>
+                            <div class="skills-tags" id="about-capabilities-list">
+                                <span class="skill-tag">Brand Strategy</span>
+                                <span class="skill-tag">Logo Architecture</span>
+                                <span class="skill-tag">Editorial Layout</span>
                             </div>
                         </div>
-
-                        <!-- Skills and Software -->
-                        <div class="about-skills-section">
-                            <div class="skills-col">
-                                <h3>Core Capabilities</h3>
-                                <div class="skills-tags" id="about-capabilities-list">
-                                    <span class="skill-tag">Brand Strategy</span>
-                                    <span class="skill-tag">Logo Architecture</span>
-                                    <span class="skill-tag">Editorial Layout</span>
-                                    <span class="skill-tag">Packaging Structural Design</span>
-                                    <span class="skill-tag">Interface Design (UI/UX)</span>
-                                    <span class="skill-tag">Art Direction</span>
-                                    <span class="skill-tag">3D Product Mockups</span>
-                                </div>
-                            </div>
-                            
-                            <div class="skills-col" style="margin-top: 2rem;">
-                                <h3>Software Directory</h3>
-                                <div class="software-icons" id="about-software-list">
-                                    <div class="software-item" title="Adobe Photoshop">
-                                        <span class="soft-icon">Ps</span>
-                                        <span class="soft-name">Photoshop</span>
-                                    </div>
-                                    <div class="software-item" title="Adobe Illustrator">
-                                        <span class="soft-icon">Ai</span>
-                                        <span class="soft-name">Illustrator</span>
-                                    </div>
-                                    <div class="software-item" title="Adobe InDesign">
-                                        <span class="soft-icon">Id</span>
-                                        <span class="soft-name">InDesign</span>
-                                    </div>
-                                    <div class="software-item" title="Figma">
-                                        <span class="soft-icon">Fi</span>
-                                        <span class="soft-name">Figma</span>
-                                    </div>
-                                    <div class="software-item" title="Cinema 4D">
-                                        <span class="soft-icon">C4d</span>
-                                        <span class="soft-name">Cinema 4D</span>
-                                    </div>
+                        <div class="skills-col">
+                            <h3>Software Directory</h3>
+                            <div class="software-icons" id="about-software-list">
+                                <div class="software-item">
+                                    <span class="soft-icon">Ps</span>
+                                    <span class="soft-name">Photoshop</span>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div style="margin-top: 3rem;">
-                            <a href="#" class="btn btn-outline" id="btn-download-resume">
-                                Download Biography / Resume (PDF)
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                                </svg>
-                            </a>
-                        </div>
+                    <div>
+                        <a href="#" class="btn btn-outline" id="btn-download-resume">
+                            Download Biography / Resume (PDF)
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- PROJECTS SECTION (DYNAMIC) -->
-        <section id="projects" class="section projects-section" data-theme="light-cream">
-            <div class="section-content">
-                <span class="section-num">02 / Portfolio Work</span>
-                <h2 class="section-title">Selected Case <br><span class="serif-italic">Studies</span></h2>
-                
-                <!-- Dynamic categories container injected here -->
-                <div id="categories-container">
-                    <div style="text-align: center; color: #686a73; font-size: 0.95rem; padding: 5rem 0;">
-                        Synthesizing project catalog...
-                    </div>
+    <!-- ═══════════════════════════ PROJECTS ═══════════════════════════ -->
+    <section id="projects" class="projects-section">
+        <div class="section-content">
+            <span class="section-badge" id="projects-badge">02 / Portfolio Work</span>
+            <h2 class="section-title" id="projects-title">
+                Selected Case <br><span class="serif-italic" id="projects-title-italic">Studies</span>
+            </h2>
+
+            <div id="categories-container">
+                <div style="text-align:center;color:var(--text-muted);font-size:.95rem;padding:5rem 0;">
+                    Loading projects...
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- CONTACT SECTION -->
-        <section id="contact" class="section contact-section" data-theme="light-cream">
-            <div class="section-content contact-content">
+    <!-- ═══════════════════════════ CONTACT ═══════════════════════════ -->
+    <section id="contact" class="contact-section">
+        <div class="section-content">
+            <div class="contact-content">
+
                 <div class="contact-left">
-                    <span class="section-num">03 / Conversation</span>
-                    <h2 class="contact-title">Let's shape your <br><span class="serif-italic">vision</span>.</h2>
-                    <p class="contact-desc">
-                        Looking to elevate your brand identity, redesign a website, or create custom prints? Reach out for collaboration or consulting inquiries.
+                    <span class="section-badge" id="contact-badge">03 / Conversation</span>
+                    <h2 class="contact-title" id="contact-heading">
+                        Let's shape your <br><span class="serif-italic" id="contact-heading-italic">vision.</span>
+                    </h2>
+                    <p class="contact-desc" id="contact-desc">
+                        Looking to elevate your brand identity, redesign a website, or create custom prints?
+                        Reach out for collaboration or consulting inquiries.
                     </p>
                     <div class="contact-details">
                         <div class="contact-info-item">
                             <span class="info-label">Email</span>
-                            <a href="mailto:sanjaymurugesan23@gmail.com" class="info-val link-hover" id="contact-email">sanjaymurugesan23@gmail.com</a>
+                            <a href="mailto:sanjaymurugesan23@gmail.com"
+                               class="info-val link-hover"
+                               id="contact-email">sanjaymurugesan23@gmail.com</a>
                         </div>
                         <div class="contact-info-item">
                             <span class="info-label">Phone</span>
-                            <a href="tel:+919876543210" class="info-val link-hover" id="contact-phone">+91 98765 43210</a>
+                            <a href="tel:+919876543210"
+                               class="info-val link-hover"
+                               id="contact-phone">+91 98765 43210</a>
                         </div>
                         <div class="contact-info-item">
                             <span class="info-label">Studio Location</span>
-                            <span class="info-val" id="contact-location">Chennai, India & Remote</span>
+                            <span class="info-val" id="contact-location">Chennai, India &amp; Remote</span>
                         </div>
                         <div class="contact-info-item">
                             <span class="info-label">Network Directory</span>
-                            <div class="social-links">
-                                <a href="https://www.behance.net/sanjayuiuxgd" class="social-link link-hover" id="behance-link" target="_blank">Behance</a>
-                                <a href="https://www.linkedin.com/in/sanjaym23" class="social-link link-hover" id="linkedin-link" target="_blank">LinkedIn</a>
-                                <a href="https://www.instagram.com/design._.folio" class="social-link link-hover" id="instagram-link" target="_blank">Instagram</a>
-                                <a href="https://dribbble.com/sanjayuiuxgd" class="social-link link-hover" id="dribbble-link" target="_blank">Dribbble</a>
-                                <a href="https://github.com/Sanjay2392002" class="social-link link-hover" id="github-link" target="_blank">GitHub</a>
+                            <div class="social-links" id="social-links-container">
+                                <a href="#" class="social-link link-hover" id="behance-link"   target="_blank">Behance</a>
+                                <a href="#" class="social-link link-hover" id="linkedin-link"  target="_blank">LinkedIn</a>
+                                <a href="#" class="social-link link-hover" id="instagram-link" target="_blank">Instagram</a>
+                                <a href="#" class="social-link link-hover" id="dribbble-link"  target="_blank">Dribbble</a>
+                                <a href="#" class="social-link link-hover" id="github-link"    target="_blank">GitHub</a>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="contact-right">
                     <form class="contact-form" id="portfolio-contact-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="form-name" class="form-label">Your Name</label>
-                                <input type="text" id="form-name" class="form-input" placeholder="Alex Morgan" required>
+                                <input type="text" id="form-name" class="form-input"
+                                       placeholder="Alex Morgan" required>
                             </div>
                             <div class="form-group">
                                 <label for="form-email" class="form-label">Email Address</label>
-                                <input type="email" id="form-email" class="form-input" placeholder="alex@example.com" required>
+                                <input type="email" id="form-email" class="form-input"
+                                       placeholder="alex@example.com" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="form-category" class="form-label">Project Category</label>
                             <select id="form-category" class="form-input form-select" required>
                                 <option value="" disabled selected>Select an option</option>
-                                <option value="logo-brand">Logo & Brand Identity</option>
+                                <option value="logo-brand">Logo &amp; Brand Identity</option>
                                 <option value="packaging">Packaging Design</option>
-                                <option value="ui-ux-web">UI/UX & Web Design</option>
-                                <option value="editorial">Print & Editorial Layout</option>
-                                <option value="3d-visuals">3D & AI Visuals</option>
+                                <option value="ui-ux-web">UI/UX &amp; Web Design</option>
+                                <option value="editorial">Print &amp; Editorial Layout</option>
+                                <option value="3d-visuals">3D &amp; AI Visuals</option>
                                 <option value="other">Other Creative Project</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="form-message" class="form-label">Your Message</label>
-                            <textarea id="form-message" class="form-input form-textarea" rows="5" placeholder="Hi, I want to talk about a design proposal for..." required></textarea>
+                            <textarea id="form-message" class="form-input form-textarea"
+                                      rows="5"
+                                      placeholder="Hi, I want to talk about a design proposal for..."
+                                      required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary form-submit-btn" id="submit-btn">
                             Send Message
-                            <svg class="submit-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left: 8px;">
-                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <svg class="submit-arrow" width="16" height="16"
+                                 viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 12H19M19 12L12 5M19 12L12 19"
+                                      stroke="currentColor" stroke-width="2.5"
+                                      stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </button>
                     </form>
                 </div>
             </div>
-            
+
             <footer class="site-footer">
                 <div class="footer-thank-you">
-                    <h2 class="thank-you-text">THANK YOU.</h2>
+                    <h2 class="thank-you-text" id="footer-thank-you">THANK YOU.</h2>
                 </div>
                 <div class="footer-container">
-                    <p class="copyright">&copy; 2026 DESIGN.PORTFOLIO. All Rights Reserved.</p>
+                    <p class="copyright" id="footer-copyright">&copy; 2026 DESIGN.PORTFOLIO. All Rights Reserved.</p>
                     <p class="back-to-top"><a href="#hero" class="link-hover">Back to Top &uarr;</a></p>
                 </div>
             </footer>
-        </section>
+        </div>
+    </section>
 
-    </main>
-
-    <!-- CASE STUDY MODAL -->
-    <div class="modal-backdrop" id="project-modal" aria-hidden="true" role="dialog">
+    <!-- ═══════════════════════════ CASE STUDY MODAL ═══════════════════════════ -->
+    <div class="modal-backdrop" id="project-modal" aria-hidden="true" role="dialog" aria-modal="true">
         <div class="modal-wrapper">
-            <button class="modal-close" aria-label="Close project modal">&times;</button>
+            <button class="modal-close" aria-label="Close modal">&times;</button>
             <div class="modal-content-container">
                 <div class="modal-case-study">
-                    
-                    <!-- Hero Section -->
+
                     <div class="modal-hero">
                         <span class="modal-category" id="modal-cat">Category</span>
                         <h2 class="modal-title" id="modal-title">Project Title</h2>
@@ -330,7 +312,6 @@
                         </div>
                     </div>
 
-                    <!-- Info Grid -->
                     <div class="modal-info-grid">
                         <div class="modal-meta-sidebar">
                             <div class="meta-row">
@@ -349,55 +330,44 @@
                                 <span class="meta-label">Tools</span>
                                 <span class="meta-val" id="modal-tools">Figma, Photoshop</span>
                             </div>
-                            <a href="" target="_blank" class="btn btn-outline" id="modal-behance-link" style="margin-top: 1.5rem; width: 100%; display: inline-flex; gap: 8px; align-items: center; justify-content: center;">
-                                View on Behance
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M18 13V19C18 19.5304 17.7893 20.0391 17.4142 20.4142C17.0391 20.7893 16.5304 21 16 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V8C3 7.46957 3.21071 6.96086 3.58579 6.58579C3.96086 6.21071 4.46957 6 5 6H11M15 3H21M21 3V9M21 3L10 14"/>
-                                </svg>
-                            </a>
-                            <button class="btn btn-outline" id="modal-share-link" style="margin-top: 0.5rem; width: 100%; display: inline-flex; gap: 8px; align-items: center; justify-content: center;">
+                            <div class="meta-row">
+                                <span class="meta-label">Focus</span>
+                                <span class="meta-val" id="modal-focus">Brand Identity</span>
+                            </div>
+                            <div class="meta-row">
+                                <span class="meta-label">Output</span>
+                                <span class="meta-val" id="modal-output">Logo System</span>
+                            </div>
+                            <button class="btn btn-outline" id="modal-share-btn"
+                                    style="margin-top:1.5rem; width:100%; justify-content:center;">
                                 Share Project
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="18" cy="5" r="3"></circle>
-                                    <circle cx="6" cy="12" r="3"></circle>
-                                    <circle cx="18" cy="19" r="3"></circle>
-                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                                </svg>
                             </button>
                         </div>
+
                         <div class="modal-concept-content">
-                            <h3>Concept & Narrative</h3>
+                            <h3>Concept &amp; Narrative</h3>
                             <p id="modal-concept-text">Details about the concept and execution.</p>
-                            
-                            <div class="modal-specs-section" id="modal-specs-section">
+
+                            <div id="modal-specs-section">
                                 <div class="modal-design-system">
                                     <h3>Color Palette</h3>
-                                    <div class="palette-swatches" id="modal-swatches">
-                                        <!-- Dynamic Swatches -->
-                                    </div>
-                                    <h3 style="margin-top: 2rem;">Typography System</h3>
-                                    <div class="typo-specimen" id="modal-typo">
-                                        <!-- Dynamic Typo details -->
-                                    </div>
+                                    <div class="palette-swatches" id="modal-swatches"></div>
+                                    <h3 style="margin-top:2rem;">Typography System</h3>
+                                    <div class="typo-specimen" id="modal-typo"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Multiple images gallery container -->
-                    <div class="modal-image-gallery" id="modal-image-gallery">
-                        <!-- Dynamic images injected here -->
-                    </div>
+                    <div class="modal-image-gallery" id="modal-image-gallery" style="display:none;"></div>
 
-                    <!-- Modal Navigation Footer -->
                     <div class="modal-navigation-footer">
                         <button class="nav-btn prev-btn" id="modal-prev-project">
-                            <span class="nav-btn-label">&larr; Previous Case Study</span>
+                            <span class="nav-btn-label">&larr; Previous</span>
                             <span class="nav-btn-title" id="modal-prev-title">Project Name</span>
                         </button>
                         <button class="nav-btn next-btn" id="modal-next-project">
-                            <span class="nav-btn-label">Next Case Study &rarr;</span>
+                            <span class="nav-btn-label">Next &rarr;</span>
                             <span class="nav-btn-title" id="modal-next-title">Project Name</span>
                         </button>
                     </div>
@@ -407,48 +377,6 @@
         </div>
     </div>
 
-    <!-- SETTINGS DRAWER -->
-    <div class="settings-drawer-backdrop" id="settings-drawer" aria-hidden="true">
-        <div class="settings-drawer-content">
-            <button class="settings-drawer-close" aria-label="Close settings">&times;</button>
-            <h3 class="drawer-title">Sync Behance Profile</h3>
-            <p class="drawer-desc">
-                Paste your Behance profile URL. The system will parse your feed, extract all high-resolution portfolio images, and dynamically sort your projects into the 12 editorial categories.
-            </p>
-            
-            <div class="form-group" style="margin-top: 2rem;">
-                <label for="behance-profile-url" class="form-label">Behance Profile URL / Username</label>
-                <input type="text" id="behance-profile-url" class="form-input" placeholder="https://www.behance.net/username" required>
-            </div>
-            
-            <button class="btn btn-primary" id="btn-save-behance-url" style="width: 100%; margin-top: 1.5rem; margin-bottom: 2.5rem;">
-                Connect & Synchronize
-            </button>
-
-            <h3 class="drawer-title" style="border-top: 1px solid rgba(0,0,0,0.06); padding-top: 2rem;">Fullstack Backend URL</h3>
-            <p class="drawer-desc">
-                If you have deployed your Express backend to Render, Railway, or Fly.io, paste the public server URL below to connect.
-            </p>
-            
-            <div class="form-group" style="margin-top: 1.5rem;">
-                <label for="production-api-url" class="form-label">Production Backend API URL</label>
-                <input type="url" id="production-api-url" class="form-input" placeholder="https://your-backend.onrender.com">
-            </div>
-            
-            <button class="btn btn-outline" id="btn-save-backend-url" style="width: 100%; margin-top: 1.5rem;">
-                Save Backend URL
-            </button>
-            
-            <div class="drawer-instructions" style="margin-top: 3rem; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 2rem;">
-                <h4>How it sorts:</h4>
-                <p style="font-size: 0.8rem; color: #686a73; margin-top: 0.5rem; line-height: 1.6;">
-                    The dynamic classifier analyzes your project title, description/narrative, focus areas, output formats, and tags. It maps them into specific categories like Packaging, UI/UX, Web, Logo, Brand Identity, etc. Unmatched works are safely categorized under "Personal Projects".
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Custom JS -->
     <script type="module" src="app.js"></script>
 </body>
 </html>

@@ -4,9 +4,17 @@ dist/
 .env.local
 .env.*.local
 *.local
+
+# Runtime data files (seeded automatically on first run)
 data/projects.json
+data/profile.json
+data/site.json
+
+# Uploaded files
 public/uploads/*
 !public/uploads/.gitkeep
+
 .DS_Store
 *.db
 *.log
+Thumbs.db

@@ -1,427 +1,306 @@
 import express from 'express';
-import multer from 'multer';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import path from 'path';
-import fs from 'fs/promises';
+import multer  from 'multer';
+import cors    from 'cors';
+import dotenv  from 'dotenv';
+import path    from 'path';
+import fs      from 'fs/promises';
 import { v2 as cloudinary } from 'cloudinary';
-import { getProjects, saveProjects, getProfile, saveProfile } from './db.js';
+import {
+    getProjects, saveProjects,
+    getProfile,  saveProfile,
+    getSiteContent, saveSiteContent
+} from './db.js';
 
-// Load Environment variables
 dotenv.config();
 
-const app = express();
+const app  = express();
 const PORT = process.env.PORT || 3000;
 
-// Enable CORS and parsing middleware
+/* ─── Middleware ─── */
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Serve static assets and local uploads path
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static('public'));
 app.use('/uploads', express.static('public/uploads'));
 
-// Setup Local File Upload storage via Multer
+/* ─── Multer local storage ─── */
 const storage = multer.diskStorage({
-    destination: async (req, file, cb) => {
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-        try {
-            await fs.mkdir(uploadDir, { recursive: true });
-        } catch {}
-        cb(null, uploadDir);
+    destination: async (_req, _file, cb) => {
+        const dir = path.join(process.cwd(), 'public', 'uploads');
+        await fs.mkdir(dir, { recursive: true });
+        cb(null, dir);
     },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        const ext = path.extname(file.originalname);
-        cb(null, file.fieldname + '-' + uniqueSuffix + ext);
+    filename: (_req, file, cb) => {
+        const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        cb(null, file.fieldname + '-' + unique + path.extname(file.originalname));
     }
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage, limits: { fileSize: 25 * 1024 * 1024 } });
 
-// Setup Multi-file storage for Profile upload fields
+/* Profile fields: hero_portrait, about_portrait, resume_pdf */
 const profileUpload = upload.fields([
-    { name: 'hero_portrait', maxCount: 1 },
-    { name: 'about_portrait', maxCount: 1 },
-    { name: 'resume_pdf', maxCount: 1 }
+    { name: 'hero_portrait',   maxCount: 1 },
+    { name: 'about_portrait',  maxCount: 1 },
+    { name: 'resume_pdf',      maxCount: 1 }
 ]);
 
-// Configure Cloudinary if keys are defined in .env
-const isCloudinaryConfigured = 
-    process.env.CLOUDINARY_CLOUD_NAME && 
-    process.env.CLOUDINARY_API_KEY && 
+/* ─── Cloudinary config ─── */
+const cloudinaryReady =
+    process.env.CLOUDINARY_CLOUD_NAME &&
+    process.env.CLOUDINARY_API_KEY    &&
     process.env.CLOUDINARY_API_SECRET;
 
-if (isCloudinaryConfigured) {
+if (cloudinaryReady) {
     cloudinary.config({
         cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
+        api_key:    process.env.CLOUDINARY_API_KEY,
         api_secret: process.env.CLOUDINARY_API_SECRET
     });
-    console.log("☁️ Cloudinary image storage configured successfully.");
+    console.log('☁️  Cloudinary configured.');
 } else {
-    console.log("📁 Cloudinary credentials missing. Defaulting to local uploads path.");
+    console.log('📁  Using local uploads (no Cloudinary credentials).');
 }
 
-/* -----------------------------------------
-   API ENDPOINTS
-   ----------------------------------------- */
-
-// 1. GET ALL PROJECTS
-app.get('/api/projects', async (req, res) => {
-    try {
-        const list = await getProjects();
-        res.json(list);
-    } catch (e) {
-        res.status(500).json({ error: "Failed to retrieve projects list" });
+/* ─── Helper: upload file (local or cloud) ─── */
+const uploadFile = async (file, resourceType = 'image') => {
+    if (cloudinaryReady) {
+        const result = await cloudinary.uploader.upload(file.path, {
+            folder:        'graphic_design_portfolio',
+            resource_type: resourceType
+        });
+        try { await fs.unlink(file.path); } catch {}
+        return result.secure_url;
     }
+    return `/uploads/${file.filename}`;
+};
+
+/* ─── Helper: delete local file ─── */
+const deleteLocal = async (imgUrl) => {
+    if (imgUrl && imgUrl.startsWith('/uploads/')) {
+        const fp = path.join(process.cwd(), 'public', imgUrl);
+        try { await fs.unlink(fp); } catch {}
+    }
+};
+
+/* ═══════════════════════════════════════════════════════════
+   PROJECTS  —  CRUD
+   ═══════════════════════════════════════════════════════════ */
+
+/* GET /api/projects */
+app.get('/api/projects', async (_req, res) => {
+    try { res.json(await getProjects()); }
+    catch { res.status(500).json({ error: 'Failed to fetch projects' }); }
 });
 
-// 2. CREATE A NEW PROJECT
+/* POST /api/projects  — create */
 app.post('/api/projects', upload.single('image'), async (req, res) => {
     try {
-        if (!req.file) {
-            return res.status(400).json({ error: "No showcase image file uploaded" });
-        }
+        if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
 
         const {
-            title,
-            category,
-            year,
-            duration,
-            tools,
-            focus,
-            output,
-            concept,
-            swatches,     // Expected: comma-separated hex strings
-            typography    // Expected: JSON string
+            title, category, year, duration, tools, client,
+            focus, output, concept, swatches, typography
         } = req.body;
 
-        let imgUrl = "";
+        const imgUrl    = await uploadFile(req.file);
+        const swatchArr = swatches ? swatches.split(',').map(s => s.trim()) : ['#0044FF','#C85A32','#FAF9F5','#141518'];
+        let   typoArr   = [];
+        try   { typoArr = typography ? JSON.parse(typography) : []; } catch {}
 
-        if (isCloudinaryConfigured) {
-            // Upload to Cloudinary bucket
-            const result = await cloudinary.uploader.upload(req.file.path, {
-                folder: "graphic_design_portfolio"
-            });
-            imgUrl = result.secure_url;
-            
-            // Delete local temp file after upload
-            try {
-                await fs.unlink(req.file.path);
-            } catch (err) {
-                console.error("Local temp file deletion failed:", err);
-            }
-        } else {
-            // Use local file path served under static middleware
-            imgUrl = `/uploads/${req.file.filename}`;
-        }
+        const slug = (title || 'project').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const id   = slug + '-' + Date.now().toString().slice(-6);
 
-        // Parse swatches (comma-separated hex codes to array)
-        const swatchArr = swatches 
-            ? swatches.split(',').map(s => s.trim()) 
-            : ["#0044FF", "#C85A32", "#FAF9F5", "#141518"];
-
-        // Parse typography (JSON string to array)
-        let typoArr = [];
-        try {
-            typoArr = typography ? JSON.parse(typography) : [];
-        } catch {
-            typoArr = [
-                { name: "Headline typography", font: "Outfit Bold", size: "72px" },
-                { name: "Body text", font: "Outfit Regular", size: "16px" }
-            ];
-        }
-
-        // Build unique ID
-        const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString().slice(-4);
-
-        const newProject = {
-            id,
-            category,
-            title,
+        const project = {
+            id, category, title,
             img: imgUrl,
-            year: year || "2026",
-            duration: duration || "3 Weeks",
-            tools: tools || "Illustrator, Photoshop",
-            focus: focus || "Branding construction",
-            output: output || "Case mockup",
-            concept,
+            year: year || '2026',
+            duration: duration || '3 Weeks',
+            tools: tools || 'Illustrator, Photoshop',
+            client: client || 'Personal Concept',
+            focus: focus || 'Visual Composition',
+            output: output || 'Digital Showcase',
+            concept: concept || '',
             swatches: swatchArr,
             typography: typoArr
         };
 
         const list = await getProjects();
-        list.push(newProject);
+        list.push(project);
         await saveProjects(list);
-
-        res.status(201).json(newProject);
+        res.status(201).json(project);
     } catch (e) {
         console.error(e);
-        res.status(500).json({ error: "Failed to upload project" });
+        res.status(500).json({ error: 'Failed to create project' });
     }
 });
 
-// 3. DELETE A PROJECT
-app.delete('/api/projects/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-        const list = await getProjects();
-        
-        const projectToDelete = list.find(p => p.id === id);
-        if (!projectToDelete) {
-            return res.status(404).json({ error: "Project not found" });
-        }
-
-        // If local file, delete it from disk
-        if (projectToDelete.img.startsWith('/uploads/')) {
-            const filename = projectToDelete.img.replace('/uploads/', '');
-            const filePath = path.join(process.cwd(), 'public', 'uploads', filename);
-            try {
-                await fs.unlink(filePath);
-            } catch (err) {
-                console.error("Local file delete warning:", err.message);
-            }
-        }
-
-        const filteredList = list.filter(p => p.id !== id);
-        await saveProjects(filteredList);
-
-        res.json({ success: true, message: `Project ${id} deleted successfully` });
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({ error: "Failed to delete project" });
-    }
-});
-
-// 4. UPDATE AN EXISTING PROJECT
+/* PUT /api/projects/:id  — update */
 app.put('/api/projects/:id', upload.single('image'), async (req, res) => {
     try {
-        const id = req.params.id;
         const list = await getProjects();
-        const projectIdx = list.findIndex(p => p.id === id);
-        
-        if (projectIdx === -1) {
-            return res.status(404).json({ error: "Project not found" });
-        }
+        const idx  = list.findIndex(p => p.id === req.params.id);
+        if (idx === -1) return res.status(404).json({ error: 'Project not found' });
 
-        const project = list[projectIdx];
+        const p = list[idx];
+        const { title, category, year, duration, tools, client, focus, output, concept, swatches, typography } = req.body;
 
-        const {
-            title,
-            category,
-            year,
-            duration,
-            tools,
-            focus,
-            output,
-            concept,
-            swatches,     // Expected: comma-separated hex strings
-            typography    // Expected: JSON string
-        } = req.body;
-
-        let imgUrl = project.img; // Default to existing image
-
+        let imgUrl = p.img;
         if (req.file) {
-            // Upload new image
-            if (isCloudinaryConfigured) {
-                const result = await cloudinary.uploader.upload(req.file.path, {
-                    folder: "graphic_design_portfolio"
-                });
-                imgUrl = result.secure_url;
-                
-                try {
-                    await fs.unlink(req.file.path);
-                } catch (err) {
-                    console.error("Local temp file deletion failed:", err);
-                }
-            } else {
-                imgUrl = `/uploads/${req.file.filename}`;
-            }
-
-            // Optional: delete old local image if it was local to prevent clutter
-            if (project.img.startsWith('/uploads/')) {
-                const filename = project.img.replace('/uploads/', '');
-                const filePath = path.join(process.cwd(), 'public', 'uploads', filename);
-                try {
-                    await fs.unlink(filePath);
-                } catch (err) {
-                    console.error("Local file delete warning:", err.message);
-                }
-            }
+            await deleteLocal(p.img);
+            imgUrl = await uploadFile(req.file);
         }
 
-        // Parse swatches (comma-separated hex codes to array)
-        let swatchArr = project.swatches;
-        if (swatches) {
-            swatchArr = swatches.split(',').map(s => s.trim());
-        }
+        const swatchArr = swatches ? swatches.split(',').map(s => s.trim()) : p.swatches;
+        let   typoArr   = p.typography;
+        try   { if (typography) typoArr = JSON.parse(typography); } catch {}
 
-        // Parse typography (JSON string to array)
-        let typoArr = project.typography;
-        if (typography) {
-            try {
-                typoArr = JSON.parse(typography);
-            } catch {
-                // Keep existing
-            }
-        }
-
-        list[projectIdx] = {
-            ...project,
-            title: title || project.title,
-            category: category || project.category,
-            year: year || project.year,
-            duration: duration || project.duration,
-            tools: tools || project.tools,
-            focus: focus || project.focus,
-            output: output || project.output,
-            concept: concept !== undefined ? concept : project.concept,
+        list[idx] = {
+            ...p,
+            title:    title    ?? p.title,
+            category: category ?? p.category,
+            year:     year     ?? p.year,
+            duration: duration ?? p.duration,
+            tools:    tools    ?? p.tools,
+            client:   client   ?? p.client,
+            focus:    focus    ?? p.focus,
+            output:   output   ?? p.output,
+            concept:  concept  !== undefined ? concept : p.concept,
             img: imgUrl,
             swatches: swatchArr,
             typography: typoArr
         };
 
         await saveProjects(list);
-        res.json(list[projectIdx]);
+        res.json(list[idx]);
     } catch (e) {
         console.error(e);
-        res.status(500).json({ error: "Failed to update project" });
+        res.status(500).json({ error: 'Failed to update project' });
     }
 });
 
-// 5. GET PROFILE DATA
-app.get('/api/profile', async (req, res) => {
+/* DELETE /api/projects/:id */
+app.delete('/api/projects/:id', async (req, res) => {
     try {
-        const profile = await getProfile();
-        res.json(profile);
+        const list = await getProjects();
+        const item = list.find(p => p.id === req.params.id);
+        if (!item) return res.status(404).json({ error: 'Project not found' });
+
+        await deleteLocal(item.img);
+        await saveProjects(list.filter(p => p.id !== req.params.id));
+        res.json({ success: true });
     } catch (e) {
-        res.status(500).json({ error: "Failed to retrieve profile details" });
+        console.error(e);
+        res.status(500).json({ error: 'Failed to delete project' });
     }
 });
 
-// 6. UPDATE PROFILE DATA (WITH OPTIONAL PORTRAITS AND RESUME FILE)
+/* ═══════════════════════════════════════════════════════════
+   PROFILE  —  GET / PUT
+   ═══════════════════════════════════════════════════════════ */
+
+/* GET /api/profile */
+app.get('/api/profile', async (_req, res) => {
+    try { res.json(await getProfile()); }
+    catch { res.status(500).json({ error: 'Failed to fetch profile' }); }
+});
+
+/* PUT /api/profile */
 app.put('/api/profile', profileUpload, async (req, res) => {
     try {
         const profile = await getProfile();
+        const b = req.body;
 
-        const {
-            hero_subtitle,
-            hero_title,
-            hero_description,
-            about_title,
-            about_bio,
-            about_experience,   // JSON string of experience timeline array
-            about_education,    // JSON string of education timeline array
-            about_capabilities, // comma-separated tags
-            about_software,     // JSON string of software array
-            contact_email,
-            contact_phone,
-            contact_location,
-            contact_socials     // JSON string of socials object
-        } = req.body;
-
-        // Process file uploads
-        if (req.files) {
-            if (req.files['hero_portrait']) {
-                const file = req.files['hero_portrait'][0];
-                if (isCloudinaryConfigured) {
-                    const result = await cloudinary.uploader.upload(file.path, {
-                        folder: "graphic_design_portfolio"
-                    });
-                    profile.hero.portrait = result.secure_url;
-                    try { await fs.unlink(file.path); } catch {}
-                } else {
-                    profile.hero.portrait = `/uploads/${file.filename}`;
-                }
-            }
-
-            if (req.files['about_portrait']) {
-                const file = req.files['about_portrait'][0];
-                if (isCloudinaryConfigured) {
-                    const result = await cloudinary.uploader.upload(file.path, {
-                        folder: "graphic_design_portfolio"
-                    });
-                    profile.about.portrait = result.secure_url;
-                    try { await fs.unlink(file.path); } catch {}
-                } else {
-                    profile.about.portrait = `/uploads/${file.filename}`;
-                }
-            }
-
-            if (req.files['resume_pdf']) {
-                const file = req.files['resume_pdf'][0];
-                if (isCloudinaryConfigured) {
-                    const result = await cloudinary.uploader.upload(file.path, {
-                        folder: "graphic_design_portfolio",
-                        resource_type: "raw"
-                    });
-                    profile.about.resumeUrl = result.secure_url;
-                    try { await fs.unlink(file.path); } catch {}
-                } else {
-                    profile.about.resumeUrl = `/uploads/${file.filename}`;
-                }
-            }
+        /* ── File uploads ── */
+        if (req.files?.hero_portrait) {
+            const old = profile.hero?.portrait;
+            if (old?.startsWith('/uploads/')) await deleteLocal(old);
+            profile.hero.portrait = await uploadFile(req.files.hero_portrait[0]);
+        }
+        if (req.files?.about_portrait) {
+            const old = profile.about?.portrait;
+            if (old?.startsWith('/uploads/')) await deleteLocal(old);
+            profile.about.portrait = await uploadFile(req.files.about_portrait[0]);
+        }
+        if (req.files?.resume_pdf) {
+            profile.about.resumeUrl = await uploadFile(req.files.resume_pdf[0], 'raw');
         }
 
-        // Update textual fields if provided
-        if (hero_subtitle !== undefined) profile.hero.subtitle = hero_subtitle;
-        if (hero_title !== undefined) profile.hero.title = hero_title;
-        if (hero_description !== undefined) profile.hero.description = hero_description;
+        /* ── Hero text fields ── */
+        if (!profile.hero) profile.hero = {};
+        const heroFields = ['badge','name','title','description','ctaPrimary','ctaSecondary'];
+        heroFields.forEach(f => { if (b[`hero_${f}`] !== undefined) profile.hero[f] = b[`hero_${f}`]; });
 
-        if (about_title !== undefined) profile.about.title = about_title;
-        if (about_bio !== undefined) profile.about.bio = about_bio;
+        /* ── About text fields ── */
+        if (!profile.about) profile.about = {};
+        const aboutFields = ['sectionBadge','title','titleItalic','bio','resumeLabel'];
+        aboutFields.forEach(f => { if (b[`about_${f}`] !== undefined) profile.about[f] = b[`about_${f}`]; });
 
-        if (about_experience) {
-            try {
-                profile.about.experience = JSON.parse(about_experience);
-            } catch (err) {
-                console.error("Error parsing experience:", err);
-            }
+        if (b.about_experience)   { try { profile.about.experience   = JSON.parse(b.about_experience); }   catch {} }
+        if (b.about_education)    { try { profile.about.education    = JSON.parse(b.about_education); }    catch {} }
+        if (b.about_software)     { try { profile.about.software     = JSON.parse(b.about_software); }     catch {} }
+        if (b.about_capabilities) {
+            profile.about.capabilities = b.about_capabilities.split(',').map(s => s.trim()).filter(Boolean);
         }
 
-        if (about_education) {
-            try {
-                profile.about.education = JSON.parse(about_education);
-            } catch (err) {
-                console.error("Error parsing education:", err);
-            }
-        }
+        /* ── Contact text fields ── */
+        if (!profile.contact) profile.contact = {};
+        const contactFields = ['sectionBadge','title','titleItalic','description','email','phone','location'];
+        contactFields.forEach(f => { if (b[`contact_${f}`] !== undefined) profile.contact[f] = b[`contact_${f}`]; });
 
-        if (about_capabilities) {
-            profile.about.capabilities = about_capabilities.split(',').map(s => s.trim()).filter(Boolean);
-        }
-
-        if (about_software) {
-            try {
-                profile.about.software = JSON.parse(about_software);
-            } catch (err) {
-                console.error("Error parsing software:", err);
-            }
-        }
-
-        if (contact_email !== undefined) profile.contact.email = contact_email;
-        if (contact_phone !== undefined) profile.contact.phone = contact_phone;
-        if (contact_location !== undefined) profile.contact.location = contact_location;
-
-        if (contact_socials) {
-            try {
-                profile.contact.socials = JSON.parse(contact_socials);
-            } catch (err) {
-                console.error("Error parsing socials:", err);
-            }
-        }
+        if (b.contact_socials) { try { profile.contact.socials = JSON.parse(b.contact_socials); } catch {} }
 
         await saveProfile(profile);
         res.json(profile);
     } catch (e) {
         console.error(e);
-        res.status(500).json({ error: "Failed to update profile details" });
+        res.status(500).json({ error: 'Failed to update profile' });
     }
 });
 
-// Start listening
+/* ═══════════════════════════════════════════════════════════
+   SITE CONTENT  —  GET / PUT
+   (nav, footer, projects section, form categories, etc.)
+   ═══════════════════════════════════════════════════════════ */
+
+/* GET /api/site */
+app.get('/api/site', async (_req, res) => {
+    try { res.json(await getSiteContent()); }
+    catch { res.status(500).json({ error: 'Failed to fetch site content' }); }
+});
+
+/* PUT /api/site */
+app.put('/api/site', async (req, res) => {
+    try {
+        const site = await getSiteContent();
+        const b    = req.body;
+
+        if (b.logo !== undefined)    site.logo   = b.logo;
+        if (b.navCta !== undefined)  site.navCta = b.navCta;
+        if (b.nav)     { try { site.nav     = JSON.parse(b.nav);     } catch {} }
+        if (b.footer)  { try { site.footer  = JSON.parse(b.footer);  } catch {} }
+        if (b.projects){ try { site.projects = JSON.parse(b.projects);} catch {} }
+        if (b.contactForm){ try { site.contactForm = JSON.parse(b.contactForm); } catch {} }
+
+        /* Allow updating individual nested fields */
+        if (b.footer_copyright   !== undefined && site.footer) site.footer.copyright   = b.footer_copyright;
+        if (b.footer_thankYouText!== undefined && site.footer) site.footer.thankYouText = b.footer_thankYouText;
+
+        if (b.projects_sectionBadge !== undefined && site.projects) site.projects.sectionBadge = b.projects_sectionBadge;
+        if (b.projects_title        !== undefined && site.projects) site.projects.title        = b.projects_title;
+        if (b.projects_titleItalic  !== undefined && site.projects) site.projects.titleItalic  = b.projects_titleItalic;
+        if (b.projects_categories)  { try { site.projects.categories = JSON.parse(b.projects_categories); } catch {} }
+        if (b.contactForm_categories){ try { site.contactForm.categories = JSON.parse(b.contactForm_categories); } catch {} }
+
+        await saveSiteContent(site);
+        res.json(site);
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: 'Failed to update site content' });
+    }
+});
+
+/* ─── Start ─── */
 app.listen(PORT, () => {
-    console.log(`🚀 Portfolio backend server running at http://localhost:${PORT}`);
+    console.log(`🚀 Portfolio server running at http://localhost:${PORT}`);
 });
