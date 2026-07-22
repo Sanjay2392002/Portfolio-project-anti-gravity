@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage projects, upload new graphic design work, and export data.">
+    <title>Portfolio Admin Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght=0,400;0,600;0,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-page {
+            background-color: #faf9f5;
+            color: #141518;
+            min-height: 100vh;
+            padding: 4rem 8%;
+        }
+
+        .admin-header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(20, 21, 24, 0.08);
+            padding-bottom: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .admin-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .admin-grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        @media (max-width: 991px) {
+            .admin-grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sidebar Panels */
+        .admin-card {
+            background: #ffffff;
+            border: 1px solid rgba(20, 21, 24, 0.08);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.01);
+            margin-bottom: 2rem;
+        }
+
+        .admin-card h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-stats-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+        }
+
+        .stat-label {
+            color: #6e7178;
+        }
+
+        .stat-val {
+            font-weight: 600;
+        }
+
+        /* Project Management list */
+        .admin-project-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .admin-project-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #fbfaf7;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-project-item:hover {
+            border-color: #0044ff;
+            background: #ffffff;
+        }
+
+        .project-item-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .project-item-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: #eee;
+        }
+
+        .project-item-details h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .project-item-details span {
+            font-size: 0.75rem;
+            color: #6e7178;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .delete-project-btn {
+            background: none;
+            border: none;
+            color: #d11a2a;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.5rem 0.8rem;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .delete-project-btn:hover {
+            background: rgba(209, 26, 42, 0.08);
+        }
+
+        /* Add Work Form styles */
+        .color-palette-picker {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .picker-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            flex: 1;
+        }
+
+        .color-picker-input {
+            width: 100%;
+            height: 40px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            padding: 0;
+            background: none;
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            border: 2px dashed rgba(20, 21, 24, 0.15);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background-color: #fbfaf7;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-wrapper:hover {
+            border-color: #0044ff;
+            background-color: #ffffff;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .upload-preview {
+            width: 100%;
+            max-height: 180px;
+            object-fit: contain;
+            border-radius: 6px;
+            margin-top: 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+
+        .typo-spec-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .alert-toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: #141518;
+            color: #ffffff;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+        }
+
+        .alert-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="admin-page">
+
+    <div class="admin-header-nav">
+        <div>
+            <span class="logo-dot"></span>
+            <a href="index.html" class="logo-text" style="display:inline-flex; align-items:center;">DESIGN.PORTFOLIO</a>
+        </div>
+        <div>
+            <a href="index.html" class="btn btn-sm btn-outline">Back to Portfolio</a>
+        </div>
+    </div>
+
+    <div class="admin-grid-layout">
+
+        <!-- LEFT SIDEBAR: Stats & works list -->
+        <div class="admin-sidebar-column">
+            <!-- Behance configuration link -->
+            <div class="admin-card">
+                <h2>Behance Sync Link</h2>
+                <p style="font-size: 0.85rem; color: #6e7178; margin-bottom: 1rem;">
+                    Your Behance profile URL can be configured directly from the portfolio homepage. Click "Sync Behance" in the header to modify.
+                </p>
+            </div>
+
+            <div class="admin-card">
+                <h2>Database Stats</h2>
+                <ul class="admin-stats-list">
+                    <li class="stat-row">
+                        <span class="stat-label">Total Works Uploaded</span>
+                        <span class="stat-val" id="total-works-count">0</span>
+                    </li>
+                    <li class="stat-row">
+                        <span class="stat-label">Food & Beverage</span>
+                        <span class="stat-val" id="count-food">0</span>
+                    </li>
+                    <li class="stat-row">
+                        <span class="stat-label">Jewelry & Luxury</span>
+                        <span class="stat-val" id="count-jewelry">0</span>
+                    </li>
+                    <li class="stat-row">
+                        <span class="stat-label">Tech & Startups</span>
+                        <span class="stat-val" id="count-tech">0</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-card">
+                <h2>Manage Uploaded Works</h2>
+                <div class="admin-project-list" id="project-list-container">
+                    <!-- Dynamically populated list -->
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: Add new work via Backend API -->
+        <div class="admin-main-column">
+            <div class="admin-card">
+                <h2>Upload New Creative Work</h2>
+                <form class="contact-form" id="upload-work-form" style="padding:0; border:none; box-shadow:none; background:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="work-title" class="form-label">Project Title</label>
+                            <input type="text" id="work-title" class="form-input" placeholder="e.g. Honeycomb Jar Design" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="work-category" class="form-label">Work Category (Industry)</label>
+                            <select id="work-category" class="form-input form-select" required>
+                                <option value="" disabled selected>Select Category</option>
+                                <option value="food">Food & Beverage</option>
+                                <option value="jewelry">Jewelry & Luxury</option>
+                                <option value="tech">Tech & Startups</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="work-year" class="form-label">Year of Creation</label>
+                            <input type="text" id="work-year" class="form-input" placeholder="e.g. 2026" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="work-duration" class="form-label">Project Duration</label>
+                            <input type="text" id="work-duration" class="form-input" placeholder="e.g. 3 Weeks" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="work-tools" class="form-label">Tools Used</label>
+                        <input type="text" id="work-tools" class="form-input" placeholder="e.g. Photoshop, Illustrator, Cinema 4D" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="work-focus" class="form-label">Core Design Focus</label>
+                            <input type="text" id="work-focus" class="form-input" placeholder="e.g. Label typography, 3D render" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="work-output" class="form-label">Deliverable Output</label>
+                            <input type="text" id="work-output" class="form-input" placeholder="e.g. Package container print" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="work-concept" class="form-label">Design Concept (Details)</label>
+                        <textarea id="work-concept" class="form-input form-textarea" rows="4" placeholder="Explain the creative idea, mathematical layouts, grid guides, and design decisions..." required></textarea>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="form-group">
+                        <label class="form-label">Upload Showcase Image</label>
+                        <div class="file-upload-wrapper" id="upload-box">
+                            <span class="upload-icon">📁</span>
+                            <p id="upload-prompt">Drag & drop or click to select image file (JPG / PNG)</p>
+                            <input type="file" id="work-image" class="file-upload-input" accept="image/*" required>
+                            <img id="image-preview" class="upload-preview" alt="Preview">
+                        </div>
+                    </div>
+
+                    <!-- Color Swatches -->
+                    <div class="form-group">
+                        <label class="form-label">Color Palette Swatches</label>
+                        <div class="color-palette-picker">
+                            <div class="picker-group">
+                                <input type="color" id="swatch-1" class="color-picker-input" value="#0044ff">
+                                <span id="swatch-1-val" style="font-size:0.7rem; font-family:monospace;">#0044ff</span>
+                            </div>
+                            <div class="picker-group">
+                                <input type="color" id="swatch-2" class="color-picker-input" value="#6e33ff">
+                                <span id="swatch-2-val" style="font-size:0.7rem; font-family:monospace;">#6e33ff</span>
+                            </div>
+                            <div class="picker-group">
+                                <input type="color" id="swatch-3" class="color-picker-input" value="#faf9f5">
+                                <span id="swatch-3-val" style="font-size:0.7rem; font-family:monospace;">#faf9f5</span>
+                            </div>
+                            <div class="picker-group">
+                                <input type="color" id="swatch-4" class="color-picker-input" value="#141518">
+                                <span id="swatch-4-val" style="font-size:0.7rem; font-family:monospace;">#141518</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Typography spec -->
+                    <div class="form-group">
+                        <label class="form-label">Typography Specimens</label>
+                        <div class="typo-spec-row">
+                            <div class="form-group">
+                                <label for="typo-font-1" class="form-label" style="font-size:0.7rem; color:#6e7178;">Heading Font</label>
+                                <input type="text" id="typo-font-1" class="form-input" placeholder="e.g. Outfit Bold" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="typo-size-1" class="form-label" style="font-size:0.7rem; color:#6e7178;">Sample Size</label>
+                                <input type="text" id="typo-size-1" class="form-input" placeholder="e.g. 72px" required>
+                            </div>
+                        </div>
+                        <div class="typo-spec-row" style="margin-top:1rem;">
+                            <div class="form-group">
+                                <label for="typo-font-2" class="form-label" style="font-size:0.7rem; color:#6e7178;">Body Font</label>
+                                <input type="text" id="typo-font-2" class="form-input" placeholder="e.g. Outfit Regular" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="typo-size-2" class="form-label" style="font-size:0.7rem; color:#6e7178;">Sample Size</label>
+                                <input type="text" id="typo-size-2" class="form-input" placeholder="e.g. 16px" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary form-submit-btn" style="margin-top:1rem; width:100%;">
+                        Add Work to Portfolio
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Feedback Toast -->
+    <div class="alert-toast" id="admin-toast">Action Completed!</div>
+
+    <script>
+        let projects = [];
+        
+        // UI selectors
+        const countTotal = document.getElementById('total-works-count');
+        const countFood = document.getElementById('count-food');
+        const countJewelry = document.getElementById('count-jewelry');
+        const countTech = document.getElementById('count-tech');
+        
+        const listContainer = document.getElementById('project-list-container');
+        const uploadForm = document.getElementById('upload-work-form');
+        
+        const imageInput = document.getElementById('work-image');
+        const imagePreview = document.getElementById('image-preview');
+        const uploadPrompt = document.getElementById('upload-prompt');
+        
+        const toast = document.getElementById('admin-toast');
+
+        // Color Picker Display sync
+        for (let i = 1; i <= 4; i++) {
+            const picker = document.getElementById(`swatch-${i}`);
+            const valSpan = document.getElementById(`swatch-${i}-val`);
+            picker.addEventListener('input', () => {
+                valSpan.textContent = picker.value.toUpperCase();
+            });
+        }
+
+        // Show Toast Feedback
+        const showToast = (message, isError = false) => {
+            toast.textContent = message;
+            toast.style.backgroundColor = isError ? '#d11a2a' : '#141518';
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        };
+
+        // Load data from Backend API
+        const loadProjects = async () => {
+            try {
+                const response = await fetch('/api/projects');
+                if (!response.ok) throw new Error("API retrieval failed");
+                projects = await response.json();
+                renderStatsAndList();
+            } catch(e) {
+                console.error(e);
+                showToast("Failed to load projects from backend database", true);
+            }
+        };
+
+        // Render stats and lists
+        const renderStatsAndList = () => {
+            countTotal.textContent = projects.length;
+            countFood.textContent = projects.filter(p => p.category === 'food').length;
+            countJewelry.textContent = projects.filter(p => p.category === 'jewelry').length;
+            countTech.textContent = projects.filter(p => p.category === 'tech').length;
+
+            listContainer.innerHTML = '';
+            
+            projects.forEach((proj) => {
+                const item = document.createElement('div');
+                item.className = 'admin-project-item';
+                
+                item.innerHTML = `
+                    <div class="project-item-left">
+                        <img src="${proj.img}" class="project-item-thumb" alt="${proj.title}">
+                        <div class="project-item-details">
+                            <h4>${proj.title}</h4>
+                            <span>${proj.category.toUpperCase()}</span>
+                        </div>
+                    </div>
+                    <button class="delete-project-btn" data-id="${proj.id}">Delete</button>
+                `;
+                
+                listContainer.appendChild(item);
+            });
+
+            // Re-bind delete listeners
+            document.querySelectorAll('.delete-project-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = btn.getAttribute('data-id');
+                    deleteProject(id);
+                });
+            });
+        };
+
+        // Delete project via Backend API
+        const deleteProject = async (id) => {
+            if (confirm('Are you sure you want to delete this project?')) {
+                try {
+                    const response = await fetch(`/api/projects/${id}`, {
+                        method: 'DELETE'
+                    });
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showToast('Project deleted successfully!');
+                        loadProjects();
+                    } else {
+                        throw new Error(result.error || "Delete failed");
+                    }
+                } catch (e) {
+                    console.error(e);
+                    showToast('Failed to delete project from server', true);
+                }
+            }
+        };
+
+        // File upload local preview
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    imagePreview.src = event.target.result;
+                    imagePreview.style.display = 'block';
+                    uploadPrompt.textContent = file.name;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Form Submit via API FormData
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!imageInput.files[0]) {
+                showToast('Please select and upload a showcase image!', true);
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('title', document.getElementById('work-title').value);
+            formData.append('category', document.getElementById('work-category').value);
+            formData.append('year', document.getElementById('work-year').value);
+            formData.append('duration', document.getElementById('work-duration').value);
+            formData.append('tools', document.getElementById('work-tools').value);
+            formData.append('focus', document.getElementById('work-focus').value);
+            formData.append('output', document.getElementById('work-output').value);
+            formData.append('concept', document.getElementById('work-concept').value);
+            formData.append('image', imageInput.files[0]);
+
+            // Swatches array to comma-separated hex codes
+            const swatches = [
+                document.getElementById('swatch-1').value.toUpperCase(),
+                document.getElementById('swatch-2').value.toUpperCase(),
+                document.getElementById('swatch-3').value.toUpperCase(),
+                document.getElementById('swatch-4').value.toUpperCase()
+            ].join(',');
+            formData.append('swatches', swatches);
+
+            // Typography structure to JSON string
+            const typography = JSON.stringify([
+                {
+                    name: "Heading Font",
+                    font: document.getElementById('typo-font-1').value,
+                    size: document.getElementById('typo-size-1').value
+                },
+                {
+                    name: "Body Font",
+                    font: document.getElementById('typo-font-2').value,
+                    size: document.getElementById('typo-size-2').value
+                }
+            ]);
+            formData.append('typography', typography);
+
+            try {
+                const response = await fetch('/api/projects', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error("Upload failed");
+
+                showToast('New work added to portfolio successfully!');
+                uploadForm.reset();
+                
+                imagePreview.style.display = 'none';
+                imagePreview.src = '';
+                uploadPrompt.textContent = 'Drag & drop or click to select image file (JPG / PNG)';
+                
+                for (let i = 1; i <= 4; i++) {
+                    const picker = document.getElementById(`swatch-${i}`);
+                    const valSpan = document.getElementById(`swatch-${i}-val`);
+                    valSpan.textContent = picker.value.toUpperCase();
+                }
+
+                loadProjects();
+            } catch (e) {
+                console.error(e);
+                showToast("Failed to upload project to server", true);
+            }
+        });
+
+        // Initialize dashboard
+        window.addEventListener('DOMContentLoaded', loadProjects);
+    </script>
+</body>
+</html>

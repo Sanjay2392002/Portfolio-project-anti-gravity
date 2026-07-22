@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium minimal graphic design portfolio synced live using a Behance profile as the single source of truth.">
+    <title>Graphic Design Portfolio | Showcase</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght=0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-dot"></div>
+
+    <!-- Navigation Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="#" class="logo-text" id="header-logo">
+                <span class="logo-dot"></span>DESIGN.PORTFOLIO
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#hero" class="nav-link active" data-sec="hero">Home</a></li>
+                    <li><a href="#food" class="nav-link" data-sec="food">Food</a></li>
+                    <li><a href="#jewelry" class="nav-link" data-sec="jewelry">Jewelry</a></li>
+                    <li><a href="#tech" class="nav-link" data-sec="tech">Tech</a></li>
+                    <li><a href="#logos" class="nav-link" data-sec="logos">Logos</a></li>
+                    <li><a href="#contact" class="nav-link" data-sec="contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <button class="btn btn-sm btn-outline" id="btn-settings-toggle" style="margin-right: 1rem;">Sync Behance</button>
+                <a href="#contact" class="btn btn-sm btn-primary">Let's Work</a>
+            </div>
+            <button class="menu-toggle" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Side Navigation Dot Indicator -->
+    <div class="side-nav-dots">
+        <a href="#hero" class="dot-link active" data-sec="hero" aria-label="Home section"></a>
+        <a href="#food" class="dot-link" data-sec="food" aria-label="Food & Beverage designs"></a>
+        <a href="#jewelry" class="dot-link" data-sec="jewelry" aria-label="Jewelry & Luxury designs"></a>
+        <a href="#tech" class="dot-link" data-sec="tech" aria-label="Tech & Startups designs"></a>
+        <a href="#logos" class="dot-link" data-sec="logos" aria-label="Logo designs from Behance"></a>
+        <a href="#contact" class="dot-link" data-sec="contact" aria-label="Contact section"></a>
+    </div>
+
+    <!-- Demo Sync Banner -->
+    <div id="demo-mode-banner" style="display: none; position: fixed; bottom: 0; left: 0; width: 100%; padding: 0.8rem; background-color: #faf9f5; border-top: 1px solid rgba(0,0,0,0.06); text-align: center; font-size: 0.8rem; z-index: 100; color: var(--text-muted);">
+        Viewing demo Behance profile. <button id="banner-settings-btn" style="background:none; border:none; text-decoration:underline; font-weight:600; color:var(--accent-color); cursor:pointer; padding:0; font-family:inherit;">Click here to connect your own profile URL</button>.
+    </div>
+
+    <!-- Main Container -->
+    <main class="portfolio-container">
+
+        <!-- HERO SECTION -->
+        <section id="hero" class="section hero-section active-section" data-theme="light-cream">
+            <div class="bg-gradient-mesh"></div>
+            <div class="section-content hero-content">
+                <div class="hero-left">
+                    <p class="hero-subtitle reveal-text">CREATIVE GRAPHIC DESIGNER</p>
+                    <h1 class="hero-title">
+                        Shaping <span class="serif-italic">brands</span>,<br>
+                        designing <span class="highlight-text">experiences.</span>
+                    </h1>
+                    <p class="hero-description">
+                        An automated portfolio synced live from Behance. Projects are categorized by Food, Jewelry, and Tech industries dynamically based on tags and descriptions.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#food" class="btn btn-primary">Explore Work</a>
+                        <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <!-- Interactive Visual Grid -->
+                    <div class="hero-visual-wrapper">
+                        <div class="hero-card card-1">
+                            <span class="card-tag">Food & Beverage</span>
+                            <h3>Organic</h3>
+                        </div>
+                        <div class="hero-card card-2">
+                            <span class="card-tag">Jewelry & Luxury</span>
+                            <h3>Refined</h3>
+                        </div>
+                        <div class="hero-card card-3">
+                            <span class="card-tag">Tech & Startups</span>
+                            <h3>Futuristic</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <span class="mouse">
+                    <span class="wheel"></span>
+                </span>
+                <span class="scroll-text">Scroll to explore</span>
+            </div>
+        </section>
+
+        <!-- FOOD & BEVERAGE SECTION -->
+        <section id="food" class="section work-section" data-theme="light-ochre">
+            <div class="section-grid">
+                <div class="section-info">
+                    <span class="section-num">01 / 04</span>
+                    <h2 class="section-title">Food & Beverage <br><span class="serif-italic">Creative</span></h2>
+                    <p class="section-desc" id="food-desc">
+                        Fetching your food designs live from Behance...
+                    </p>
+                    <div class="project-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Focus</span>
+                            <span class="meta-val" id="food-meta-focus">Organic label styling, package container print</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Output</span>
+                            <span class="meta-val" id="food-meta-output">Packaging design spreads</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline view-project-btn" data-project="" id="food-btn">
+                        View Project details
+                        <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="section-visual">
+                    <div class="visual-card-container">
+                        <div class="visual-card image-reveal" id="food-card">
+                            <img src="" alt="Food & Beverage design showcase" class="portfolio-img" id="food-img">
+                            <div class="card-overlay">
+                                <span class="overlay-tag" id="food-overlay-tag">Food & Beverage</span>
+                                <h3 id="food-overlay-title">Project Loading</h3>
+                                <p class="overlay-click">Click to inspect project</p>
+                            </div>
+                        </div>
+                        <div class="thumbnail-indicator-track" id="food-thumbnails"></div>
+                        <div class="visual-bg-glow package-glow"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- JEWELRY & LUXURY SECTION -->
+        <section id="jewelry" class="section work-section" data-theme="light-terracotta">
+            <div class="section-grid reverse">
+                <div class="section-info">
+                    <span class="section-num">02 / 04</span>
+                    <h2 class="section-title">Jewelry & Luxury <br><span class="serif-italic">Designs</span></h2>
+                    <p class="section-desc" id="jewelry-desc">
+                        Fetching your jewelry and luxury catalog spreads live from Behance...
+                    </p>
+                    <div class="project-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Focus</span>
+                            <span class="meta-val" id="jewelry-meta-focus">Material realism, premium print finishes, catalog layout</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Output</span>
+                            <span class="meta-val" id="jewelry-meta-output">Luxury print publications</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline view-project-btn" data-project="" id="jewelry-btn">
+                        View Project details
+                        <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="section-visual">
+                    <div class="visual-card-container">
+                        <div class="visual-card image-reveal" id="jewelry-card">
+                            <img src="" alt="Jewelry & Luxury design showcase" class="portfolio-img" id="jewelry-img">
+                            <div class="card-overlay">
+                                <span class="overlay-tag" id="jewelry-overlay-tag">Jewelry & Luxury</span>
+                                <h3 id="jewelry-overlay-title">Project Loading</h3>
+                                <p class="overlay-click">Click to inspect project</p>
+                            </div>
+                        </div>
+                        <div class="thumbnail-indicator-track" id="jewelry-thumbnails"></div>
+                        <div class="visual-bg-glow logo-glow"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TECH & STARTUPS SECTION -->
+        <section id="tech" class="section work-section" data-theme="light-violet">
+            <div class="section-grid">
+                <div class="section-info">
+                    <span class="section-num">03 / 04</span>
+                    <h2 class="section-title">Tech & Startups <br><span class="serif-italic">Identity</span></h2>
+                    <p class="section-desc" id="tech-desc">
+                        Fetching your tech startup identity designs live from Behance...
+                    </p>
+                    <div class="project-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Focus</span>
+                            <span class="meta-val" id="tech-meta-focus">Vibrant compositions, tech messaging, digital vectors</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Output</span>
+                            <span class="meta-val" id="tech-meta-output">Startup launch marketing visual assets</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline view-project-btn" data-project="" id="tech-btn">
+                        View Project details
+                        <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="section-visual">
+                    <div class="visual-card-container">
+                        <div class="visual-card image-reveal" id="tech-card">
+                            <img src="" alt="Tech & Startup design showcase" class="portfolio-img" id="tech-img">
+                            <div class="card-overlay">
+                                <span class="overlay-tag" id="tech-overlay-tag">Tech & Startups</span>
+                                <h3 id="tech-overlay-title">Project Loading</h3>
+                                <p class="overlay-click">Click to inspect project</p>
+                            </div>
+                        </div>
+                        <div class="thumbnail-indicator-track" id="tech-thumbnails"></div>
+                        <div class="visual-bg-glow poster-glow"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LOGOS BEHANCE SHOWCASE SECTION -->
+        <section id="logos" class="section logos-behance-section" data-theme="light-sage">
+            <div class="section-content">
+                <span class="section-num">04 / 04</span>
+                <h2 class="section-title" style="margin-bottom: 1.5rem;">Logo Portfolio <br><span class="serif-italic">Live from Behance</span></h2>
+                <p class="section-desc" style="max-width: 600px; margin-bottom: 2.5rem;">
+                    Syncing your logo designs and other works live from Behance. Connect your profile to fetch and sync projects instantly.
+                </p>
+                
+                <!-- Behance Input Bar -->
+                <div class="behance-bar" style="margin-bottom: 4rem; display: flex; gap: 1.2rem; max-width: 520px; z-index: 5; position: relative;">
+                    <input type="text" id="behance-user-input" class="form-input" placeholder="Enter Behance Username (e.g. adobecrown)" style="flex:1; padding: 1.1rem 1.4rem;">
+                    <button class="btn btn-primary" id="btn-fetch-behance" style="padding: 1.1rem 2rem;">Fetch Feed</button>
+                </div>
+
+                <!-- Behance Grid -->
+                <div class="behance-grid" id="behance-projects-grid">
+                    <!-- Dynamic Behance projects -->
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="section contact-section" data-theme="light-cream">
+            <div class="section-content contact-content">
+                <div class="contact-left">
+                    <span class="section-num">Get in touch</span>
+                    <h2 class="contact-title">Let's create something<br><span class="serif-italic">impactful</span> together.</h2>
+                    <p class="contact-desc">
+                        Have a project in mind, want to discuss a partnership, or simply want to chat about design? Drop a message!
+                    </p>
+                    <div class="contact-details">
+                        <div class="contact-info-item">
+                            <span class="info-label">Email</span>
+                            <a href="mailto:sanjaymurugesan23@gmail.com" class="info-val link-hover">sanjaymurugesan23@gmail.com</a>
+                        </div>
+                        <div class="contact-info-item">
+                            <span class="info-label">Socials</span>
+                            <div class="social-links">
+                                <a href="https://www.instagram.com/design._.folio?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="social-link link-hover" id="instagram-link" target="_blank">Instagram</a>
+                                <a href="https://www.behance.net/sanjayuiuxgd" class="social-link link-hover" id="behance-link" target="_blank">Behance</a>
+                                <a href="https://dribbble.com/sanjayuiuxgd" class="social-link link-hover" id="dribbble-link" target="_blank">Dribbble</a>
+                                <a href="https://www.linkedin.com/in/sanjaym23" class="social-link link-hover" id="linkedin-link" target="_blank">LinkedIn</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-right">
+                    <!-- Elegant Contact Form -->
+                    <form class="contact-form" id="portfolio-contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="form-name" class="form-label">Your Name</label>
+                                <input type="text" id="form-name" class="form-input" placeholder="Alex Morgan" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="form-email" class="form-label">Email Address</label>
+                                <input type="email" id="form-email" class="form-input" placeholder="alex@example.com" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="form-category" class="form-label">Project Category</label>
+                            <select id="form-category" class="form-input form-select" required>
+                                <option value="" disabled selected>Select an option</option>
+                                <option value="food-beverage">Food & Beverage</option>
+                                <option value="jewelry-luxury">Jewelry & Luxury</option>
+                                <option value="tech-startups">Tech & Startups</option>
+                                <option value="other">Other / Full Project</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="form-message" class="form-label">Your Message</label>
+                            <textarea id="form-message" class="form-input form-textarea" rows="5" placeholder="Hi, I want to talk about a design proposal for..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary form-submit-btn" id="submit-btn">
+                            Send Message
+                            <svg class="submit-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <footer class="site-footer">
+                <div class="footer-container">
+                    <p class="copyright">&copy; 2026 DESIGN.PORTFOLIO. Built with passion.</p>
+                    <p class="back-to-top"><a href="#hero" class="link-hover">Back to Top &uarr;</a></p>
+                </div>
+            </footer>
+        </section>
+
+    </main>
+
+    <!-- CASE STUDY MODAL -->
+    <div class="modal-backdrop" id="project-modal" aria-hidden="true" role="dialog">
+        <div class="modal-wrapper">
+            <button class="modal-close" aria-label="Close project modal">&times;</button>
+            <div class="modal-content-container">
+                <div class="modal-grid">
+                    <div class="modal-visual">
+                        <img src="" alt="" class="modal-main-img" id="modal-img">
+                    </div>
+                    <div class="modal-details">
+                        <div class="modal-header-info">
+                            <span class="modal-category" id="modal-cat">Project Category</span>
+                            <h2 class="modal-title" id="modal-title">Project Title</h2>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-specs">
+                                <div class="spec-col">
+                                    <span class="spec-label">Year</span>
+                                    <span class="spec-val" id="modal-year">2026</span>
+                                </div>
+                                <div class="spec-col">
+                                    <span class="spec-label">Duration</span>
+                                    <span class="spec-val" id="modal-duration">3 weeks</span>
+                                </div>
+                                <div class="spec-col">
+                                    <span class="spec-label">Tools Used</span>
+                                    <span class="spec-val" id="modal-tools">Figma, Photoshop, Illustrator</span>
+                                </div>
+                            </div>
+                            <div class="modal-description">
+                                <h3>Design Concept</h3>
+                                <p id="modal-concept-text">Details about the concept and execution.</p>
+                            </div>
+                            <div class="modal-design-system">
+                                <h3>Color Palette</h3>
+                                <div class="palette-swatches" id="modal-swatches">
+                                    <!-- Dynamic Swatches -->
+                                </div>
+                                <h3 class="margin-top-md">Typography System</h3>
+                                <div class="typo-specimen" id="modal-typo">
+                                    <!-- Dynamic Typo details -->
+                                </div>
+                            </div>
+                            <!-- Link to full Behance project -->
+                            <a href="" target="_blank" class="btn btn-outline" id="modal-behance-link" style="margin-top: 2rem; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                                View case study on Behance
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 13V19C18 19.5304 17.7893 20.0391 17.4142 20.4142C17.0391 20.7893 16.5304 21 16 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V8C3 7.46957 3.21071 6.96086 3.58579 6.58579C3.96086 6.21071 4.46957 6 5 6H11M15 3H21M21 3V9M21 3L10 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SETTINGS DRAWER -->
+    <div class="settings-drawer-backdrop" id="settings-drawer" aria-hidden="true">
+        <div class="settings-drawer-content">
+            <button class="settings-drawer-close" aria-label="Close settings">&times;</button>
+            <h3 class="drawer-title">Sync Behance Profile</h3>
+            <p class="drawer-desc">
+                Paste your Behance profile URL (or just enter your username). The portfolio will automatically fetch your published projects and sort them into sections dynamically using search keywords.
+            </p>
+            
+            <div class="form-group" style="margin-top: 2rem;">
+                <label for="behance-profile-url" class="form-label">Behance Profile URL / Username</label>
+                <input type="text" id="behance-profile-url" class="form-input" placeholder="https://www.behance.net/username" required>
+            </div>
+            
+            <button class="btn btn-primary" id="btn-save-behance-url" style="width: 100%; margin-top: 1.5rem; margin-bottom: 2.5rem;">
+                Connect & Synchronize
+            </button>
+
+            <h3 class="drawer-title" style="border-top: 1px solid rgba(0,0,0,0.06); padding-top: 2rem;">Fullstack Backend URL</h3>
+            <p class="drawer-desc">
+                If you have deployed your Express backend to Render, Railway, or Fly.io, paste the public server URL below to connect.
+            </p>
+            
+            <div class="form-group" style="margin-top: 1.5rem;">
+                <label for="production-api-url" class="form-label">Production Backend API URL</label>
+                <input type="url" id="production-api-url" class="form-input" placeholder="https://your-backend.onrender.com">
+            </div>
+            
+            <button class="btn btn-outline" id="btn-save-backend-url" style="width: 100%; margin-top: 1.5rem;">
+                Save Backend URL
+            </button>
+            
+            <div class="drawer-instructions" style="margin-top: 3rem; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 2rem;">
+                <h4>How it sorts:</h4>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 1.2rem; font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; line-height:1.5;">
+                    <li>🍎 <strong>Food & Beverage:</strong> Projects with title or description containing words like <em>food, beverage, coffee, restaurant, cafe, honey, juice</em>.</li>
+                    <li>💎 <strong>Jewelry & Luxury:</strong> Projects with title or description containing words like <em>jewelry, luxury, gold, cosmetic, skincare, fashion</em>.</li>
+                    <li>💻 <strong>Tech & Startups:</strong> Projects with title or description containing words like <em>tech, startup, app, digital, platform, software, ai</em>.</li>
+                    <li>🎨 <strong>Logo Portfolio:</strong> All other projects (or those matching <em>logo</em>) go into the live Logo Showcase grid.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+</body>
+</html>
