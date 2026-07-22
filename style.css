@@ -1565,3 +1565,197 @@ body.cursor-active .custom-cursor-dot {
         padding: 3rem 1.5rem;
     }
 }
+
+/* -----------------------------------------
+   15. EDITORIAL SCROLL PROGRESS & MAGAZINE GRIDS
+   ----------------------------------------- */
+
+.scroll-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background-color: var(--text-color);
+    z-index: 10002;
+    transition: width 0.08s linear;
+}
+
+.site-header--hidden {
+    transform: translateY(-100%) !important;
+}
+
+/* Editorial Category Grid */
+.category-editorial-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4.5rem 3rem;
+    margin-top: 3.5rem;
+    width: 100%;
+}
+
+.project-editorial-card {
+    grid-column: span 6; /* Default half width */
+    display: flex;
+    flex-direction: column;
+}
+
+.project-editorial-card.project-card-wide {
+    grid-column: span 12;
+}
+
+.project-editorial-card.project-card-portrait {
+    grid-column: span 5;
+}
+
+.project-editorial-card.project-card-square {
+    grid-column: span 7;
+}
+
+.project-card-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    gap: 1.5rem;
+}
+
+.project-img-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    background-color: #fafaf7;
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+}
+
+.optimized-project-img {
+    width: 100%;
+    height: auto;
+    max-height: 75vh;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    object-fit: cover;
+}
+
+.project-img-wrapper:hover .optimized-project-img {
+    transform: scale(1.04);
+}
+
+.project-img-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(20, 21, 24, 0.02);
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.project-img-wrapper:hover .project-img-overlay {
+    opacity: 1;
+}
+
+.project-view-badge {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.project-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.project-card-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.project-card-info .proj-title {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.8rem;
+    line-height: 1.2;
+    margin-bottom: 0;
+    color: var(--text-color);
+    letter-spacing: -0.01em;
+}
+
+.project-card-info .proj-desc {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin-bottom: 0;
+}
+
+.proj-card-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.8rem;
+    margin-top: 0.2rem;
+}
+
+.proj-card-specs span strong {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.project-card-swatches {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.2rem;
+}
+
+.card-swatch-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(20, 21, 24, 0.08);
+    display: inline-block;
+}
+
+.project-card-actions {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 991px) {
+    .category-editorial-grid {
+        grid-template-columns: 1fr;
+        gap: 3.5rem;
+    }
+    .project-editorial-card {
+        grid-column: span 12 !important;
+    }
+    .optimized-project-img {
+        max-height: 55vh;
+    }
+}

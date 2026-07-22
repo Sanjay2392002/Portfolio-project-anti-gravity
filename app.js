@@ -3,6 +3,7 @@
    ----------------------------------------- */
 let activeProjects = []; // Personal works from Admin Panel database
 let behanceProjects = []; // Sync projects from Behance RSS Feed
+let activeModalProjectId = null;
 
 const CATEGORIES = [
     "Logo Designs",
@@ -368,6 +369,9 @@ const getProjectsByCategory = () => {
 /* -----------------------------------------
    4. DYNAMIC SHOWCASE RENDERING
    ----------------------------------------- */
+/* -----------------------------------------
+   4. DYNAMIC SHOWCASE RENDERING
+   ----------------------------------------- */
 const renderCategoryShowcases = () => {
     const container = document.getElementById('categories-container');
     if (!container) return;
@@ -381,116 +385,147 @@ const renderCategoryShowcases = () => {
         const projects = grouped[categoryName];
         if (!projects || projects.length === 0) return; // Hide unpopulated categories
 
-        // Initialize active category index
-        if (categoryActiveIndices[categoryName] === undefined) {
-            categoryActiveIndices[categoryName] = 0;
-        }
-        
-        let activeIdx = categoryActiveIndices[categoryName];
-        if (activeIdx >= projects.length) {
-            activeIdx = 0;
-            categoryActiveIndices[categoryName] = 0;
-        }
-
-        const currentProj = projects[activeIdx];
         const serialStr = visibleIndex.toString().padStart(2, '0');
         visibleIndex++;
 
-        // Parsing project details
-        const isBehance = currentProj.isBehance;
-        const coverImg = parseCoverImage(currentProj);
-        const cleanDesc = parseCleanDescription(currentProj);
-        const year = currentProj.year || (currentProj.pubDate ? new Date(currentProj.pubDate).getFullYear() : '2026');
-        const toolsUsed = currentProj.tools || (currentProj.categories || []).join(", ") || "Illustrator, Photoshop";
-        const focusArea = currentProj.focus || "Visual Composition";
-        const outputFormat = currentProj.output || "Digital Showcase";
-        const id = currentProj.id || currentProj.guid;
+        // Category container
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'category-showcase-section';
+        categoryDiv.setAttribute('id', `cat-${categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`);
 
-        const sectionDiv = document.createElement('div');
-        sectionDiv.className = 'category-showcase-section';
-        sectionDiv.setAttribute('id', `cat-${categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`);
-
-        // Left pane details indicators
-        let indicatorsHtml = '';
-        if (projects.length > 1) {
-            indicatorsHtml = `<div class="category-indicator-track">`;
-            projects.forEach((_, idx) => {
-                indicatorsHtml += `<button class="thumb-dot ${idx === activeIdx ? 'active' : ''}" data-category="${categoryName}" data-index="${idx}" aria-label="View Project ${idx + 1}"></button>`;
-            });
-            indicatorsHtml += `</div>`;
-        }
-
-        sectionDiv.innerHTML = `
+        // Category Header
+        let htmlContent = `
             <div class="category-header">
                 <span class="category-number">${serialStr}.</span>
                 <h3 class="category-heading">${categoryName}</h3>
             </div>
-            
-            <div class="category-split-layout">
-                <!-- Details Pane -->
-                <div class="project-details-pane" id="pane-details-${categoryName.replace(/\s+/g, '')}">
-                    <span class="proj-meta-tag">${isBehance ? 'Behance Live' : 'Personal Studio'}</span>
-                    <h4 class="proj-title">${currentProj.title}</h4>
-                    <p class="proj-desc">${cleanDesc}</p>
-                    
-                    <div class="proj-specs-grid">
-                        <div class="spec-cell">
-                            <span class="spec-cell-label">Tools Used</span>
-                            <span class="spec-cell-val">${toolsUsed}</span>
-                        </div>
-                        <div class="spec-cell">
-                            <span class="spec-cell-label">Year</span>
-                            <span class="spec-cell-val">${year}</span>
-                        </div>
-                        <div class="spec-cell">
-                            <span class="spec-cell-label">Focus Area</span>
-                            <span class="spec-cell-val">${focusArea}</span>
-                        </div>
-                        <div class="spec-cell">
-                            <span class="spec-cell-label">Deliverable</span>
-                            <span class="spec-cell-val">${outputFormat}</span>
-                        </div>
-                    </div>
-                    
-                    <button class="btn btn-outline view-project-btn" data-project-id="${id}">
-                        View Case Study
-                        <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;">
-                            <path d="M5 12H19M19 12L12 5M19 12L12 19"/>
-                        </svg>
-                    </button>
-                    
-                    ${indicatorsHtml}
-                </div>
-                
-                <!-- Visual Pane -->
-                <div class="project-visual-pane">
-                    <div class="project-img-wrapper" id="pane-visual-${categoryName.replace(/\s+/g, '')}" data-project-id="${id}">
-                        <img src="${coverImg}" alt="${currentProj.title} cover" loading="lazy">
-                    </div>
-                </div>
-            </div>
+            <div class="category-editorial-grid">
         `;
 
-        container.appendChild(sectionDiv);
+        // Render each project in the category
+        projects.forEach((proj, idx) => {
+            const isBehance = proj.isBehance;
+            const coverImg = parseCoverImage(proj);
+            const cleanDesc = parseCleanDescription(proj);
+            const year = proj.year || (proj.pubDate ? new Date(proj.pubDate).getFullYear() : '2026');
+            const toolsUsed = proj.tools || (proj.categories || []).join(", ") || "Illustrator, Photoshop";
+            const focusArea = proj.focus || "Visual Composition";
+            const outputFormat = proj.output || "Digital Showcase";
+            const id = proj.id || proj.guid;
+
+            // Determine editorial layout column span class based on index
+            // This creates a beautiful staggered magazine look (some full-width, some split, some square)
+            let layoutClass = 'project-card-standard';
+            if (idx % 3 === 0) {
+                layoutClass = 'project-card-wide';
+            } else if (idx % 3 === 1) {
+                layoutClass = 'project-card-portrait';
+            } else {
+                layoutClass = 'project-card-square';
+            }
+
+            // Build swatches display if present
+            let swatchesHtml = '';
+            if (!isBehance && proj.swatches && proj.swatches.length > 0) {
+                swatchesHtml = `<div class="project-card-swatches">`;
+                proj.swatches.forEach(color => {
+                    swatchesHtml += `<span class="card-swatch-dot" style="background-color: ${color};" title="${color}"></span>`;
+                });
+                swatchesHtml += `</div>`;
+            }
+
+            htmlContent += `
+                <div class="project-editorial-card ${layoutClass}" data-project-id="${id}">
+                    <div class="project-card-inner">
+                        <div class="project-img-wrapper" data-project-id="${id}">
+                            <img src="${coverImg}" alt="${proj.title} cover" loading="lazy" class="optimized-project-img">
+                            <div class="project-img-overlay">
+                                <span class="project-view-badge">View Case</span>
+                            </div>
+                        </div>
+                        <div class="project-card-info">
+                            <div class="project-card-meta">
+                                <span class="proj-meta-tag">${isBehance ? 'Behance Live' : 'Personal Studio'}</span>
+                                <span class="proj-meta-year">${year}</span>
+                            </div>
+                            <h4 class="proj-title">${proj.title}</h4>
+                            <p class="proj-desc">${cleanDesc}</p>
+                            
+                            <div class="proj-card-specs">
+                                <span><strong>Tools:</strong> ${toolsUsed}</span>
+                                <span><strong>Focus:</strong> ${focusArea}</span>
+                            </div>
+                            
+                            ${swatchesHtml}
+
+                            <div class="project-card-actions">
+                                <button class="btn btn-sm btn-outline view-case-btn" data-project-id="${id}">
+                                    Case Study
+                                </button>
+                                ${isBehance ? `
+                                <a href="${proj.link}" target="_blank" class="btn btn-sm btn-secondary behance-direct-btn" onclick="event.stopPropagation();">
+                                    Behance
+                                </a>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        htmlContent += `</div>`;
+        categoryDiv.innerHTML = htmlContent;
+        container.appendChild(categoryDiv);
     });
 
-    // Event hooks for switching slides inside each category
-    container.querySelectorAll('.thumb-dot').forEach(dot => {
-        dot.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const cat = dot.getAttribute('data-category');
-            const idx = parseInt(dot.getAttribute('data-index'), 10);
-            switchCategoryProject(cat, idx);
-        });
-    });
+    // Add scroll animations using GSAP ScrollTrigger for cards reveal
+    animateProjectsEntrance();
 
     // Event hooks for opening full modal case study
-    container.querySelectorAll('.view-project-btn, .project-img-wrapper').forEach(element => {
-        element.addEventListener('click', () => {
+    container.querySelectorAll('.project-img-wrapper, .view-case-btn').forEach(element => {
+        element.addEventListener('click', (e) => {
+            e.stopPropagation();
             const id = element.getAttribute('data-project-id');
             if (id) openProjectModal(id);
         });
     });
+};
+
+const animateProjectsEntrance = () => {
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        const cards = document.querySelectorAll('.project-editorial-card');
+        cards.forEach((card, index) => {
+            gsap.fromTo(card,
+                { opacity: 0, y: 30 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 92%",
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
+        });
+
+        // Parallax image scrolling inside wrapper
+        const images = document.querySelectorAll('.optimized-project-img');
+        images.forEach(img => {
+            gsap.to(img, {
+                yPercent: 6,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: img.parentElement,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+        });
+    }
 };
 
 const switchCategoryProject = (categoryName, targetIdx) => {
@@ -701,6 +736,8 @@ const loadModalData = (projectId) => {
     const data = all.find(p => (p.id || p.guid) === projectId);
     if (!data) return;
 
+    activeModalProjectId = projectId;
+
     const isBehance = data.isBehance;
     const coverUrl = parseCoverImage(data);
     const cleanDesc = data.concept || (data.description ? data.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() : "No concept narrative documented.");
@@ -794,6 +831,29 @@ const loadModalData = (projectId) => {
     }
 
     updateModalNavButtons(projectId);
+
+    // Share link button action
+    const shareBtn = document.getElementById('modal-share-link');
+    if (shareBtn) {
+        const newShareBtn = shareBtn.cloneNode(true);
+        shareBtn.parentNode.replaceChild(newShareBtn, shareBtn);
+        newShareBtn.addEventListener('click', () => {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?project=${encodeURIComponent(projectId)}`;
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                newShareBtn.textContent = 'Link Copied ✓';
+                setTimeout(() => { newShareBtn.textContent = 'Share Project'; }, 2000);
+            }).catch(() => {
+                const input = document.createElement('input');
+                input.value = shareUrl;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                newShareBtn.textContent = 'Link Copied ✓';
+                setTimeout(() => { newShareBtn.textContent = 'Share Project'; }, 2000);
+            });
+        });
+    }
 };
 
 const transitionModalContent = (targetId) => {
@@ -807,6 +867,7 @@ const transitionModalContent = (targetId) => {
         ease: "power2.in",
         onComplete: () => {
             loadModalData(targetId);
+            history.pushState(null, '', `?project=${encodeURIComponent(targetId)}`);
             const modalBackdrop = document.getElementById('project-modal');
             if (modalBackdrop) modalBackdrop.scrollTop = 0;
             
@@ -825,6 +886,7 @@ const openProjectModal = (projectId) => {
     if (!modal) return;
 
     loadModalData(projectId);
+    history.pushState(null, '', `?project=${encodeURIComponent(projectId)}`);
 
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
@@ -853,6 +915,8 @@ const closeProjectModal = () => {
             modal.classList.remove('open');
             modal.setAttribute('aria-hidden', 'true');
             document.body.style.overflow = '';
+            history.pushState(null, '', window.location.pathname);
+            activeModalProjectId = null;
 
             if (window.lenis) {
                 window.lenis.start();
@@ -876,6 +940,17 @@ const initProjectModal = () => {
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeProjectModal();
+        
+        // Prev/Next project arrows if modal is open
+        if (modal && modal.classList.contains('open')) {
+            if (e.key === 'ArrowLeft') {
+                const prevBtn = document.getElementById('modal-prev-project');
+                if (prevBtn) prevBtn.click();
+            } else if (e.key === 'ArrowRight') {
+                const nextBtn = document.getElementById('modal-next-project');
+                if (nextBtn) nextBtn.click();
+            }
+        }
     });
 };
 
@@ -1126,22 +1201,42 @@ const initScrollSystem = () => {
     });
     gsap.ticker.lagSmoothing(0);
 
-    // Shrink header on scroll
+    // Dynamic Header show-on-up/hide-on-down & scroll progress indicator
     const header = document.querySelector('.site-header');
-    if (header) {
-        ScrollTrigger.create({
-            start: "top -50",
-            onToggle: (self) => {
-                if (self.isActive) {
-                    header.style.height = "68px";
-                    header.style.backgroundColor = "rgba(250, 250, 247, 0.96)";
-                } else {
-                    header.style.height = "80px";
-                    header.style.backgroundColor = "rgba(250, 250, 247, 0.85)";
-                }
+    let lastScroll = 0;
+
+    lenis.on('scroll', (e) => {
+        const currentScroll = e.scroll;
+        
+        if (header) {
+            if (currentScroll > lastScroll && currentScroll > 150) {
+                // Scrolling down
+                header.classList.add('site-header--hidden');
+            } else {
+                // Scrolling up
+                header.classList.remove('site-header--hidden');
             }
-        });
-    }
+
+            // Shrink header size slightly
+            if (currentScroll > 50) {
+                header.style.height = "68px";
+                header.style.backgroundColor = "rgba(250, 250, 247, 0.98)";
+            } else {
+                header.style.height = "80px";
+                header.style.backgroundColor = "rgba(250, 250, 247, 0.85)";
+            }
+        }
+
+        // Update progress bar
+        const scrollProgress = document.getElementById('scroll-progress');
+        if (scrollProgress) {
+            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = totalHeight > 0 ? (currentScroll / totalHeight) * 100 : 0;
+            scrollProgress.style.width = `${progress}%`;
+        }
+
+        lastScroll = currentScroll;
+    });
 
     // Dynamic Image Parallax effect
     gsap.utils.toArray('.hero-portrait-img, .about-portrait-img, .project-img-wrapper img').forEach(img => {
@@ -1276,6 +1371,69 @@ const initHeaderAndForms = () => {
     }
 };
 
+const initHeroAnimations = () => {
+    if (typeof gsap !== 'undefined') {
+        const tl = gsap.timeline();
+        
+        // Setup initial states
+        gsap.set('.hero-subtitle', { opacity: 0, y: 25 });
+        gsap.set('#hero-dynamic-text', { opacity: 0, y: 15 });
+        gsap.set('.hero-description', { opacity: 0, y: 15 });
+        gsap.set('.hero-actions .btn', { opacity: 0, y: 15 });
+        gsap.set('.hero-portrait-frame', { opacity: 0, scale: 0.96 });
+        gsap.set('.scroll-indicator', { opacity: 0, y: 10 });
+
+        tl.to('.hero-subtitle', { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" })
+          .to('#hero-dynamic-text', { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.6")
+          .to('.hero-description', { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.6")
+          .to('.hero-actions .btn', { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.15 }, "-=0.5")
+          .to('.hero-portrait-frame', { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }, "-=0.9")
+          .to('.scroll-indicator', { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.4");
+    }
+};
+
+const initScrollRevealAnimations = () => {
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        // Sections reveal
+        const sections = document.querySelectorAll('section');
+        sections.forEach(sec => {
+            gsap.fromTo(sec, 
+                { opacity: 0, y: 35 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: sec,
+                        start: "top 88%",
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
+        });
+
+        // Section headings reveal
+        const headings = document.querySelectorAll('.section-title');
+        headings.forEach(heading => {
+            gsap.fromTo(heading,
+                { opacity: 0, y: 20 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: heading,
+                        start: "top 90%",
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
+        });
+    }
+};
+
 /* -----------------------------------------
    10. GLOBAL SYSTEM LOADER
    ----------------------------------------- */
@@ -1290,4 +1448,17 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeroTextAnimation();
     initScrollSystem();
     initSmoothScrollClicks();
+    
+    // Setup dynamic creative reveals
+    initHeroAnimations();
+    initScrollRevealAnimations();
+
+    // Check URL query parameters to auto-open direct-linked case study modal
+    const urlParams = new URLSearchParams(window.location.search);
+    const sharedProjId = urlParams.get('project');
+    if (sharedProjId) {
+        setTimeout(() => {
+            openProjectModal(sharedProjId);
+        }, 800);
+    }
 });
