@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+*.local
+data/projects.json
+public/uploads/*
+!public/uploads/.gitkeep
+.DS_Store
+*.db
+*.log

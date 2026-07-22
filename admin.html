@@ -40,8 +40,59 @@
         }
 
         @media (max-width: 991px) {
+            .admin-page {
+                padding: 3rem 4%;
+            }
             .admin-grid-layout {
                 grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .admin-card {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .admin-page {
+                padding: 2rem 1.2rem;
+            }
+            .admin-header-nav {
+                flex-direction: column;
+                gap: 1.2rem;
+                align-items: center;
+                text-align: center;
+                padding-bottom: 1.5rem;
+                margin-bottom: 2rem;
+            }
+            .admin-card {
+                padding: 1.5rem 1.2rem;
+                border-radius: 12px;
+            }
+            .admin-card h2 {
+                font-size: 1.15rem;
+                margin-bottom: 1rem;
+                padding-bottom: 0.6rem;
+            }
+            .typo-spec-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .color-palette-picker {
+                flex-wrap: wrap;
+                gap: 0.8rem 0.5rem;
+            }
+            .picker-group {
+                min-width: calc(50% - 0.5rem);
+            }
+            .file-upload-wrapper {
+                padding: 1.5rem 1rem;
+            }
+            .stat-row {
+                font-size: 0.9rem;
+            }
+            .delete-project-btn {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
             }
         }
 

@@ -718,17 +718,44 @@ const initHeaderAndForms = () => {
     const mainNav = document.querySelector('.main-nav');
     
     if (menuToggle && mainNav) {
+        const headerActions = document.querySelector('.header-actions');
+        const mediaQuery = window.matchMedia('(max-width: 991px)');
+        
+        const handleTabletChange = (e) => {
+            if (e.matches) {
+                if (mainNav && headerActions && !mainNav.contains(headerActions)) {
+                    mainNav.appendChild(headerActions);
+                }
+            } else {
+                if (mainNav && headerActions && mainNav.contains(headerActions)) {
+                    const headerContainer = document.querySelector('.header-container');
+                    if (headerContainer) {
+                        headerContainer.insertBefore(headerActions, menuToggle);
+                    }
+                }
+            }
+        };
+        
+        if (mediaQuery.addEventListener) {
+            mediaQuery.addEventListener('change', handleTabletChange);
+        } else if (mediaQuery.addListener) {
+            mediaQuery.addListener(handleTabletChange);
+        }
+        handleTabletChange(mediaQuery);
+
         menuToggle.addEventListener('click', () => {
             mainNav.classList.toggle('mobile-open');
             const bars = menuToggle.querySelectorAll('.bar');
-            if (mainNav.classList.contains('mobile-open')) {
-                bars[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-                bars[1].style.transform = 'scale(0)';
-                bars[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
-            } else {
-                bars[0].style.transform = 'none';
-                bars[1].style.transform = 'none';
-                bars[2].style.transform = 'none';
+            if (bars.length >= 3) {
+                if (mainNav.classList.contains('mobile-open')) {
+                    bars[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                    bars[1].style.transform = 'scale(0)';
+                    bars[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
+                } else {
+                    bars[0].style.transform = 'none';
+                    bars[1].style.transform = 'none';
+                    bars[2].style.transform = 'none';
+                }
             }
         });
 

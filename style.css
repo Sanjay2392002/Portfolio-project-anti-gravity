@@ -1262,6 +1262,73 @@ body.cursor-active .custom-cursor-dot {
 @media (max-width: 991px) {
     .main-nav {
         display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: var(--bg-color);
+        z-index: 1000;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 6rem 2rem 3rem 2rem;
+        overflow-y: auto;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), background-color 1s ease;
+        pointer-events: none;
+    }
+    
+    .main-nav.mobile-open {
+        display: flex;
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    
+    .main-nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 2.2rem;
+        margin-bottom: 3rem;
+        width: 100%;
+    }
+    
+    .main-nav .nav-link {
+        font-size: 1.8rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        color: var(--text-muted);
+    }
+    
+    .main-nav .nav-link:hover, .main-nav .nav-link.active {
+        color: var(--text-color);
+    }
+    
+    .main-nav .nav-link.active::after {
+        bottom: -10px;
+        width: 6px;
+        height: 6px;
+    }
+    
+    .site-header .main-nav.mobile-open .header-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+    
+    .site-header .main-nav.mobile-open .header-actions .btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 0;
+        padding: 1.1rem 2rem;
+        font-size: 1rem;
     }
     
     .site-header .btn {
@@ -1342,7 +1409,23 @@ body.cursor-active .custom-cursor-dot {
     }
     
     .modal-details {
-        padding: 2.5rem;
+        padding: 2.5rem 1.5rem;
+        max-height: none;
+        overflow-y: visible;
+    }
+    
+    .modal-content-container {
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+    
+    .visual-card,
+    .work-section:nth-of-type(even) .visual-card {
+        aspect-ratio: 4/3;
+    }
+    
+    .custom-cursor, .custom-cursor-dot {
+        display: none !important;
     }
 }
 
@@ -1377,6 +1460,102 @@ body.cursor-active .custom-cursor-dot {
         flex-direction: column;
         gap: 1rem;
         text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .behance-bar {
+        flex-direction: column !important;
+        gap: 1rem !important;
+        width: 100%;
+        max-width: 100% !important;
+    }
+    
+    .behance-bar input,
+    .behance-bar button {
+        width: 100% !important;
+    }
+    
+    .modal-wrapper {
+        width: 95%;
+        max-height: 90vh;
+        border-radius: var(--border-radius-md);
+    }
+    
+    .modal-content-container {
+        max-height: 90vh;
+    }
+    
+    .modal-title {
+        font-size: 1.8rem;
+    }
+    
+    .modal-close {
+        top: 1rem;
+        right: 1rem;
+        width: 38px;
+        height: 38px;
+        font-size: 1.8rem;
+        background-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1002;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-description {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+    }
+    
+    .hero-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .hero-visual-wrapper {
+        height: 280px;
+        gap: 0.8rem;
+    }
+    
+    .hero-card {
+        padding: 1.2rem;
+    }
+    
+    .hero-card h3 {
+        font-size: 1.3rem;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .contact-title {
+        font-size: 1.8rem;
+    }
+    
+    .settings-drawer-content {
+        padding: 4rem 1.5rem 2rem 1.5rem;
+    }
+    
+    .drawer-title {
+        font-size: 1.5rem;
     }
 }
 
