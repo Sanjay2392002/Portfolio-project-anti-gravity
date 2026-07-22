@@ -110,6 +110,21 @@ img {
     width: 26px;
     height: 26px;
     border: 1px solid rgba(20, 21, 24, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cursor-text {
+    font-family: var(--font-sans);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-color);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
 }
 
 .custom-cursor-dot {
@@ -128,6 +143,20 @@ body.cursor-active .custom-cursor-dot {
     height: 48px;
     background-color: rgba(20, 21, 24, 0.04);
     border-color: rgba(20, 21, 24, 0.8);
+}
+
+.custom-cursor.view-hover,
+.custom-cursor.close-hover {
+    width: 60px;
+    height: 60px;
+    background-color: var(--bg-color);
+    border-color: var(--text-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.custom-cursor.view-hover .cursor-text,
+.custom-cursor.close-hover .cursor-text {
+    opacity: 1;
 }
 
 @media (pointer: coarse) {

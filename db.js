@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 const DB_FILE = path.join(process.cwd(), 'data', 'projects.json');
+const PROFILE_FILE = path.join(process.cwd(), 'data', 'profile.json');
 
 // Default initial projects seed
 const seedProjects = [
@@ -75,6 +76,58 @@ const seedProjects = [
     }
 ];
 
+const defaultProfile = {
+    hero: {
+        subtitle: "CREATIVE GRAPHIC DESIGNER",
+        title: "PORTFOLIO",
+        description: "Sanjay Murugesan is a visual designer specializing in brand identity, editorial layout, packaging, and digital experiences. Creating premium designs rooted in precision and modern aesthetics.",
+        portrait: "/assets/images/designer_portrait.jpg"
+    },
+    about: {
+        title: "About Sanjay Murugesan",
+        bio: "I am a multidisciplinary visual designer driven by geometric structure, typographic elegance, and a devotion to minimal aesthetics. I translate complex brand concepts into highly functional visual identities, editorial layouts, and tangible packaging layouts. I build systems that bridge the gap between creative storytelling and industrial execution.",
+        portrait: "/assets/images/designer_portrait.jpg",
+        resumeUrl: "",
+        experience: [
+            { date: "2024 - Present", role: "Lead Brand & Identity Designer", company: "Independent Studio practice" },
+            { date: "2022 - 2024", role: "Senior Graphic Designer", company: "Visual Communications Agency" },
+            { date: "2020 - 2022", role: "Visual UX Designer", company: "Digital Experience Agency" }
+        ],
+        education: [
+            { date: "2017 - 2020", role: "Bachelor of Design (B.Des)", company: "National Institute of Design" },
+            { date: "2015 - 2017", role: "Creative Communication Certificate", company: "Academy of Fine Arts" }
+        ],
+        capabilities: [
+            "Brand Strategy",
+            "Logo Architecture",
+            "Editorial Layout",
+            "Packaging Structural Design",
+            "Interface Design (UI/UX)",
+            "Art Direction",
+            "3D Product Mockups"
+        ],
+        software: [
+            { key: "Ps", name: "Photoshop" },
+            { key: "Ai", name: "Illustrator" },
+            { key: "Id", name: "InDesign" },
+            { key: "Fi", name: "Figma" },
+            { key: "C4d", name: "Cinema 4D" }
+        ]
+    },
+    contact: {
+        email: "sanjaymurugesan23@gmail.com",
+        phone: "+91 98765 43210",
+        location: "Chennai, India & Remote",
+        socials: {
+            behance: "https://www.behance.net/sanjayuiuxgd",
+            linkedin: "https://www.linkedin.com/in/sanjaym23",
+            instagram: "https://www.instagram.com/design._.folio",
+            dribbble: "https://dribbble.com/sanjayuiuxgd",
+            github: "https://github.com/Sanjay2392002"
+        }
+    }
+};
+
 export const initDb = async () => {
     try {
         await fs.mkdir(path.dirname(DB_FILE), { recursive: true });
@@ -86,6 +139,20 @@ export const initDb = async () => {
         }
     } catch (e) {
         console.error("Database directory setup failed:", e);
+    }
+};
+
+export const initProfileDb = async () => {
+    try {
+        await fs.mkdir(path.dirname(PROFILE_FILE), { recursive: true });
+        try {
+            await fs.access(PROFILE_FILE);
+        } catch {
+            // Seed profile file if missing
+            await fs.writeFile(PROFILE_FILE, JSON.stringify(defaultProfile, null, 4));
+        }
+    } catch (e) {
+        console.error("Profile database directory setup failed:", e);
     }
 };
 
@@ -107,6 +174,28 @@ export const saveProjects = async (projects) => {
         return true;
     } catch (e) {
         console.error("Error saving database:", e);
+        return false;
+    }
+};
+
+export const getProfile = async () => {
+    try {
+        await initProfileDb();
+        const data = await fs.readFile(PROFILE_FILE, 'utf8');
+        return JSON.parse(data);
+    } catch (e) {
+        console.error("Error reading profile database:", e);
+        return defaultProfile;
+    }
+};
+
+export const saveProfile = async (profile) => {
+    try {
+        await initProfileDb();
+        await fs.writeFile(PROFILE_FILE, JSON.stringify(profile, null, 4));
+        return true;
+    } catch (e) {
+        console.error("Error saving profile database:", e);
         return false;
     }
 };

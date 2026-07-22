@@ -123,6 +123,139 @@ const loadActiveProjects = async () => {
     renderCategoryShowcases();
 };
 
+// Fetch dynamic profile details (Hero, About, Contact)
+const loadProfileDetails = async () => {
+    try {
+        const response = await fetch(getApiUrl('/api/profile'));
+        if (!response.ok) throw new Error("Profile retrieval failed");
+        const profile = await response.json();
+        renderProfileData(profile);
+    } catch (e) {
+        console.warn("Could not load profile from backend. Using static fallback page content.", e);
+    }
+};
+
+const renderProfileData = (profile) => {
+    if (!profile) return;
+    
+    // 1. Hero Section
+    if (profile.hero) {
+        const heroSubtitle = document.querySelector('.hero-subtitle');
+        if (heroSubtitle && profile.hero.subtitle) heroSubtitle.textContent = profile.hero.subtitle;
+        
+        const heroDynamicText = document.getElementById('hero-dynamic-text');
+        if (heroDynamicText && profile.hero.title) heroDynamicText.textContent = profile.hero.title;
+        
+        const heroDesc = document.querySelector('.hero-description');
+        if (heroDesc && profile.hero.description) heroDesc.textContent = profile.hero.description;
+        
+        const heroImg = document.getElementById('hero-portrait-img');
+        if (heroImg && profile.hero.portrait) heroImg.src = profile.hero.portrait;
+    }
+    
+    // 2. About Section
+    if (profile.about) {
+        const aboutTitle = document.getElementById('about-section-title');
+        if (aboutTitle && profile.about.title) {
+            aboutTitle.innerHTML = profile.about.title;
+        }
+        
+        const aboutBio = document.getElementById('about-bio');
+        if (aboutBio && profile.about.bio) aboutBio.textContent = profile.about.bio;
+        
+        const aboutImg = document.getElementById('about-portrait-img');
+        if (aboutImg && profile.about.portrait) aboutImg.src = profile.about.portrait;
+        
+        const resumeBtn = document.getElementById('btn-download-resume');
+        if (resumeBtn && profile.about.resumeUrl) {
+            resumeBtn.href = profile.about.resumeUrl;
+        }
+        
+        // Experience Timeline
+        const expList = document.getElementById('about-experience-list');
+        if (expList && profile.about.experience) {
+            expList.innerHTML = profile.about.experience.map(item => `
+                <li>
+                    <span class="timeline-date">${item.date}</span>
+                    <span class="timeline-role">${item.role}</span>
+                    <span class="timeline-company">${item.company}</span>
+                </li>
+            `).join('');
+        }
+        
+        // Education Timeline
+        const eduList = document.getElementById('about-education-list');
+        if (eduList && profile.about.education) {
+            eduList.innerHTML = profile.about.education.map(item => `
+                <li>
+                    <span class="timeline-date">${item.date}</span>
+                    <span class="timeline-role">${item.role}</span>
+                    <span class="timeline-company">${item.company}</span>
+                </li>
+            `).join('');
+        }
+        
+        // Capabilities tags
+        const capList = document.getElementById('about-capabilities-list');
+        if (capList && profile.about.capabilities) {
+            capList.innerHTML = profile.about.capabilities.map(cap => `
+                <span class="skill-tag">${cap}</span>
+            `).join('');
+        }
+        
+        // Software directory
+        const softList = document.getElementById('about-software-list');
+        if (softList && profile.about.software) {
+            softList.innerHTML = profile.about.software.map(soft => `
+                <div class="software-item" title="${soft.name}">
+                    <span class="soft-icon">${soft.key}</span>
+                    <span class="soft-name">${soft.name}</span>
+                </div>
+            `).join('');
+        }
+    }
+    
+    // 3. Contact Section
+    if (profile.contact) {
+        const mailLink = document.getElementById('contact-email');
+        if (mailLink && profile.contact.email) {
+            mailLink.href = `mailto:${profile.contact.email}`;
+            mailLink.textContent = profile.contact.email;
+        }
+        
+        const phoneLink = document.getElementById('contact-phone');
+        if (phoneLink && profile.contact.phone) {
+            phoneLink.href = `tel:${profile.contact.phone.replace(/\s+/g, '')}`;
+            phoneLink.textContent = profile.contact.phone;
+        }
+        
+        const locSpan = document.getElementById('contact-location');
+        if (locSpan && profile.contact.location) {
+            locSpan.textContent = profile.contact.location;
+        }
+        
+        // Social networks
+        if (profile.contact.socials) {
+            const soc = profile.contact.socials;
+            
+            const bLink = document.getElementById('behance-link');
+            if (bLink && soc.behance) bLink.href = soc.behance;
+            
+            const lLink = document.getElementById('linkedin-link');
+            if (lLink && soc.linkedin) lLink.href = soc.linkedin;
+            
+            const iLink = document.getElementById('instagram-link');
+            if (iLink && soc.instagram) iLink.href = soc.instagram;
+            
+            const dLink = document.getElementById('dribbble-link');
+            if (dLink && soc.dribbble) dLink.href = soc.dribbble;
+            
+            const gLink = document.getElementById('github-link');
+            if (gLink && soc.github) gLink.href = soc.github;
+        }
+    }
+};
+
 /* -----------------------------------------
    3. EDITORIAL CLASSIFIER ENGINE
    ----------------------------------------- */
@@ -870,16 +1003,31 @@ const initCustomCursor = () => {
     };
     requestAnimationFrame(animateCursor);
 
-    const hoverTargets = 'a, button, input, select, textarea, .project-img-wrapper, .dot-link, .thumb-dot';
+    const hoverTargets = 'a, button, input, select, textarea, .project-img-wrapper, .dot-link, .thumb-dot, .modal-backdrop, .modal-close';
     document.body.addEventListener('mouseenter', (e) => {
         if (e.target.matches && e.target.matches(hoverTargets)) {
-            cursor.classList.add('hovered');
+            const target = e.target;
+            const textSpan = cursor.querySelector('.cursor-text');
+            
+            if (target.closest('.project-img-wrapper') || target.matches('.project-img-wrapper')) {
+                cursor.classList.add('view-hover');
+                if (textSpan) textSpan.textContent = 'VIEW';
+            } else if (target.closest('.modal-close') || target.matches('.modal-close') || target.matches('.modal-backdrop')) {
+                cursor.classList.add('close-hover');
+                if (textSpan) textSpan.textContent = 'CLOSE';
+            } else {
+                cursor.classList.add('hovered');
+            }
         }
     }, true);
 
     document.body.addEventListener('mouseleave', (e) => {
         if (e.target.matches && e.target.matches(hoverTargets)) {
             cursor.classList.remove('hovered');
+            cursor.classList.remove('view-hover');
+            cursor.classList.remove('close-hover');
+            const textSpan = cursor.querySelector('.cursor-text');
+            if (textSpan) textSpan.textContent = '';
         }
     }, true);
 };
@@ -1133,6 +1281,7 @@ const initHeaderAndForms = () => {
    ----------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
     loadActiveProjects();
+    loadProfileDetails();
     initSettingsDrawer();
     initCustomCursor();
     initIntersectionObserver();

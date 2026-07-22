@@ -21,7 +21,7 @@
 <body>
 
     <!-- Custom Cursor -->
-    <div class="custom-cursor"></div>
+    <div class="custom-cursor"><span class="cursor-text"></span></div>
     <div class="custom-cursor-dot"></div>
 
     <!-- Navigation Header -->
@@ -87,7 +87,7 @@
                 </div>
                 <div class="hero-right">
                     <div class="hero-portrait-frame">
-                        <img src="/assets/images/designer_portrait.jpg" alt="Sanjay Murugesan Portrait" class="hero-portrait-img">
+                        <img src="/assets/images/designer_portrait.jpg" alt="Sanjay Murugesan Portrait" class="hero-portrait-img" id="hero-portrait-img">
                         <div class="portrait-overlay"></div>
                     </div>
                 </div>
@@ -104,16 +104,16 @@
         <section id="about" class="section about-section" data-theme="light-cream">
             <div class="section-content about-content">
                 <span class="section-num">01 / Profile</span>
-                <h2 class="section-title">About Sanjay <br><span class="serif-italic">Murugesan</span></h2>
+                <h2 class="section-title" id="about-section-title">About Sanjay <br><span class="serif-italic">Murugesan</span></h2>
                 
                 <div class="about-grid">
                     <div class="about-left">
                         <div class="about-portrait-frame">
-                            <img src="/assets/images/designer_portrait.jpg" alt="Sanjay Murugesan" class="about-portrait-img">
+                            <img src="/assets/images/designer_portrait.jpg" alt="Sanjay Murugesan" class="about-portrait-img" id="about-portrait-img">
                         </div>
                     </div>
                     <div class="about-right">
-                        <p class="about-bio">
+                        <p class="about-bio" id="about-bio">
                             I am a multidisciplinary visual designer driven by geometric structure, typographic elegance, and a devotion to minimal aesthetics. I translate complex brand concepts into highly functional visual identities, editorial layouts, and tangible packaging layouts. I build systems that bridge the gap between creative storytelling and industrial execution.
                         </p>
                         
@@ -121,7 +121,7 @@
                         <div class="about-timeline-grid" id="about-resume">
                             <div class="timeline-col">
                                 <h3>Experience</h3>
-                                <ul class="timeline-list">
+                                <ul class="timeline-list" id="about-experience-list">
                                     <li>
                                         <span class="timeline-date">2024 - Present</span>
                                         <span class="timeline-role">Lead Brand & Identity Designer</span>
@@ -141,7 +141,7 @@
                             </div>
                             <div class="timeline-col">
                                 <h3>Education</h3>
-                                <ul class="timeline-list">
+                                <ul class="timeline-list" id="about-education-list">
                                     <li>
                                         <span class="timeline-date">2017 - 2020</span>
                                         <span class="timeline-role">Bachelor of Design (B.Des)</span>
@@ -160,7 +160,7 @@
                         <div class="about-skills-section">
                             <div class="skills-col">
                                 <h3>Core Capabilities</h3>
-                                <div class="skills-tags">
+                                <div class="skills-tags" id="about-capabilities-list">
                                     <span class="skill-tag">Brand Strategy</span>
                                     <span class="skill-tag">Logo Architecture</span>
                                     <span class="skill-tag">Editorial Layout</span>
@@ -173,7 +173,7 @@
                             
                             <div class="skills-col" style="margin-top: 2rem;">
                                 <h3>Software Directory</h3>
-                                <div class="software-icons">
+                                <div class="software-icons" id="about-software-list">
                                     <div class="software-item" title="Adobe Photoshop">
                                         <span class="soft-icon">Ps</span>
                                         <span class="soft-name">Photoshop</span>
@@ -238,15 +238,15 @@
                     <div class="contact-details">
                         <div class="contact-info-item">
                             <span class="info-label">Email</span>
-                            <a href="mailto:sanjaymurugesan23@gmail.com" class="info-val link-hover">sanjaymurugesan23@gmail.com</a>
+                            <a href="mailto:sanjaymurugesan23@gmail.com" class="info-val link-hover" id="contact-email">sanjaymurugesan23@gmail.com</a>
                         </div>
                         <div class="contact-info-item">
                             <span class="info-label">Phone</span>
-                            <a href="tel:+919876543210" class="info-val link-hover">+91 98765 43210</a>
+                            <a href="tel:+919876543210" class="info-val link-hover" id="contact-phone">+91 98765 43210</a>
                         </div>
                         <div class="contact-info-item">
                             <span class="info-label">Studio Location</span>
-                            <span class="info-val">Chennai, India & Remote</span>
+                            <span class="info-val" id="contact-location">Chennai, India & Remote</span>
                         </div>
                         <div class="contact-info-item">
                             <span class="info-label">Network Directory</span>

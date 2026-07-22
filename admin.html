@@ -3,253 +3,421 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Manage projects, upload new graphic design work, and export data.">
+    <meta name="description" content="Manage projects, upload new graphic design work, and edit page sections dynamically.">
     <title>Portfolio Admin Dashboard</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght=0,400;0,600;0,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght=0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    
     <style>
-        .admin-page {
-            background-color: #faf9f5;
-            color: #141518;
+        /* Graphic Designer Vibe Blueprint Overlays & Variables */
+        :root {
+            --bg-color: #faf9f5;
+            --card-bg: #ffffff;
+            --text-color: #141518;
+            --text-muted: #6e7178;
+            --accent-color: #141518;
+            --border-color: rgba(20, 21, 24, 0.08);
+            --grid-line-color: rgba(20, 21, 24, 0.03);
+        }
+
+        body.admin-page {
+            background-color: var(--bg-color);
+            color: var(--text-color);
             min-height: 100vh;
-            padding: 4rem 8%;
+            padding: 0;
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            background-image: 
+                linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            position: relative;
+        }
+
+        /* Architectural structural annotations */
+        .grid-blueprint-label {
+            position: absolute;
+            font-size: 0.65rem;
+            color: rgba(20, 21, 24, 0.3);
+            font-family: monospace;
+            pointer-events: none;
+        }
+        .gbl-tl { top: 10px; left: 10px; }
+        .gbl-tr { top: 10px; right: 10px; }
+        .gbl-bl { bottom: 10px; left: 10px; }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+            position: relative;
+            z-index: 2;
         }
 
         .admin-header-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(20, 21, 24, 0.08);
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 2rem;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .admin-header-nav::after {
+            content: '+';
+            position: absolute;
+            bottom: -8px;
+            right: 0;
+            font-family: monospace;
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .admin-header-nav::before {
+            content: '+';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            font-family: monospace;
+            font-size: 1rem;
+            color: var(--text-muted);
         }
 
         .admin-title {
-            font-size: 2.2rem;
-            font-weight: 700;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .admin-grid-layout {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 4rem;
-            align-items: start;
+        .admin-title span.title-spec {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 1.6rem;
+            color: var(--text-muted);
         }
 
-        @media (max-width: 991px) {
-            .admin-page {
-                padding: 3rem 4%;
-            }
-            .admin-grid-layout {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            .admin-card {
-                padding: 2rem;
-            }
+        /* Tab Navigation Bar */
+        .admin-tabs-nav {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2.5rem;
+            overflow-x: auto;
+            scrollbar-width: none; /* Hide scrollbar for clean aesthetic */
+        }
+        .admin-tabs-nav::-webkit-scrollbar {
+            display: none;
         }
 
-        @media (max-width: 576px) {
-            .admin-page {
-                padding: 2rem 1.2rem;
-            }
-            .admin-header-nav {
-                flex-direction: column;
-                gap: 1.2rem;
-                align-items: center;
-                text-align: center;
-                padding-bottom: 1.5rem;
-                margin-bottom: 2rem;
-            }
-            .admin-card {
-                padding: 1.5rem 1.2rem;
-                border-radius: 12px;
-            }
-            .admin-card h2 {
-                font-size: 1.15rem;
-                margin-bottom: 1rem;
-                padding-bottom: 0.6rem;
-            }
-            .typo-spec-row {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-            .color-palette-picker {
-                flex-wrap: wrap;
-                gap: 0.8rem 0.5rem;
-            }
-            .picker-group {
-                min-width: calc(50% - 0.5rem);
-            }
-            .file-upload-wrapper {
-                padding: 1.5rem 1rem;
-            }
-            .stat-row {
-                font-size: 0.9rem;
-            }
-            .delete-project-btn {
-                padding: 0.4rem 0.6rem;
-                font-size: 0.8rem;
-            }
+        .tab-trigger {
+            background: none;
+            border: none;
+            padding: 1rem 1.8rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
-        /* Sidebar Panels */
+        .tab-trigger::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-color);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .tab-trigger.active {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .tab-trigger.active::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Tabs Content Containers */
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Layout Grid Cards */
         .admin-card {
-            background: #ffffff;
-            border: 1px solid rgba(20, 21, 24, 0.08);
-            border-radius: 16px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.01);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
+            position: relative;
             margin-bottom: 2rem;
         }
 
-        .admin-card h2 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            padding-bottom: 0.8rem;
+        .admin-card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid rgba(20, 21, 24, 0.05);
+            padding-bottom: 1rem;
+            margin-bottom: 1.8rem;
         }
 
-        .admin-stats-list {
-            list-style: none;
+        .admin-card h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-card h2::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: var(--text-color);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .admin-card-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: monospace;
+            text-transform: uppercase;
+        }
+
+        /* 2 Column Grid for Projects Tab */
+        .projects-grid-layout {
+            display: grid;
+            grid-template-columns: 1.1fr 1.9fr;
+            gap: 2.5rem;
+            align-items: start;
+        }
+
+        /* Scrollable Project Inventory List */
+        .project-inventory-list {
             display: flex;
             flex-direction: column;
             gap: 1rem;
-        }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.95rem;
-        }
-
-        .stat-label {
-            color: #6e7178;
-        }
-
-        .stat-val {
-            font-weight: 600;
-        }
-
-        /* Project Management list */
-        .admin-project-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-            max-height: 500px;
+            max-height: 700px;
             overflow-y: auto;
             padding-right: 0.5rem;
+            scrollbar-width: thin;
         }
 
-        .admin-project-item {
+        .project-inventory-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 1rem;
-            background: #fbfaf7;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: #fafaf7;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             transition: all 0.3s ease;
         }
 
-        .admin-project-item:hover {
-            border-color: #0044ff;
+        .project-inventory-item:hover {
+            border-color: var(--accent-color);
             background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
         }
 
-        .project-item-left {
+        .pi-left {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
-        .project-item-thumb {
-            width: 50px;
-            height: 50px;
+        .pi-thumb {
+            width: 55px;
+            height: 55px;
             border-radius: 6px;
             object-fit: cover;
             border: 1px solid rgba(0, 0, 0, 0.05);
-            background: #eee;
+            background: #eaeaea;
         }
 
-        .project-item-details h4 {
+        .pi-details h4 {
             font-size: 0.95rem;
             font-weight: 600;
-            margin-bottom: 0.2rem;
+            margin: 0 0 0.2rem 0;
+            color: var(--text-color);
         }
 
-        .project-item-details span {
+        .pi-details span {
             font-size: 0.75rem;
-            color: #6e7178;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
-        .delete-project-btn {
-            background: none;
-            border: none;
-            color: #d11a2a;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            padding: 0.5rem 0.8rem;
-            border-radius: 4px;
-            transition: background 0.2s;
+        .pi-actions {
+            display: flex;
+            gap: 0.5rem;
         }
 
-        .delete-project-btn:hover {
+        .action-btn {
+            background: none;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .action-btn.edit {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        .action-btn.edit:hover {
+            background: var(--accent-color);
+            color: #ffffff;
+        }
+
+        .action-btn.delete {
+            color: #d11a2a;
+            border-color: rgba(209, 26, 42, 0.15);
+        }
+        .action-btn.delete:hover {
             background: rgba(209, 26, 42, 0.08);
         }
 
-        /* Add Work Form styles */
-        .color-palette-picker {
-            display: flex;
-            gap: 1rem;
-            margin-top: 0.5rem;
+        /* Form styling updates */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
         }
 
-        .picker-group {
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(20, 20, 22, 0.05);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23141518' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-chevron-down'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 10px;
+            cursor: pointer;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        /* Color swatch picker widgets */
+        .color-swatch-editor {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .color-swatch-cell {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.3rem;
-            flex: 1;
+            gap: 0.4rem;
+            border: 1px solid var(--border-color);
+            padding: 0.8rem 0.5rem;
+            border-radius: 8px;
+            background: #fafaf7;
         }
 
-        .color-picker-input {
+        .color-hex-picker {
             width: 100%;
-            height: 40px;
+            height: 45px;
             border-radius: 4px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(20, 21, 24, 0.1);
             cursor: pointer;
             padding: 0;
             background: none;
         }
 
-        .file-upload-wrapper {
-            position: relative;
+        .color-hex-value {
+            font-size: 0.75rem;
+            font-family: monospace;
+            font-weight: 500;
+        }
+
+        /* Drag & Drop File Upload Area */
+        .drag-upload-zone {
             border: 2px dashed rgba(20, 21, 24, 0.15);
             border-radius: 8px;
-            padding: 2rem;
+            padding: 2.2rem;
             text-align: center;
-            background-color: #fbfaf7;
+            background-color: #fafaf7;
             cursor: pointer;
+            position: relative;
             transition: all 0.3s;
         }
 
-        .file-upload-wrapper:hover {
-            border-color: #0044ff;
+        .drag-upload-zone:hover {
+            border-color: var(--accent-color);
             background-color: #ffffff;
         }
 
-        .file-upload-input {
+        .drag-upload-zone input[type="file"] {
             position: absolute;
             top: 0;
             left: 0;
@@ -259,255 +427,668 @@
             cursor: pointer;
         }
 
-        .upload-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            display: block;
+        .upload-zone-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.6rem;
+            display: inline-block;
         }
 
-        .upload-preview {
+        .upload-zone-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .upload-zone-preview {
             width: 100%;
-            max-height: 180px;
+            max-height: 160px;
             object-fit: contain;
-            border-radius: 6px;
+            border-radius: 4px;
             margin-top: 1rem;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
             display: none;
         }
 
-        .typo-spec-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+        /* Dynamic Form Repeater Lists */
+        .repeater-section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(20, 21, 24, 0.05);
+            padding-bottom: 0.4rem;
         }
 
+        .btn-add-row {
+            background: none;
+            border: 1px solid var(--accent-color);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-add-row:hover {
+            background-color: var(--accent-color);
+            color: #ffffff;
+        }
+
+        .dynamic-repeater-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .dynamic-row-item {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dynamic-row-item .form-input {
+            padding: 0.65rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-remove-row {
+            background: none;
+            border: 1px solid rgba(209, 26, 42, 0.2);
+            color: #d11a2a;
+            font-size: 1.2rem;
+            font-weight: 500;
+            line-height: 1;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-remove-row:hover {
+            background-color: rgba(209, 26, 42, 0.06);
+            border-color: #d11a2a;
+        }
+
+        /* Form action layouts */
+        .form-actions-footer {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-submit {
+            flex: 2;
+            padding: 0.95rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 0.95rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(20, 21, 24, 0.03);
+            color: var(--text-color);
+            border-color: var(--accent-color);
+        }
+
+        /* Document/PDF Attachment preview label */
+        .attachment-link-info {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        /* Database Stats widget layout */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-badge-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-badge-num {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--text-color);
+            margin-bottom: 0.2rem;
+        }
+
+        .stat-badge-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Alert Toast notifications styling */
         .alert-toast {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
-            background-color: #141518;
+            background-color: var(--accent-color);
             color: #ffffff;
             padding: 1rem 2rem;
             border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             transform: translateY(100px);
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1000;
+            z-index: 10000;
+            font-weight: 500;
+            font-size: 0.9rem;
         }
 
         .alert-toast.show {
             transform: translateY(0);
             opacity: 1;
         }
+
+        /* Responsive Breakpoints & Mobile Optimization */
+        @media (max-width: 1024px) {
+            .projects-grid-layout {
+                grid-template-columns: 1fr;
+            }
+            .stats-dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 2rem 4%;
+            }
+            .admin-header-nav {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+                padding-bottom: 1.5rem;
+            }
+            .admin-header-nav::after, .admin-header-nav::before {
+                display: none;
+            }
+            .stats-dashboard {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .admin-card {
+                padding: 1.5rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .color-swatch-editor {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .dynamic-row-item {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: stretch;
+                border: 1px solid var(--border-color);
+                padding: 0.8rem;
+                border-radius: 6px;
+                background: rgba(20, 21, 24, 0.01);
+                position: relative;
+            }
+            .dynamic-row-item.software-row {
+                flex-direction: row;
+                align-items: center;
+            }
+            .dynamic-row-item .btn-remove-row {
+                position: absolute;
+                top: 0.8rem;
+                right: 0.8rem;
+            }
+            .dynamic-row-item.software-row .btn-remove-row {
+                position: static;
+            }
+            .dynamic-row-item .form-input {
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-dashboard {
+                grid-template-columns: 1fr;
+            }
+            .color-swatch-editor {
+                grid-template-columns: 1fr;
+            }
+            .tab-trigger {
+                padding: 0.8rem 1.2rem;
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </head>
 <body class="admin-page">
 
-    <div class="admin-header-nav">
-        <div>
-            <span class="logo-dot"></span>
-            <a href="index.html" class="logo-text" style="display:inline-flex; align-items:center;">DESIGN.PORTFOLIO</a>
-        </div>
-        <div>
-            <a href="index.html" class="btn btn-sm btn-outline">Back to Portfolio</a>
-        </div>
-    </div>
+    <!-- Design Annotations -->
+    <div class="grid-blueprint-label gbl-tl">SYS_REF: AGY-ADMIN-PORTAL</div>
+    <div class="grid-blueprint-label gbl-tr">WORKSPACE: Sanjay2392002</div>
 
-    <div class="admin-grid-layout">
-
-        <!-- LEFT SIDEBAR: Stats & works list -->
-        <div class="admin-sidebar-column">
-            <!-- Behance configuration link -->
-            <div class="admin-card">
-                <h2>Behance Sync Link</h2>
-                <p style="font-size: 0.85rem; color: #6e7178; margin-bottom: 1rem;">
-                    Your Behance profile URL can be configured directly from the portfolio homepage. Click "Sync Behance" in the header to modify.
-                </p>
+    <div class="admin-container">
+        
+        <!-- Header -->
+        <div class="admin-header-nav">
+            <div class="admin-title">
+                DESIGN.PORTFOLIO <span class="title-spec">Dashboard</span>
             </div>
-
-            <div class="admin-card">
-                <h2>Database Stats</h2>
-                <ul class="admin-stats-list">
-                    <li class="stat-row">
-                        <span class="stat-label">Total Works Uploaded</span>
-                        <span class="stat-val" id="total-works-count">0</span>
-                    </li>
-                    <li class="stat-row">
-                        <span class="stat-label">Food & Beverage</span>
-                        <span class="stat-val" id="count-food">0</span>
-                    </li>
-                    <li class="stat-row">
-                        <span class="stat-label">Jewelry & Luxury</span>
-                        <span class="stat-val" id="count-jewelry">0</span>
-                    </li>
-                    <li class="stat-row">
-                        <span class="stat-label">Tech & Startups</span>
-                        <span class="stat-val" id="count-tech">0</span>
-                    </li>
-                </ul>
+            <div>
+                <a href="index.html" class="btn btn-sm btn-outline">Back to Portfolio</a>
             </div>
+        </div>
 
-            <div class="admin-card">
-                <h2>Manage Uploaded Works</h2>
-                <div class="admin-project-list" id="project-list-container">
-                    <!-- Dynamically populated list -->
+        <!-- Section Stat Badges -->
+        <div class="stats-dashboard">
+            <div class="stat-badge-card">
+                <span class="stat-badge-num" id="total-works-count">0</span>
+                <span class="stat-badge-title">Total Projects</span>
+            </div>
+            <div class="stat-badge-card">
+                <span class="stat-badge-num" id="count-food">0</span>
+                <span class="stat-badge-title">Food & Beverage</span>
+            </div>
+            <div class="stat-badge-card">
+                <span class="stat-badge-num" id="count-jewelry">0</span>
+                <span class="stat-badge-title">Jewelry & Luxury</span>
+            </div>
+            <div class="stat-badge-card">
+                <span class="stat-badge-num" id="count-tech">0</span>
+                <span class="stat-badge-title">Tech & Startups</span>
+            </div>
+        </div>
+
+        <!-- Section Selection Tabs -->
+        <div class="admin-tabs-nav">
+            <button class="tab-trigger active" data-tab="projects">Projects Portfolio</button>
+            <button class="tab-trigger" data-tab="hero">Hero Section</button>
+            <button class="tab-trigger" data-tab="about">About & Profile</button>
+            <button class="tab-trigger" data-tab="contact">Contact & Socials</button>
+        </div>
+
+        <!-- TAB PANEL 1: Projects Portfolio -->
+        <div class="tab-panel active" id="tab-projects">
+            <div class="projects-grid-layout">
+                
+                <!-- Left Panel: List of projects -->
+                <div>
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h2>Project Inventory</h2>
+                            <span class="admin-card-subtitle">catalog_list.db</span>
+                        </div>
+                        <div class="project-inventory-list" id="project-list-container">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Right Panel: Form Editor -->
+                <div>
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h2 id="project-editor-title">Upload New Creative Work</h2>
+                            <span class="admin-card-subtitle">editor_model.json</span>
+                        </div>
+                        
+                        <form id="upload-work-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="work-title" class="form-label">Project Title</label>
+                                    <input type="text" id="work-title" class="form-input" placeholder="e.g. Sola Organic Coffee Mark" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="work-category" class="form-label">Category</label>
+                                    <select id="work-category" class="form-input form-select" required>
+                                        <option value="" disabled selected>Select Category</option>
+                                        <option value="food">Food & Beverage</option>
+                                        <option value="jewelry">Jewelry & Luxury</option>
+                                        <option value="tech">Tech & Startups</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="work-year" class="form-label">Year of Creation</label>
+                                    <input type="text" id="work-year" class="form-input" placeholder="e.g. 2026" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="work-duration" class="form-label">Project Duration</label>
+                                    <input type="text" id="work-duration" class="form-input" placeholder="e.g. 3 Weeks" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="work-tools" class="form-label">Tools Used</label>
+                                <input type="text" id="work-tools" class="form-input" placeholder="e.g. Illustrator, Photoshop, Figma" required>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="work-focus" class="form-label">Design Focus</label>
+                                    <input type="text" id="work-focus" class="form-input" placeholder="e.g. Geometry grid, typography" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="work-output" class="form-label">Deliverable Output</label>
+                                    <input type="text" id="work-output" class="form-input" placeholder="e.g. Logo mark, package box label" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="work-concept" class="form-label">Design Concept Narrative</label>
+                                <textarea id="work-concept" class="form-input form-textarea" rows="4" placeholder="Explain the creative idea, grid system layout, visual choices, etc..." required></textarea>
+                            </div>
+
+                            <!-- Image Upload Zone -->
+                            <div class="form-group">
+                                <label class="form-label">Showcase Image Upload</label>
+                                <div class="drag-upload-zone" id="project-upload-zone">
+                                    <span class="upload-zone-icon">📁</span>
+                                    <p class="upload-zone-text" id="project-upload-prompt">Drag & drop image or click to select (JPG / PNG)</p>
+                                    <input type="file" id="work-image" accept="image/*" required>
+                                    <img id="project-image-preview" class="upload-zone-preview" alt="Preview">
+                                </div>
+                            </div>
+
+                            <!-- Color Palette pickers -->
+                            <div class="form-group">
+                                <label class="form-label">Visual Color Swatches</label>
+                                <div class="color-swatch-editor">
+                                    <div class="color-swatch-cell">
+                                        <input type="color" id="swatch-1" class="color-hex-picker" value="#0A0F14">
+                                        <span id="swatch-1-val" class="color-hex-value">#0A0F14</span>
+                                    </div>
+                                    <div class="color-swatch-cell">
+                                        <input type="color" id="swatch-2" class="color-hex-picker" value="#FFDF79">
+                                        <span id="swatch-2-val" class="color-hex-value">#FFDF79</span>
+                                    </div>
+                                    <div class="color-swatch-cell">
+                                        <input type="color" id="swatch-3" class="color-hex-picker" value="#00D2C4">
+                                        <span id="swatch-3-val" class="color-hex-value">#00D2C4</span>
+                                    </div>
+                                    <div class="color-swatch-cell">
+                                        <input type="color" id="swatch-4" class="color-hex-picker" value="#F0F3F5">
+                                        <span id="swatch-4-val" class="color-hex-value">#F0F3F5</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Typography inputs -->
+                            <div class="form-group">
+                                <label class="form-label">Typography Specimens</label>
+                                <div class="form-row">
+                                    <div class="form-group" style="margin-bottom:0.5rem;">
+                                        <label for="typo-font-1" class="form-label" style="font-size:0.7rem; color:var(--text-muted);">Heading Font</label>
+                                        <input type="text" id="typo-font-1" class="form-input" placeholder="e.g. Outfit Medium" required>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:0.5rem;">
+                                        <label for="typo-size-1" class="form-label" style="font-size:0.7rem; color:var(--text-muted);">Heading Font Sample Size</label>
+                                        <input type="text" id="typo-size-1" class="form-input" placeholder="e.g. 36px" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label for="typo-font-2" class="form-label" style="font-size:0.7rem; color:var(--text-muted);">Body Font</label>
+                                        <input type="text" id="typo-font-2" class="form-input" placeholder="e.g. Outfit Light" required>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label for="typo-size-2" class="form-label" style="font-size:0.7rem; color:var(--text-muted);">Body Font Sample Size</label>
+                                        <input type="text" id="typo-size-2" class="form-input" placeholder="e.g. 12px" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions-footer">
+                                <button type="submit" class="btn btn-primary btn-submit" id="btn-project-submit">Add Project to Portfolio</button>
+                                <button type="button" class="btn-cancel" id="btn-project-cancel" style="display: none;">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <!-- RIGHT PANEL: Add new work via Backend API -->
-        <div class="admin-main-column">
+        <!-- TAB PANEL 2: Hero Section -->
+        <div class="tab-panel" id="tab-hero">
             <div class="admin-card">
-                <h2>Upload New Creative Work</h2>
-                <form class="contact-form" id="upload-work-form" style="padding:0; border:none; box-shadow:none; background:none;">
+                <div class="admin-card-header">
+                    <h2>Edit Hero Banner Section</h2>
+                    <span class="admin-card-subtitle">hero_controller.json</span>
+                </div>
+                <form id="hero-edit-form">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="work-title" class="form-label">Project Title</label>
-                            <input type="text" id="work-title" class="form-input" placeholder="e.g. Honeycomb Jar Design" required>
+                            <label for="hero-subtitle" class="form-label">Hero Tagline Subtitle</label>
+                            <input type="text" id="hero-subtitle" class="form-input" placeholder="CREATIVE GRAPHIC DESIGNER" required>
                         </div>
                         <div class="form-group">
-                            <label for="work-category" class="form-label">Work Category (Industry)</label>
-                            <select id="work-category" class="form-input form-select" required>
-                                <option value="" disabled selected>Select Category</option>
-                                <option value="food">Food & Beverage</option>
-                                <option value="jewelry">Jewelry & Luxury</option>
-                                <option value="tech">Tech & Startups</option>
-                            </select>
+                            <label for="hero-title" class="form-label">Dynamic Head Title</label>
+                            <input type="text" id="hero-title" class="form-input" placeholder="PORTFOLIO" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hero-description" class="form-label">Hero Biography Tagline Description</label>
+                        <textarea id="hero-description" class="form-input form-textarea" rows="4" placeholder="Brief visual summary description..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Hero Portrait Image</label>
+                        <div class="drag-upload-zone">
+                            <span class="upload-zone-icon">📷</span>
+                            <p class="upload-zone-text" id="hero-upload-prompt">Select new portrait photo to replace current (JPG / PNG)</p>
+                            <input type="file" id="hero-portrait" accept="image/*">
+                            <img id="hero-image-preview" class="upload-zone-preview" alt="Preview">
+                        </div>
+                    </div>
+
+                    <div class="form-actions-footer">
+                        <button type="submit" class="btn btn-primary btn-submit">Save Hero Section</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- TAB PANEL 3: About & Biography -->
+        <div class="tab-panel" id="tab-about">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2>Edit About & Resume</h2>
+                    <span class="admin-card-subtitle">about_profile.json</span>
+                </div>
+                <form id="about-edit-form">
+                    <div class="form-group">
+                        <label for="about-title" class="form-label">About Section Heading Title</label>
+                        <input type="text" id="about-title" class="form-input" placeholder="About Sanjay Murugesan" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="about-bio" class="form-label">About Biography Narrative</label>
+                        <textarea id="about-bio-text" class="form-input form-textarea" rows="5" placeholder="Deep-dive bio statement..." required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">About Detail Portrait Image</label>
+                            <div class="drag-upload-zone">
+                                <span class="upload-zone-icon">📷</span>
+                                <p class="upload-zone-text" id="about-portrait-prompt">Replace secondary about page portrait</p>
+                                <input type="file" id="about-portrait" accept="image/*">
+                                <img id="about-image-preview" class="upload-zone-preview" alt="Preview">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Biography Resume File (PDF)</label>
+                            <div class="drag-upload-zone">
+                                <span class="upload-zone-icon">📄</span>
+                                <p class="upload-zone-text" id="resume-upload-prompt">Upload new resume PDF document</p>
+                                <input type="file" id="resume-pdf" accept=".pdf">
+                                <span class="attachment-link-info" id="resume-attachment-name"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Repeater for Experience Timeline -->
+                    <div class="repeater-section-title">
+                        <span>Work Experience Timeline</span>
+                        <button type="button" class="btn-add-row" id="btn-add-experience">+ Add job</button>
+                    </div>
+                    <div class="dynamic-repeater-list" id="experience-list-container">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <!-- Repeater for Education Timeline -->
+                    <div class="repeater-section-title">
+                        <span>Education Timeline</span>
+                        <button type="button" class="btn-add-row" id="btn-add-education">+ Add education</button>
+                    </div>
+                    <div class="dynamic-repeater-list" id="education-list-container">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <!-- Capabilities comma tags -->
+                    <div class="form-group">
+                        <label for="about-capabilities" class="form-label">Core Capabilities (Comma-separated)</label>
+                        <input type="text" id="about-capabilities" class="form-input" placeholder="e.g. Brand Strategy, Editorial Layout, Interface Design (UI/UX)">
+                    </div>
+
+                    <!-- Repeater for Software Directory -->
+                    <div class="repeater-section-title">
+                        <span>Software Directory</span>
+                        <button type="button" class="btn-add-row" id="btn-add-software">+ Add software</button>
+                    </div>
+                    <div class="dynamic-repeater-list" id="software-list-container">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <div class="form-actions-footer">
+                        <button type="submit" class="btn btn-primary btn-submit">Save About Profile Details</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- TAB PANEL 4: Contact & Socials -->
+        <div class="tab-panel" id="tab-contact">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2>Edit Contact & Link Directory</h2>
+                    <span class="admin-card-subtitle">contact_directory.json</span>
+                </div>
+                <form id="contact-edit-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contact-email-input" class="form-label">Public Email Address</label>
+                            <input type="email" id="contact-email-input" class="form-input" placeholder="sanjaymurugesan23@gmail.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-phone-input" class="form-label">Phone / Studio Number</label>
+                            <input type="text" id="contact-phone-input" class="form-input" placeholder="+91 98765 43210" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-location-input" class="form-label">Studio / Location Details</label>
+                        <input type="text" id="contact-location-input" class="form-input" placeholder="Chennai, India & Remote" required>
+                    </div>
+
+                    <h3 style="font-size:1.05rem; font-weight:600; margin-top:2.5rem; margin-bottom:1.2rem; border-bottom:1px solid rgba(20, 21, 24, 0.05); padding-bottom:0.4rem;">
+                        Social Network Links
+                    </h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="social-behance" class="form-label">Behance URL</label>
+                            <input type="url" id="social-behance" class="form-input" placeholder="https://www.behance.net/username">
+                        </div>
+                        <div class="form-group">
+                            <label for="social-linkedin" class="form-label">LinkedIn URL</label>
+                            <input type="url" id="social-linkedin" class="form-input" placeholder="https://www.linkedin.com/in/username">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="work-year" class="form-label">Year of Creation</label>
-                            <input type="text" id="work-year" class="form-input" placeholder="e.g. 2026" required>
+                            <label for="social-instagram" class="form-label">Instagram URL</label>
+                            <input type="url" id="social-instagram" class="form-input" placeholder="https://www.instagram.com/username">
                         </div>
                         <div class="form-group">
-                            <label for="work-duration" class="form-label">Project Duration</label>
-                            <input type="text" id="work-duration" class="form-input" placeholder="e.g. 3 Weeks" required>
+                            <label for="social-dribbble" class="form-label">Dribbble URL</label>
+                            <input type="url" id="social-dribbble" class="form-input" placeholder="https://dribbble.com/username">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="work-tools" class="form-label">Tools Used</label>
-                        <input type="text" id="work-tools" class="form-input" placeholder="e.g. Photoshop, Illustrator, Cinema 4D" required>
+                        <label for="social-github" class="form-label">GitHub URL</label>
+                        <input type="url" id="social-github" class="form-input" placeholder="https://github.com/username">
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="work-focus" class="form-label">Core Design Focus</label>
-                            <input type="text" id="work-focus" class="form-input" placeholder="e.g. Label typography, 3D render" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="work-output" class="form-label">Deliverable Output</label>
-                            <input type="text" id="work-output" class="form-input" placeholder="e.g. Package container print" required>
-                        </div>
+                    <div class="form-actions-footer">
+                        <button type="submit" class="btn btn-primary btn-submit">Save Contact & Social Info</button>
                     </div>
-
-                    <div class="form-group">
-                        <label for="work-concept" class="form-label">Design Concept (Details)</label>
-                        <textarea id="work-concept" class="form-input form-textarea" rows="4" placeholder="Explain the creative idea, mathematical layouts, grid guides, and design decisions..." required></textarea>
-                    </div>
-
-                    <!-- Image Upload -->
-                    <div class="form-group">
-                        <label class="form-label">Upload Showcase Image</label>
-                        <div class="file-upload-wrapper" id="upload-box">
-                            <span class="upload-icon">📁</span>
-                            <p id="upload-prompt">Drag & drop or click to select image file (JPG / PNG)</p>
-                            <input type="file" id="work-image" class="file-upload-input" accept="image/*" required>
-                            <img id="image-preview" class="upload-preview" alt="Preview">
-                        </div>
-                    </div>
-
-                    <!-- Color Swatches -->
-                    <div class="form-group">
-                        <label class="form-label">Color Palette Swatches</label>
-                        <div class="color-palette-picker">
-                            <div class="picker-group">
-                                <input type="color" id="swatch-1" class="color-picker-input" value="#0044ff">
-                                <span id="swatch-1-val" style="font-size:0.7rem; font-family:monospace;">#0044ff</span>
-                            </div>
-                            <div class="picker-group">
-                                <input type="color" id="swatch-2" class="color-picker-input" value="#6e33ff">
-                                <span id="swatch-2-val" style="font-size:0.7rem; font-family:monospace;">#6e33ff</span>
-                            </div>
-                            <div class="picker-group">
-                                <input type="color" id="swatch-3" class="color-picker-input" value="#faf9f5">
-                                <span id="swatch-3-val" style="font-size:0.7rem; font-family:monospace;">#faf9f5</span>
-                            </div>
-                            <div class="picker-group">
-                                <input type="color" id="swatch-4" class="color-picker-input" value="#141518">
-                                <span id="swatch-4-val" style="font-size:0.7rem; font-family:monospace;">#141518</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Typography spec -->
-                    <div class="form-group">
-                        <label class="form-label">Typography Specimens</label>
-                        <div class="typo-spec-row">
-                            <div class="form-group">
-                                <label for="typo-font-1" class="form-label" style="font-size:0.7rem; color:#6e7178;">Heading Font</label>
-                                <input type="text" id="typo-font-1" class="form-input" placeholder="e.g. Outfit Bold" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="typo-size-1" class="form-label" style="font-size:0.7rem; color:#6e7178;">Sample Size</label>
-                                <input type="text" id="typo-size-1" class="form-input" placeholder="e.g. 72px" required>
-                            </div>
-                        </div>
-                        <div class="typo-spec-row" style="margin-top:1rem;">
-                            <div class="form-group">
-                                <label for="typo-font-2" class="form-label" style="font-size:0.7rem; color:#6e7178;">Body Font</label>
-                                <input type="text" id="typo-font-2" class="form-input" placeholder="e.g. Outfit Regular" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="typo-size-2" class="form-label" style="font-size:0.7rem; color:#6e7178;">Sample Size</label>
-                                <input type="text" id="typo-size-2" class="form-input" placeholder="e.g. 16px" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary form-submit-btn" style="margin-top:1rem; width:100%;">
-                        Add Work to Portfolio
-                    </button>
                 </form>
             </div>
         </div>
 
     </div>
 
-    <!-- Feedback Toast -->
+    <!-- Toast alert messages -->
     <div class="alert-toast" id="admin-toast">Action Completed!</div>
 
+    <!-- Scripting for Admin panel operations -->
     <script>
+        // Global references
         let projects = [];
-        
-        // UI selectors
-        const countTotal = document.getElementById('total-works-count');
-        const countFood = document.getElementById('count-food');
-        const countJewelry = document.getElementById('count-jewelry');
-        const countTech = document.getElementById('count-tech');
-        
-        const listContainer = document.getElementById('project-list-container');
-        const uploadForm = document.getElementById('upload-work-form');
-        
-        const imageInput = document.getElementById('work-image');
-        const imagePreview = document.getElementById('image-preview');
-        const uploadPrompt = document.getElementById('upload-prompt');
-        
+        let editingProjectId = null;
+
+        // Toast Helper
         const toast = document.getElementById('admin-toast');
-
-        // Color Picker Display sync
-        for (let i = 1; i <= 4; i++) {
-            const picker = document.getElementById(`swatch-${i}`);
-            const valSpan = document.getElementById(`swatch-${i}-val`);
-            picker.addEventListener('input', () => {
-                valSpan.textContent = picker.value.toUpperCase();
-            });
-        }
-
-        // Show Toast Feedback
         const showToast = (message, isError = false) => {
             toast.textContent = message;
             toast.style.backgroundColor = isError ? '#d11a2a' : '#141518';
@@ -517,112 +1098,305 @@
             }, 3000);
         };
 
-        // Load data from Backend API
+        /* -----------------------------------------
+           TAB SWITCHING
+           ----------------------------------------- */
+        document.querySelectorAll('.tab-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const targetTab = trigger.getAttribute('data-tab');
+                
+                // Toggle navigation triggers
+                document.querySelectorAll('.tab-trigger').forEach(t => t.classList.remove('active'));
+                trigger.classList.add('active');
+                
+                // Toggle tab panels
+                document.querySelectorAll('.tab-panel').forEach(panel => {
+                    panel.classList.remove('active');
+                    if (panel.id === `tab-${targetTab}`) {
+                        panel.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        /* -----------------------------------------
+           COLOR PICKERS HEX TEXT REFRESHER
+           ----------------------------------------- */
+        for (let i = 1; i <= 4; i++) {
+            const picker = document.getElementById(`swatch-${i}`);
+            const valSpan = document.getElementById(`swatch-${i}-val`);
+            picker.addEventListener('input', () => {
+                valSpan.textContent = picker.value.toUpperCase();
+            });
+        }
+
+        /* -----------------------------------------
+           FILE UPLOAD INPUT PREVIEW SYNC
+           ----------------------------------------- */
+        const setupFilePreview = (fileInputId, previewId, promptId) => {
+            const fileInput = document.getElementById(fileInputId);
+            const preview = document.getElementById(previewId);
+            const prompt = document.getElementById(promptId);
+            
+            if (fileInput && preview) {
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                                preview.src = event.target.result;
+                                preview.style.display = 'block';
+                                if (prompt) prompt.textContent = file.name;
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            if (prompt) prompt.textContent = file.name;
+                        }
+                    }
+                });
+            }
+        };
+
+        setupFilePreview('work-image', 'project-image-preview', 'project-upload-prompt');
+        setupFilePreview('hero-portrait', 'hero-image-preview', 'hero-upload-prompt');
+        setupFilePreview('about-portrait', 'about-image-preview', 'about-portrait-prompt');
+
+        // Special handling for PDF input preview
+        const pdfInput = document.getElementById('resume-pdf');
+        const pdfName = document.getElementById('resume-attachment-name');
+        if (pdfInput && pdfName) {
+            pdfInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    pdfName.textContent = `Attached: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                }
+            });
+        }
+
+        /* -----------------------------------------
+           DYNAMIC FORM ROW REPEATERS (Experience, Education, Software)
+           ----------------------------------------- */
+        const createTimelineRow = (containerId, data = { date: '', role: '', company: '' }) => {
+            const container = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.className = 'dynamic-row-item';
+            div.innerHTML = `
+                <input type="text" placeholder="e.g. 2024 - Present" class="form-input row-date" value="${data.date || ''}" required style="flex:1;">
+                <input type="text" placeholder="e.g. Lead Brand Designer" class="form-input row-role" value="${data.role || ''}" required style="flex:2;">
+                <input type="text" placeholder="e.g. Independent Studio" class="form-input row-company" value="${data.company || ''}" required style="flex:2;">
+                <button type="button" class="btn-remove-row" title="Remove row">×</button>
+            `;
+            div.querySelector('.btn-remove-row').addEventListener('click', () => div.remove());
+            container.appendChild(div);
+        };
+
+        const createSoftwareRow = (containerId, data = { key: '', name: '' }) => {
+            const container = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.className = 'dynamic-row-item software-row';
+            div.innerHTML = `
+                <input type="text" placeholder="Ps" class="form-input row-key" value="${data.key || ''}" maxlength="3" required style="width: 80px; text-align: center;">
+                <input type="text" placeholder="Photoshop" class="form-input row-name" value="${data.name || ''}" required style="flex: 1;">
+                <button type="button" class="btn-remove-row" title="Remove row">×</button>
+            `;
+            div.querySelector('.btn-remove-row').addEventListener('click', () => div.remove());
+            container.appendChild(div);
+        };
+
+        // Bind repeater buttons
+        document.getElementById('btn-add-experience').addEventListener('click', () => createTimelineRow('experience-list-container'));
+        document.getElementById('btn-add-education').addEventListener('click', () => createTimelineRow('education-list-container'));
+        document.getElementById('btn-add-software').addEventListener('click', () => createSoftwareRow('software-list-container'));
+
+        // Serialize Repeaters
+        const getTimelineDataJson = (containerId) => {
+            const container = document.getElementById(containerId);
+            const rows = container.querySelectorAll('.dynamic-row-item');
+            const list = [];
+            rows.forEach(row => {
+                const date = row.querySelector('.row-date').value.trim();
+                const role = row.querySelector('.row-role').value.trim();
+                const company = row.querySelector('.row-company').value.trim();
+                if (date || role || company) {
+                    list.push({ date, role, company });
+                }
+            });
+            return JSON.stringify(list);
+        };
+
+        const getSoftwareDataJson = (containerId) => {
+            const container = document.getElementById(containerId);
+            const rows = container.querySelectorAll('.dynamic-row-item');
+            const list = [];
+            rows.forEach(row => {
+                const key = row.querySelector('.row-key').value.trim();
+                const name = row.querySelector('.row-name').value.trim();
+                if (key || name) {
+                    list.push({ key, name });
+                }
+            });
+            return JSON.stringify(list);
+        };
+
+        /* -----------------------------------------
+           1. PORTFOLIO PROJECTS CRUD OPERATIONS
+           ----------------------------------------- */
         const loadProjects = async () => {
             try {
                 const response = await fetch('/api/projects');
-                if (!response.ok) throw new Error("API retrieval failed");
+                if (!response.ok) throw new Error("API call failed");
                 projects = await response.json();
-                renderStatsAndList();
-            } catch(e) {
-                console.error(e);
-                showToast("Failed to load projects from backend database", true);
+                renderStatsAndInventory();
+            } catch (err) {
+                console.error(err);
+                showToast("Failed to load projects list from database", true);
             }
         };
 
-        // Render stats and lists
-        const renderStatsAndList = () => {
-            countTotal.textContent = projects.length;
-            countFood.textContent = projects.filter(p => p.category === 'food').length;
-            countJewelry.textContent = projects.filter(p => p.category === 'jewelry').length;
-            countTech.textContent = projects.filter(p => p.category === 'tech').length;
+        const renderStatsAndInventory = () => {
+            // Count badges
+            document.getElementById('total-works-count').textContent = projects.length;
+            document.getElementById('count-food').textContent = projects.filter(p => p.category === 'food').length;
+            document.getElementById('count-jewelry').textContent = projects.filter(p => p.category === 'jewelry').length;
+            document.getElementById('count-tech').textContent = projects.filter(p => p.category === 'tech').length;
 
-            listContainer.innerHTML = '';
-            
-            projects.forEach((proj) => {
-                const item = document.createElement('div');
-                item.className = 'admin-project-item';
-                
-                item.innerHTML = `
-                    <div class="project-item-left">
-                        <img src="${proj.img}" class="project-item-thumb" alt="${proj.title}">
-                        <div class="project-item-details">
+            // List table
+            const container = document.getElementById('project-list-container');
+            container.innerHTML = '';
+
+            if (projects.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding: 2rem; color: var(--text-muted); font-size:0.9rem;">No projects uploaded yet.</div>';
+                return;
+            }
+
+            projects.forEach(proj => {
+                const div = document.createElement('div');
+                div.className = 'project-inventory-item';
+                div.innerHTML = `
+                    <div class="pi-left">
+                        <img src="${proj.img}" class="pi-thumb" alt="${proj.title}">
+                        <div class="pi-details">
                             <h4>${proj.title}</h4>
-                            <span>${proj.category.toUpperCase()}</span>
+                            <span>${proj.category.toUpperCase()} • ${proj.year}</span>
                         </div>
                     </div>
-                    <button class="delete-project-btn" data-id="${proj.id}">Delete</button>
+                    <div class="pi-actions">
+                        <button type="button" class="action-btn edit" data-id="${proj.id}">Edit</button>
+                        <button type="button" class="action-btn delete" data-id="${proj.id}">Delete</button>
+                    </div>
                 `;
-                
-                listContainer.appendChild(item);
-            });
 
-            // Re-bind delete listeners
-            document.querySelectorAll('.delete-project-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = btn.getAttribute('data-id');
-                    deleteProject(id);
+                // Edit Button Click handler
+                div.querySelector('.action-btn.edit').addEventListener('click', () => {
+                    initiateProjectEdit(proj);
                 });
+
+                // Delete Button Click handler
+                div.querySelector('.action-btn.delete').addEventListener('click', () => {
+                    deleteProject(proj.id);
+                });
+
+                container.appendChild(div);
             });
         };
 
-        // Delete project via Backend API
-        const deleteProject = async (id) => {
-            if (confirm('Are you sure you want to delete this project?')) {
-                try {
-                    const response = await fetch(`/api/projects/${id}`, {
-                        method: 'DELETE'
-                    });
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        showToast('Project deleted successfully!');
-                        loadProjects();
-                    } else {
-                        throw new Error(result.error || "Delete failed");
-                    }
-                } catch (e) {
-                    console.error(e);
-                    showToast('Failed to delete project from server', true);
+        // Set form in edit mode
+        const initiateProjectEdit = (proj) => {
+            editingProjectId = proj.id;
+            
+            // Header titles
+            document.getElementById('project-editor-title').textContent = "Edit Creative Work";
+            document.getElementById('btn-project-submit').textContent = "Save Project Changes";
+            document.getElementById('btn-project-cancel').style.display = 'inline-block';
+            
+            // Fields
+            document.getElementById('work-title').value = proj.title || '';
+            document.getElementById('work-category').value = proj.category || '';
+            document.getElementById('work-year').value = proj.year || '';
+            document.getElementById('work-duration').value = proj.duration || '';
+            document.getElementById('work-tools').value = proj.tools || '';
+            document.getElementById('work-focus').value = proj.focus || '';
+            document.getElementById('work-output').value = proj.output || '';
+            document.getElementById('work-concept').value = proj.concept || '';
+
+            // Image (not required anymore when editing)
+            document.getElementById('work-image').required = false;
+            const preview = document.getElementById('project-image-preview');
+            preview.src = proj.img || '';
+            preview.style.display = 'block';
+            document.getElementById('project-upload-prompt').textContent = `Current: ${proj.img.split('/').pop()}`;
+
+            // Swatches
+            if (proj.swatches && proj.swatches.length >= 4) {
+                for (let i = 1; i <= 4; i++) {
+                    const hex = proj.swatches[i-1];
+                    document.getElementById(`swatch-${i}`).value = hex;
+                    document.getElementById(`swatch-${i}-val`).textContent = hex.toUpperCase();
                 }
             }
+
+            // Typography
+            if (proj.typography && proj.typography.length >= 2) {
+                document.getElementById('typo-font-1').value = proj.typography[0].font || '';
+                document.getElementById('typo-size-1').value = proj.typography[0].size || '';
+                document.getElementById('typo-font-2').value = proj.typography[1].font || '';
+                document.getElementById('typo-size-2').value = proj.typography[1].size || '';
+            }
+
+            // Scroll form into view if on mobile
+            document.getElementById('upload-work-form').scrollIntoView({ behavior: 'smooth' });
         };
 
-        // File upload local preview
-        imageInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    imagePreview.src = event.target.result;
-                    imagePreview.style.display = 'block';
-                    uploadPrompt.textContent = file.name;
-                };
-                reader.readAsDataURL(file);
+        // Reset project form
+        const resetProjectForm = () => {
+            editingProjectId = null;
+            document.getElementById('upload-work-form').reset();
+            
+            document.getElementById('project-editor-title').textContent = "Upload New Creative Work";
+            document.getElementById('btn-project-submit').textContent = "Add Project to Portfolio";
+            document.getElementById('btn-project-cancel').style.display = 'none';
+            
+            document.getElementById('work-image').required = true;
+            const preview = document.getElementById('project-image-preview');
+            preview.src = '';
+            preview.style.display = 'none';
+            document.getElementById('project-upload-prompt').textContent = 'Drag & drop image or click to select (JPG / PNG)';
+            
+            // Set default swatch text values
+            for (let i = 1; i <= 4; i++) {
+                const picker = document.getElementById(`swatch-${i}`);
+                document.getElementById(`swatch-${i}-val`).textContent = picker.value.toUpperCase();
             }
-        });
+        };
 
-        // Form Submit via API FormData
-        uploadForm.addEventListener('submit', async (e) => {
+        document.getElementById('btn-project-cancel').addEventListener('click', resetProjectForm);
+
+        // Submit form (Create / Update)
+        document.getElementById('upload-work-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            if (!imageInput.files[0]) {
-                showToast('Please select and upload a showcase image!', true);
+            const imageInput = document.getElementById('work-image');
+            if (!editingProjectId && !imageInput.files[0]) {
+                showToast("Please upload a showcase image!", true);
                 return;
             }
 
             const formData = new FormData();
-            formData.append('title', document.getElementById('work-title').value);
+            formData.append('title', document.getElementById('work-title').value.trim());
             formData.append('category', document.getElementById('work-category').value);
-            formData.append('year', document.getElementById('work-year').value);
-            formData.append('duration', document.getElementById('work-duration').value);
-            formData.append('tools', document.getElementById('work-tools').value);
-            formData.append('focus', document.getElementById('work-focus').value);
-            formData.append('output', document.getElementById('work-output').value);
-            formData.append('concept', document.getElementById('work-concept').value);
-            formData.append('image', imageInput.files[0]);
+            formData.append('year', document.getElementById('work-year').value.trim());
+            formData.append('duration', document.getElementById('work-duration').value.trim());
+            formData.append('tools', document.getElementById('work-tools').value.trim());
+            formData.append('focus', document.getElementById('work-focus').value.trim());
+            formData.append('output', document.getElementById('work-output').value.trim());
+            formData.append('concept', document.getElementById('work-concept').value.trim());
 
-            // Swatches array to comma-separated hex codes
+            if (imageInput.files[0]) {
+                formData.append('image', imageInput.files[0]);
+            }
+
+            // Swatches array
             const swatches = [
                 document.getElementById('swatch-1').value.toUpperCase(),
                 document.getElementById('swatch-2').value.toUpperCase(),
@@ -631,51 +1405,249 @@
             ].join(',');
             formData.append('swatches', swatches);
 
-            // Typography structure to JSON string
+            // Typography
             const typography = JSON.stringify([
                 {
                     name: "Heading Font",
-                    font: document.getElementById('typo-font-1').value,
-                    size: document.getElementById('typo-size-1').value
+                    font: document.getElementById('typo-font-1').value.trim(),
+                    size: document.getElementById('typo-size-1').value.trim()
                 },
                 {
                     name: "Body Font",
-                    font: document.getElementById('typo-font-2').value,
-                    size: document.getElementById('typo-size-2').value
+                    font: document.getElementById('typo-font-2').value.trim(),
+                    size: document.getElementById('typo-size-2').value.trim()
                 }
             ]);
             formData.append('typography', typography);
 
             try {
-                const response = await fetch('/api/projects', {
-                    method: 'POST',
+                let url = '/api/projects';
+                let method = 'POST';
+
+                if (editingProjectId) {
+                    url = `/api/projects/${editingProjectId}`;
+                    method = 'PUT';
+                }
+
+                const response = await fetch(url, {
+                    method: method,
                     body: formData
                 });
 
-                if (!response.ok) throw new Error("Upload failed");
+                if (!response.ok) throw new Error("Server submission failed");
 
-                showToast('New work added to portfolio successfully!');
-                uploadForm.reset();
-                
-                imagePreview.style.display = 'none';
-                imagePreview.src = '';
-                uploadPrompt.textContent = 'Drag & drop or click to select image file (JPG / PNG)';
-                
-                for (let i = 1; i <= 4; i++) {
-                    const picker = document.getElementById(`swatch-${i}`);
-                    const valSpan = document.getElementById(`swatch-${i}-val`);
-                    valSpan.textContent = picker.value.toUpperCase();
-                }
-
+                showToast(editingProjectId ? "Project updated successfully!" : "New project uploaded successfully!");
+                resetProjectForm();
                 loadProjects();
-            } catch (e) {
-                console.error(e);
-                showToast("Failed to upload project to server", true);
+            } catch (err) {
+                console.error(err);
+                showToast("Failed to submit project to server database", true);
             }
         });
 
-        // Initialize dashboard
-        window.addEventListener('DOMContentLoaded', loadProjects);
+        // Delete project
+        const deleteProject = async (id) => {
+            if (confirm("Are you sure you want to delete this project? This will permanently wipe it from the dashboard.")) {
+                try {
+                    const response = await fetch(`/api/projects/${id}`, {
+                        method: 'DELETE'
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        showToast("Project deleted successfully");
+                        loadProjects();
+                        if (editingProjectId === id) resetProjectForm();
+                    } else {
+                        throw new Error(result.error);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    showToast("Failed to delete project from server", true);
+                }
+            }
+        };
+
+
+        /* -----------------------------------------
+           2. DYNAMIC PROFILE LOADING & UPDATES
+           ----------------------------------------- */
+        const loadProfile = async () => {
+            try {
+                const response = await fetch('/api/profile');
+                if (!response.ok) throw new Error("Failed to load profile details");
+                const profile = await response.json();
+
+                // Hero values
+                if (profile.hero) {
+                    document.getElementById('hero-subtitle').value = profile.hero.subtitle || '';
+                    document.getElementById('hero-title').value = profile.hero.title || '';
+                    document.getElementById('hero-description').value = profile.hero.description || '';
+                    
+                    if (profile.hero.portrait) {
+                        const preview = document.getElementById('hero-image-preview');
+                        preview.src = profile.hero.portrait;
+                        preview.style.display = 'block';
+                        document.getElementById('hero-upload-prompt').textContent = `Current: ${profile.hero.portrait.split('/').pop()}`;
+                    }
+                }
+
+                // About values
+                if (profile.about) {
+                    document.getElementById('about-title').value = profile.about.title || '';
+                    document.getElementById('about-bio-text').value = profile.about.bio || '';
+                    
+                    if (profile.about.portrait) {
+                        const preview = document.getElementById('about-image-preview');
+                        preview.src = profile.about.portrait;
+                        preview.style.display = 'block';
+                        document.getElementById('about-portrait-prompt').textContent = `Current: ${profile.about.portrait.split('/').pop()}`;
+                    }
+
+                    if (profile.about.resumeUrl) {
+                        document.getElementById('resume-attachment-name').innerHTML = `
+                            Attached: <a href="${profile.about.resumeUrl}" target="_blank" style="text-decoration:underline; font-weight:600;">Download Resume File</a>
+                        `;
+                    }
+
+                    document.getElementById('about-capabilities').value = (profile.about.capabilities || []).join(', ');
+
+                    // Dynamic Lists experience
+                    const expContainer = document.getElementById('experience-list-container');
+                    expContainer.innerHTML = '';
+                    if (profile.about.experience && profile.about.experience.length > 0) {
+                        profile.about.experience.forEach(exp => createTimelineRow('experience-list-container', exp));
+                    } else {
+                        // Add one default empty row
+                        createTimelineRow('experience-list-container');
+                    }
+
+                    // Dynamic Lists education
+                    const eduContainer = document.getElementById('education-list-container');
+                    eduContainer.innerHTML = '';
+                    if (profile.about.education && profile.about.education.length > 0) {
+                        profile.about.education.forEach(edu => createTimelineRow('education-list-container', edu));
+                    } else {
+                        createTimelineRow('education-list-container');
+                    }
+
+                    // Dynamic Lists software
+                    const softContainer = document.getElementById('software-list-container');
+                    softContainer.innerHTML = '';
+                    if (profile.about.software && profile.about.software.length > 0) {
+                        profile.about.software.forEach(soft => createSoftwareRow('software-list-container', soft));
+                    } else {
+                        createSoftwareRow('software-list-container');
+                    }
+                }
+
+                // Contact values
+                if (profile.contact) {
+                    document.getElementById('contact-email-input').value = profile.contact.email || '';
+                    document.getElementById('contact-phone-input').value = profile.contact.phone || '';
+                    document.getElementById('contact-location-input').value = profile.contact.location || '';
+
+                    if (profile.contact.socials) {
+                        document.getElementById('social-behance').value = profile.contact.socials.behance || '';
+                        document.getElementById('social-linkedin').value = profile.contact.socials.linkedin || '';
+                        document.getElementById('social-instagram').value = profile.contact.socials.instagram || '';
+                        document.getElementById('social-dribbble').value = profile.contact.socials.dribbble || '';
+                        document.getElementById('social-github').value = profile.contact.socials.github || '';
+                    }
+                }
+
+            } catch (err) {
+                console.error(err);
+                showToast("Failed to load profile settings", true);
+            }
+        };
+
+        // Submit Hero Form
+        document.getElementById('hero-edit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('hero_subtitle', document.getElementById('hero-subtitle').value.trim());
+            formData.append('hero_title', document.getElementById('hero-title').value.trim());
+            formData.append('hero_description', document.getElementById('hero-description').value.trim());
+
+            const fileInput = document.getElementById('hero-portrait');
+            if (fileInput.files[0]) {
+                formData.append('hero_portrait', fileInput.files[0]);
+            }
+
+            await submitProfileForm(formData, "Hero section updated successfully!");
+        });
+
+        // Submit About Form
+        document.getElementById('about-edit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('about_title', document.getElementById('about-title').value.trim());
+            formData.append('about_bio', document.getElementById('about-bio-text').value.trim());
+            formData.append('about_capabilities', document.getElementById('about-capabilities').value.trim());
+
+            const portraitInput = document.getElementById('about-portrait');
+            if (portraitInput.files[0]) {
+                formData.append('about_portrait', portraitInput.files[0]);
+            }
+
+            const resumeInput = document.getElementById('resume-pdf');
+            if (resumeInput.files[0]) {
+                formData.append('resume_pdf', resumeInput.files[0]);
+            }
+
+            // Timeline structures
+            formData.append('about_experience', getTimelineDataJson('experience-list-container'));
+            formData.append('about_education', getTimelineDataJson('education-list-container'));
+            formData.append('about_software', getSoftwareDataJson('software-list-container'));
+
+            await submitProfileForm(formData, "About details and timeline updated successfully!");
+        });
+
+        // Submit Contact Form
+        document.getElementById('contact-edit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('contact_email', document.getElementById('contact-email-input').value.trim());
+            formData.append('contact_phone', document.getElementById('contact-phone-input').value.trim());
+            formData.append('contact_location', document.getElementById('contact-location-input').value.trim());
+
+            // Socials JSON object
+            const socials = {
+                behance: document.getElementById('social-behance').value.trim(),
+                linkedin: document.getElementById('social-linkedin').value.trim(),
+                instagram: document.getElementById('social-instagram').value.trim(),
+                dribbble: document.getElementById('social-dribbble').value.trim(),
+                github: document.getElementById('social-github').value.trim()
+            };
+            formData.append('contact_socials', JSON.stringify(socials));
+
+            await submitProfileForm(formData, "Contact details and social links updated successfully!");
+        });
+
+        const submitProfileForm = async (formData, successMessage) => {
+            try {
+                const response = await fetch('/api/profile', {
+                    method: 'PUT',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error("Failed to submit profile update");
+
+                showToast(successMessage);
+                loadProfile();
+            } catch (err) {
+                console.error(err);
+                showToast("Failed to update profile settings on server", true);
+            }
+        };
+
+        /* -----------------------------------------
+           PAGE INITIALIZER
+           ----------------------------------------- */
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProjects();
+            loadProfile();
+        });
     </script>
 </body>
 </html>
