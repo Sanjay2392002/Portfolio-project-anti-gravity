@@ -89,10 +89,10 @@ const seedProjects = [
    ───────────────────────────────────────────────────────── */
 const defaultProfile = {
     hero: {
-        badge: 'CREATIVE GRAPHIC DESIGNER',
-        name: 'Sanjay Murugesan',
+        badge: 'GRAPHIC AND VISUAL DESIGNER',
+        name: 'Sanjay M',
         title: 'PORTFOLIO',
-        description: 'Sanjay Murugesan is a visual designer specializing in brand identity, editorial layout, packaging, and digital experiences. Creating premium designs rooted in precision and modern aesthetics.',
+        description: 'Sanjay M is a graphic and visual designer specializing in brand identity, editorial layout, packaging, and digital experiences. Creating premium designs rooted in precision and modern aesthetics.',
         portrait: '/assets/images/designer_portrait.jpg',
         ctaPrimary: 'View Showcase',
         ctaSecondary: 'Get In Touch'
@@ -100,7 +100,7 @@ const defaultProfile = {
     about: {
         sectionBadge: '01 / Profile',
         title: 'About Sanjay',
-        titleItalic: 'Murugesan',
+        titleItalic: 'M',
         bio: 'I am a multidisciplinary visual designer driven by geometric structure, typographic elegance, and a devotion to minimal aesthetics. I translate complex brand concepts into highly functional visual identities, editorial layouts, and tangible packaging layouts. I build systems that bridge the gap between creative storytelling and industrial execution.',
         portrait: '/assets/images/designer_portrait.jpg',
         resumeUrl: '',
