@@ -65,12 +65,16 @@ if (cloudinaryReady) {
 /* ─── Helper: upload file (local or cloud) ─── */
 const uploadFile = async (file, resourceType = 'image') => {
     if (cloudinaryReady) {
-        const result = await cloudinary.uploader.upload(file.path, {
-            folder:        'graphic_design_portfolio',
-            resource_type: resourceType
-        });
-        try { await fs.unlink(file.path); } catch {}
-        return result.secure_url;
+        try {
+            const result = await cloudinary.uploader.upload(file.path, {
+                folder:        'graphic_design_portfolio',
+                resource_type: resourceType
+            });
+            try { await fs.unlink(file.path); } catch {}
+            return result.secure_url;
+        } catch (err) {
+            console.warn('Cloudinary upload warning (falling back to local storage):', err.message || err);
+        }
     }
     return `/uploads/${file.filename}`;
 };
