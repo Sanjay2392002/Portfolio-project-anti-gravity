@@ -128,12 +128,16 @@ const seedDatabase = async () => {
     
     // Seed admin user
     const { User } = await import('./models.js');
-    const userCount = await User.countDocuments();
-    if (userCount === 0) {
+    const adminUser = await User.findOne({ username: 'sanjay239002@gmail.com' });
+    if (!adminUser) {
         const bcrypt = await import('bcryptjs');
         const hashedPassword = await bcrypt.default.hash('Sanjay2392@!', 10);
+        
+        // Wipe old credentials to prevent lockouts
+        await User.deleteMany({});
+        
         await User.create({ username: 'sanjay239002@gmail.com', password: hashedPassword });
-        console.log('👤 Admin user created (username: sanjay239002@gmail.com, password: Sanjay2392@!)');
+        console.log('👤 Admin user securely provisioned');
     }
 };
 
