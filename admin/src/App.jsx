@@ -10,7 +10,7 @@ import Sections from './pages/Sections';
 
 const App = () => {
   return (
-    <Router>
+    <Router basename="/admin">
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
