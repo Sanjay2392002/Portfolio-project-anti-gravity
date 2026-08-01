@@ -22,8 +22,55 @@ const apiFetch = async (endpoint, opts = {}) => {
 };
 
 /* =============================================================
-   3. PROFILE / SITE CONTENT LOADING
+   3. SECTIONS & PROFILE / SITE CONTENT LOADING
    ============================================================= */
+const loadSections = async () => {
+    try {
+        const sections = await apiFetch('/api/sections');
+        const visible = sections.filter(s => !s.isHidden).sort((a,b) => a.order - b.order);
+        
+        const main = document.getElementById('main-content');
+        if (!main) return;
+        
+        visible.forEach(sec => {
+            let el = document.getElementById(sec.type);
+            if (!el) {
+                if (sec.type === 'custom') {
+                    el = document.createElement('section');
+                    el.id = 'custom-' + sec._id;
+                    el.className = 'custom-section section-content';
+                    el.innerHTML = sec.content || '<h2>Custom Section</h2>';
+                } else return;
+            }
+            if (el) main.appendChild(el); // Move to the end of main, thereby reordering
+        });
+        
+        const defaultSections = ['hero', 'about', 'projects', 'contact'];
+        defaultSections.forEach(id => {
+            if (!visible.find(s => s.type === id)) {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            } else {
+                const el = document.getElementById(id);
+                if (el) el.style.display = '';
+            }
+        });
+        
+        // Update nav dots based on visible sections
+        const dotContainer = document.querySelector('.side-nav-dots');
+        if (dotContainer) {
+            dotContainer.innerHTML = visible.filter(s => defaultSections.includes(s.type)).map(s => 
+                `<a href="#${s.type}" class="dot-link" data-sec="${s.type}" aria-label="${s.name}"></a>`
+            ).join('');
+            const firstDot = dotContainer.querySelector('.dot-link');
+            if (firstDot) firstDot.classList.add('active');
+        }
+        
+    } catch(e) {
+        console.warn('Failed to load sections:', e.message);
+    }
+};
+
 const loadSiteContent = async () => {
     try {
         const site = await apiFetch('/api/site');
@@ -843,6 +890,7 @@ const initHeroAnimations = () => {
 document.addEventListener('DOMContentLoaded', async () => {
     /* Load data first */
     await Promise.allSettled([
+        loadSections(),
         loadSiteContent(),
         loadProfileDetails(),
         loadProjects()

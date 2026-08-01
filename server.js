@@ -8,10 +8,16 @@ import { v2 as cloudinary } from 'cloudinary';
 import {
     getProjects, saveProjects,
     getProfile,  saveProfile,
-    getSiteContent, saveSiteContent
+    getSiteContent, saveSiteContent,
+    connectDB, getSections
 } from './db.js';
+import { User, Section } from './models.js';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 dotenv.config();
+connectDB();
+
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -87,6 +93,73 @@ const deleteLocal = async (imgUrl) => {
     }
 };
 
+/* ─── JWT Middleware ─── */
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.JWT_SECRET || 'supersecret123', (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    });
+};
+
+/* ═══════════════════════════════════════════════════════════
+   AUTH  —  Login
+   ═══════════════════════════════════════════════════════════ */
+app.post('/api/auth/login', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const user = await User.findOne({ username });
+        if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+        
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) return res.status(401).json({ error: 'Invalid credentials' });
+
+        const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET || 'supersecret123', { expiresIn: '1d' });
+        res.json({ token, username });
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   SECTIONS  —  CRUD
+   ═══════════════════════════════════════════════════════════ */
+app.get('/api/sections', async (_req, res) => {
+    try { res.json(await getSections()); }
+    catch { res.status(500).json({ error: 'Failed to fetch sections' }); }
+});
+
+app.post('/api/sections', authenticateToken, async (req, res) => {
+    try {
+        const section = await Section.create(req.body);
+        res.status(201).json(section);
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to create section' });
+    }
+});
+
+app.put('/api/sections/:id', authenticateToken, async (req, res) => {
+    try {
+        const section = await Section.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(section);
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to update section' });
+    }
+});
+
+app.delete('/api/sections/:id', authenticateToken, async (req, res) => {
+    try {
+        await Section.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to delete section' });
+    }
+});
+
 /* ═══════════════════════════════════════════════════════════
    PROJECTS  —  CRUD
    ═══════════════════════════════════════════════════════════ */
@@ -98,7 +171,7 @@ app.get('/api/projects', async (_req, res) => {
 });
 
 /* POST /api/projects  — create */
-app.post('/api/projects', upload.single('image'), async (req, res) => {
+app.post('/api/projects', authenticateToken, upload.single('image'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
 
@@ -140,7 +213,7 @@ app.post('/api/projects', upload.single('image'), async (req, res) => {
 });
 
 /* PUT /api/projects/:id  — update */
-app.put('/api/projects/:id', upload.single('image'), async (req, res) => {
+app.put('/api/projects/:id', authenticateToken, upload.single('image'), async (req, res) => {
     try {
         const list = await getProjects();
         const idx  = list.findIndex(p => p.id === req.params.id);
@@ -184,7 +257,7 @@ app.put('/api/projects/:id', upload.single('image'), async (req, res) => {
 });
 
 /* DELETE /api/projects/:id */
-app.delete('/api/projects/:id', async (req, res) => {
+app.delete('/api/projects/:id', authenticateToken, async (req, res) => {
     try {
         const list = await getProjects();
         const item = list.find(p => p.id === req.params.id);
@@ -210,7 +283,7 @@ app.get('/api/profile', async (_req, res) => {
 });
 
 /* PUT /api/profile */
-app.put('/api/profile', profileUpload, async (req, res) => {
+app.put('/api/profile', authenticateToken, profileUpload, async (req, res) => {
     try {
         const profile = await getProfile();
         const b = req.body;
@@ -274,7 +347,7 @@ app.get('/api/site', async (_req, res) => {
 });
 
 /* PUT /api/site */
-app.put('/api/site', async (req, res) => {
+app.put('/api/site', authenticateToken, async (req, res) => {
     try {
         const site = await getSiteContent();
         const b    = req.body;
