@@ -26,8 +26,19 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use(express.static('public'));
 app.use('/uploads', express.static('public/uploads'));
+
+// Serve Admin Panel (Production)
+app.use('/admin', express.static(path.join(process.cwd(), 'admin', 'dist')));
+app.get('/admin/*', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'admin', 'dist', 'index.html'));
+});
+
+// Serve Main Portfolio
+app.use(express.static(process.cwd()));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'index.html'));
+});
 
 /* ─── Multer local storage ─── */
 const storage = multer.diskStorage({
