@@ -131,9 +131,9 @@ const seedDatabase = async () => {
     const userCount = await User.countDocuments();
     if (userCount === 0) {
         const bcrypt = await import('bcryptjs');
-        const hashedPassword = await bcrypt.default.hash('admin123', 10);
-        await User.create({ username: 'admin', password: hashedPassword });
-        console.log('👤 Admin user created (username: admin, password: admin123)');
+        const hashedPassword = await bcrypt.default.hash('Sanjay2392@!', 10);
+        await User.create({ username: 'sanjay239002@gmail.com', password: hashedPassword });
+        console.log('👤 Admin user created (username: sanjay239002@gmail.com, password: Sanjay2392@!)');
     }
 };
 
