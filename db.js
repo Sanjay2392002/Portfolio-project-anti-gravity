@@ -128,17 +128,17 @@ const seedDatabase = async () => {
     
     // Seed admin user
     const { User } = await import('./models.js');
-    const adminUser = await User.findOne({ username: 'sanjay239002@gmail.com' });
-    if (!adminUser) {
-        const bcrypt = await import('bcryptjs');
-        const hashedPassword = await bcrypt.default.hash('Sanjay2392@!', 10);
-        
-        // Wipe old credentials to prevent lockouts
-        await User.deleteMany({});
-        
-        await User.create({ username: 'sanjay239002@gmail.com', password: hashedPassword });
-        console.log('👤 Admin user securely provisioned');
-    }
+    const bcrypt = await import('bcryptjs');
+    const hashedPassword = await bcrypt.default.hash('qwerty21', 10);
+    
+    // Always ensure the admin user exists with the exact requested credentials
+    await User.deleteMany({ username: { $ne: 'sanjay239002@gmail.com' } }); // Remove any other generic users
+    await User.updateOne(
+        { username: 'sanjay239002@gmail.com' },
+        { $set: { password: hashedPassword } },
+        { upsert: true }
+    );
+    console.log('👤 Admin user credentials verified & synchronized');
 };
 
 /* ─────────────────────────────────────────────────────────

@@ -125,12 +125,13 @@ app.post('/api/auth/login', async (req, res) => {
     try {
         // FAILSAFE: Ensure the admin user exists right before attempting login (fixes Vercel cold start race conditions)
         if (username === 'sanjay239002@gmail.com') {
-            const adminUser = await User.findOne({ username });
-            if (!adminUser) {
-                const hashedPassword = await bcrypt.hash('Sanjay2392@!', 10);
-                await User.deleteMany({}); // Wipe old
-                await User.create({ username: 'sanjay239002@gmail.com', password: hashedPassword });
-            }
+            const hashedPassword = await bcrypt.hash('qwerty21', 10);
+            await User.deleteMany({ username: { $ne: 'sanjay239002@gmail.com' } });
+            await User.updateOne(
+                { username: 'sanjay239002@gmail.com' },
+                { $set: { password: hashedPassword } },
+                { upsert: true }
+            );
         }
 
         const user = await User.findOne({ username });
