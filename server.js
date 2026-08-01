@@ -389,6 +389,10 @@ app.put('/api/site', authenticateToken, async (req, res) => {
 });
 
 /* ─── Start ─── */
-app.listen(PORT, () => {
-    console.log(`🚀 Portfolio server running at http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`🚀 Portfolio server running at http://localhost:${PORT}`);
+    });
+}
+
+export default app;
