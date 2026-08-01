@@ -18,3 +18,4 @@ public/uploads/*
 *.db
 *.log
 Thumbs.db
+Backup file/
