@@ -746,7 +746,9 @@ section { position: relative; }
     margin-bottom: 1rem;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
+    box-orient: vertical;
     overflow: hidden;
 }
 
@@ -882,6 +884,8 @@ section { position: relative; }
     transition: border-color var(--ease-fast), box-shadow var(--ease-fast);
     outline: none;
     -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .form-input::placeholder { color: var(--text-muted); font-size: 0.85rem; }
