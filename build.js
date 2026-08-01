@@ -10,7 +10,7 @@ console.log('Building main site...');
 execSync('npx --yes vite build', { stdio: 'inherit', cwd: __dirname });
 
 console.log('Installing admin dependencies...');
-execSync('npm install', { stdio: 'inherit', cwd: path.join(__dirname, 'admin') });
+execSync('npm install --include=dev', { stdio: 'inherit', cwd: path.join(__dirname, 'admin') });
 
 console.log('Building admin panel...');
 execSync('npm run build', { stdio: 'inherit', cwd: path.join(__dirname, 'admin') });
