@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Projects from './pages/Projects';
 import Sections from './pages/Sections';
+import SiteSettings from './pages/SiteSettings';
 
 const App = () => {
   return (
@@ -19,7 +20,7 @@ const App = () => {
             <Route path="profile" element={<Profile />} />
             <Route path="projects" element={<Projects />} />
             <Route path="sections" element={<Sections />} />
-            <Route path="settings" element={<div className="text-white">Settings Placeholder</div>} />
+            <Route path="settings" element={<SiteSettings />} />
           </Route>
         </Routes>
       </AuthProvider>
@@ -28,3 +29,4 @@ const App = () => {
 };
 
 export default App;
+
