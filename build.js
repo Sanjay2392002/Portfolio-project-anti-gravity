@@ -6,8 +6,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+console.log('Installing main site dependencies (devDependencies needed for Vite)...');
+execSync('npm install --include=dev', { stdio: 'inherit', cwd: __dirname });
+
 console.log('Building main site...');
-execSync('npx --yes vite build', { stdio: 'inherit', cwd: __dirname });
+execSync('npx vite build', { stdio: 'inherit', cwd: __dirname });
 
 console.log('Installing admin dependencies...');
 execSync('npm install --include=dev', { stdio: 'inherit', cwd: path.join(__dirname, 'admin') });
