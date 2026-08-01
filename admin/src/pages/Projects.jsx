@@ -14,8 +14,18 @@ const Projects = () => {
       const { data } = await axiosInstance.get('/projects');
       setProjects(data || []);
     } catch (error) {
-      console.error(error);
-      setProjects([{ id: 1, title: 'Anti Gravity App', status: 'Active' }]);
+      console.error('Error fetching projects:', error);
+    }
+  };
+
+  const deleteProject = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this project?')) return;
+    try {
+      await axiosInstance.delete(`/projects/${id}`);
+      setProjects(projects.filter(p => p._id !== id));
+    } catch (error) {
+      console.error('Failed to delete project', error);
+      alert('Failed to delete project');
     }
   };
 
@@ -26,7 +36,7 @@ const Projects = () => {
           <h1 className="text-3xl font-bold text-white">Projects</h1>
           <p className="text-gray-400 mt-2">Manage your portfolio projects.</p>
         </div>
-        <button className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition-colors">
+        <button onClick={() => alert('Editing functionality is available via API directly for now.')} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition-colors">
           <Plus size={18} /> Add Project
         </button>
       </header>
@@ -42,18 +52,15 @@ const Projects = () => {
           </thead>
           <tbody>
             {projects.map((proj) => (
-              <tr key={proj.id} className="border-b border-gray-800 hover:bg-gray-800/20 transition-colors">
+              <tr key={proj._id} className="border-b border-gray-800 hover:bg-gray-800/20 transition-colors">
                 <td className="px-6 py-4 text-white">{proj.title}</td>
                 <td className="px-6 py-4">
                   <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs">
-                    {proj.status || 'Active'}
+                    {proj.isHidden ? 'Hidden' : 'Active'}
                   </span>
                 </td>
                 <td className="px-6 py-4 flex justify-end gap-3">
-                  <button className="text-indigo-400 hover:text-indigo-300 p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
-                    <Edit2 size={18} />
-                  </button>
-                  <button className="text-red-400 hover:text-red-300 p-2 hover:bg-red-500/10 rounded-lg transition-colors">
+                  <button onClick={() => deleteProject(proj._id)} className="text-red-400 hover:text-red-300 p-2 hover:bg-red-500/10 rounded-lg transition-colors">
                     <Trash2 size={18} />
                   </button>
                 </td>

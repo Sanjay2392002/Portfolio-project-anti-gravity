@@ -14,11 +14,7 @@ const Sections = () => {
         const { data } = await axiosInstance.get('/sections');
         setSections(data || []);
     } catch (error) {
-        console.error(error);
-        setSections([
-          { _id: '1', name: 'Hero Banner', order: 1, isHidden: false },
-          { _id: '2', name: 'About Me', order: 2, isHidden: false },
-        ]);
+        console.error('Error fetching sections:', error);
     }
   }
 
