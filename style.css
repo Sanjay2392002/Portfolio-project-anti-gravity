@@ -2,28 +2,28 @@
    DESIGN SYSTEM — VARIABLES
    ============================================================= */
 :root {
-    --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-serif: 'Archivo', sans-serif;
 
-    /* Palette — editorial off-white */
-    --bg:          #FAFAF7;
-    --bg-card:     #FFFFFF;
-    --text:        #141416;
-    --text-muted:  #686A73;
-    --accent:      #141416;
-    --accent-rgb:  20, 20, 22;
-    --border:      rgba(20, 21, 24, 0.07);
-    --border-hover:rgba(20, 21, 24, 0.18);
-    --input-bg:    #FFFFFF;
-    --success:     #16a34a;
-    --danger:      #dc2626;
+    /* Palette — dark mode creative */
+    --bg:          #09090B;
+    --bg-card:     #18181B;
+    --text:        #FFFFFF;
+    --text-muted:  #A1A1AA;
+    --accent:      #2563EB;
+    --accent-rgb:  37, 99, 235;
+    --border:      #27272A;
+    --border-hover:#3F3F46;
+    --input-bg:    #18181B;
+    --success:     #10B981;
+    --danger:      #EF4444;
 
     /* Layout */
     --max-w:       1300px;
     --header-h:    76px;
-    --radius-sm:   4px;
-    --radius-md:   10px;
-    --radius-lg:   20px;
+    --radius-sm:   8px;
+    --radius-md:   16px;
+    --radius-lg:   24px;
 
     /* Motion */
     --ease-fast:   0.22s cubic-bezier(0.25, 1, 0.5, 1);
@@ -83,7 +83,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 .custom-cursor {
     width: 26px; height: 26px;
-    border: 1px solid rgba(20,21,24,0.22);
+    border: 1px solid rgba(255,255,255,0.22);
     display: flex; align-items: center; justify-content: center;
 }
 
@@ -104,8 +104,8 @@ body.cursor-active .custom-cursor-dot { opacity: 1; }
 
 .custom-cursor.hovered {
     width: 48px; height: 48px;
-    background-color: rgba(20,21,24,0.04);
-    border-color: rgba(20,21,24,0.8);
+    background-color: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.8);
 }
 
 .custom-cursor.view-hover,
@@ -189,7 +189,7 @@ body.cursor-active .custom-cursor-dot { opacity: 1; }
     position: fixed; top: 0; left: 0; right: 0;
     height: var(--header-h);
     z-index: 900;
-    background-color: rgba(250, 250, 247, 0.88);
+    background-color: rgba(9, 9, 11, 0.88);
     backdrop-filter: blur(14px) saturate(180%);
     -webkit-backdrop-filter: blur(14px) saturate(180%);
     border-bottom: 1px solid var(--border);
@@ -383,7 +383,7 @@ body.cursor-active .custom-cursor-dot { opacity: 1; }
 
 .portrait-overlay {
     position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(20,20,22,0.12), transparent 60%);
+    background: linear-gradient(to top, rgba(0,0,0,0.5), transparent 60%);
     pointer-events: none;
 }
 
@@ -697,7 +697,7 @@ section { position: relative; }
 
 .project-img-overlay {
     position: absolute; inset: 0;
-    background: rgba(20,20,22,0.35);
+    background: rgba(0,0,0,0.7);
     display: flex; align-items: center; justify-content: center;
     opacity: 0; transition: opacity var(--ease-med);
 }
@@ -767,7 +767,7 @@ section { position: relative; }
 .card-swatch-dot {
     width: 14px; height: 14px;
     border-radius: 50%;
-    border: 1px solid rgba(0,0,0,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
     display: inline-block;
 }
 
@@ -1214,4 +1214,49 @@ section { position: relative; }
     .project-card-portrait,
     .project-card-square { grid-column: span 1; }
     .hero-title { font-size: 2.5rem; }
+}
+
+/* =============================================================
+   CREATIVE WOW EFFECTS (ADDED)
+   ============================================================= */
+.hero-title {
+    text-shadow: 0 0 20px rgba(var(--accent-rgb), 0.5);
+    animation: glow 3s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.3), 0 0 20px rgba(var(--accent-rgb), 0.3); }
+    to { text-shadow: 0 0 20px rgba(var(--accent-rgb), 0.7), 0 0 30px rgba(var(--accent-rgb), 0.5); }
+}
+
+.hero-portrait-img, .about-portrait-img {
+    filter: drop-shadow(0 0 30px rgba(var(--accent-rgb), 0.4));
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent), #1E40AF) !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(var(--accent-rgb), 0.4) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-primary:hover::after {
+    left: 100%;
 }
