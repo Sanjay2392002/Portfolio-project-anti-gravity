@@ -4,6 +4,7 @@ import cors    from 'cors';
 import dotenv  from 'dotenv';
 import path    from 'path';
 import fs      from 'fs/promises';
+import crypto  from 'crypto';
 import { v2 as cloudinary } from 'cloudinary';
 import {
     getProjects, saveProjects,
@@ -11,12 +12,16 @@ import {
     getSiteContent, saveSiteContent,
     connectDB, getSections
 } from './db.js';
-import { User, Section, Submission } from './models.js';
+import { User, Section, Submission, Category, Service, Experience } from './models.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
 dotenv.config();
 connectDB();
+
+const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'production' 
+    ? crypto.randomBytes(32).toString('hex') 
+    : 'devsecret123');
 
 
 const app  = express();
@@ -111,7 +116,7 @@ const authenticateToken = (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1];
     if (!token) return res.sendStatus(401);
 
-    jwt.verify(token, process.env.JWT_SECRET || 'supersecret123', (err, user) => {
+    jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) return res.sendStatus(403);
         req.user = user;
         next();
@@ -124,24 +129,13 @@ const authenticateToken = (req, res, next) => {
 app.post('/api/auth/login', async (req, res) => {
     const { username, password } = req.body;
     try {
-        // FAILSAFE: Ensure the admin user exists right before attempting login (fixes Vercel cold start race conditions)
-        if (username === 'sanjay239002@gmail.com') {
-            const hashedPassword = await bcrypt.hash('qwerty21', 10);
-            await User.deleteMany({ username: { $ne: 'sanjay239002@gmail.com' } });
-            await User.updateOne(
-                { username: 'sanjay239002@gmail.com' },
-                { $set: { password: hashedPassword } },
-                { upsert: true }
-            );
-        }
-
         const user = await User.findOne({ username });
         if (!user) return res.status(401).json({ error: 'Invalid credentials' });
         
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) return res.status(401).json({ error: 'Invalid credentials' });
 
-        const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET || 'supersecret123', { expiresIn: '1d' });
+        const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '1d' });
         res.json({ token, username });
     } catch (err) {
         res.status(500).json({ error: 'Server error' });
@@ -303,8 +297,23 @@ app.delete('/api/projects/:id', authenticateToken, async (req, res) => {
 
 /* GET /api/profile */
 app.get('/api/profile', async (_req, res) => {
-    try { res.json(await getProfile()); }
-    catch { res.status(500).json({ error: 'Failed to fetch profile' }); }
+    try {
+        const profile = await getProfile();
+        const experiences = await Experience.find({ type: 'experience' }).sort({ order: 1 });
+        const education = await Experience.find({ type: 'education' }).sort({ order: 1 });
+        const services = await Service.find().sort({ order: 1 });
+        
+        if (!profile.about) profile.about = {};
+        profile.about.experience = experiences;
+        profile.about.education = education;
+        profile.about.services = services;
+        
+        res.json(profile);
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ error: 'Failed to fetch profile' });
+    }
 });
 
 /* PUT /api/profile */
@@ -368,8 +377,16 @@ app.put('/api/profile', authenticateToken, profileUpload, async (req, res) => {
 
 /* GET /api/site */
 app.get('/api/site', async (_req, res) => {
-    try { res.json(await getSiteContent()); }
-    catch { res.status(500).json({ error: 'Failed to fetch site content' }); }
+    try {
+        const site = await getSiteContent();
+        const cats = await Category.find().sort({ order: 1 });
+        if (!site.projects) site.projects = {};
+        site.projects.categories = cats.map(c => c.name);
+        res.json(site);
+    }
+    catch (e) {
+        res.status(500).json({ error: 'Failed to fetch site content' });
+    }
 });
 
 /* PUT /api/site */
@@ -400,6 +417,123 @@ app.put('/api/site', authenticateToken, async (req, res) => {
     } catch (e) {
         console.error(e);
         res.status(500).json({ error: 'Failed to update site content' });
+    }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   CATEGORIES  —  CRUD
+   ═══════════════════════════════════════════════════════════ */
+app.get('/api/categories', async (_req, res) => {
+    try {
+        const cats = await Category.find().sort({ order: 1 });
+        res.json(cats);
+    } catch {
+        res.status(500).json({ error: 'Failed to fetch categories.' });
+    }
+});
+
+app.post('/api/categories', authenticateToken, async (req, res) => {
+    try {
+        const cat = await Category.create(req.body);
+        res.status(201).json(cat);
+    } catch {
+        res.status(500).json({ error: 'Failed to create category.' });
+    }
+});
+
+app.put('/api/categories/:id', authenticateToken, async (req, res) => {
+    try {
+        const cat = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(cat);
+    } catch {
+        res.status(500).json({ error: 'Failed to update category.' });
+    }
+});
+
+app.delete('/api/categories/:id', authenticateToken, async (req, res) => {
+    try {
+        await Category.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch {
+        res.status(500).json({ error: 'Failed to delete category.' });
+    }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   SERVICES  —  CRUD
+   ═══════════════════════════════════════════════════════════ */
+app.get('/api/services', async (_req, res) => {
+    try {
+        const services = await Service.find().sort({ order: 1 });
+        res.json(services);
+    } catch {
+        res.status(500).json({ error: 'Failed to fetch services.' });
+    }
+});
+
+app.post('/api/services', authenticateToken, async (req, res) => {
+    try {
+        const service = await Service.create(req.body);
+        res.status(201).json(service);
+    } catch {
+        res.status(500).json({ error: 'Failed to create service.' });
+    }
+});
+
+app.put('/api/services/:id', authenticateToken, async (req, res) => {
+    try {
+        const service = await Service.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(service);
+    } catch {
+        res.status(500).json({ error: 'Failed to update service.' });
+    }
+});
+
+app.delete('/api/services/:id', authenticateToken, async (req, res) => {
+    try {
+        await Service.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch {
+        res.status(500).json({ error: 'Failed to delete service.' });
+    }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   EXPERIENCE  —  CRUD
+   ═══════════════════════════════════════════════════════════ */
+app.get('/api/experience', async (_req, res) => {
+    try {
+        const items = await Experience.find().sort({ order: 1 });
+        res.json(items);
+    } catch {
+        res.status(500).json({ error: 'Failed to fetch experience.' });
+    }
+});
+
+app.post('/api/experience', authenticateToken, async (req, res) => {
+    try {
+        const item = await Experience.create(req.body);
+        res.status(201).json(item);
+    } catch {
+        res.status(500).json({ error: 'Failed to create experience.' });
+    }
+});
+
+app.put('/api/experience/:id', authenticateToken, async (req, res) => {
+    try {
+        const item = await Experience.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(item);
+    } catch {
+        res.status(500).json({ error: 'Failed to update experience.' });
+    }
+});
+
+app.delete('/api/experience/:id', authenticateToken, async (req, res) => {
+    try {
+        await Experience.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch {
+        res.status(500).json({ error: 'Failed to delete experience.' });
     }
 });
 

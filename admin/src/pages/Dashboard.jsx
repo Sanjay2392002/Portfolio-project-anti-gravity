@@ -1,78 +1,139 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../api/axiosInstance';
-import { Activity, LayoutDashboard, FolderKanban, Eye } from 'lucide-react';
+import { FolderKanban, Star, Tag, Code, Mail, ArrowRight, UserCheck } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-  const [stats, setStats] = useState({
-    projects: 0,
-    sections: 0,
+  const [data, setData] = useState({
+    projectsCount: 0,
+    featuredCount: 0,
+    categoriesCount: 0,
+    servicesCount: 0,
+    recentInquiries: [],
     loading: true
   });
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const [projectsRes, sectionsRes] = await Promise.all([
-          axiosInstance.get('/projects'),
-          axiosInstance.get('/sections')
-        ]);
-        
-        setStats({
-          projects: projectsRes.data?.length || 0,
-          sections: sectionsRes.data?.length || 0,
-          loading: false
-        });
-      } catch (error) {
-        console.error('Error fetching dashboard stats', error);
-        setStats(s => ({ ...s, loading: false }));
-      }
-    };
-    
-    fetchStats();
+    fetchDashboardData();
   }, []);
 
+  const fetchDashboardData = async () => {
+    try {
+      const [projectsRes, categoriesRes, servicesRes, submissionsRes] = await Promise.all([
+        axiosInstance.get('/projects').catch(() => ({ data: [] })),
+        axiosInstance.get('/categories').catch(() => ({ data: [] })),
+        axiosInstance.get('/services').catch(() => ({ data: [] })),
+        axiosInstance.get('/submissions').catch(() => ({ data: [] }))
+      ]);
+
+      const projects = projectsRes.data || [];
+      const featured = projects.filter(p => p.isFeatured);
+
+      setData({
+        projectsCount: projects.length,
+        featuredCount: featured.length,
+        categoriesCount: categoriesRes.data?.length || 0,
+        servicesCount: servicesRes.data?.length || 0,
+        recentInquiries: (submissionsRes.data || []).slice(0, 4),
+        loading: false
+      });
+    } catch (error) {
+      console.error('Failed to load dashboard data', error);
+      setData(d => ({ ...d, loading: false }));
+    }
+  };
+
+  if (data.loading) return (
+    <div className="flex items-center justify-center h-64">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+    </div>
+  );
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 max-w-6xl">
       <header className="mb-10">
-        <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Dashboard Overview</h1>
-        <p className="text-gray-400 mt-2 text-lg">Welcome back to your command center.</p>
+        <h1 className="text-4xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+          CMS Overview
+        </h1>
+        <p className="text-gray-400 mt-2">Welcome to your portfolio command center.</p>
       </header>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Total Projects', value: stats.loading ? '...' : stats.projects, icon: <FolderKanban size={28} className="text-indigo-400" />, color: 'from-indigo-500/20 to-indigo-900/20 border-indigo-500/30' },
-          { label: 'Active Sections', value: stats.loading ? '...' : stats.sections, icon: <LayoutDashboard size={28} className="text-purple-400" />, color: 'from-purple-500/20 to-purple-900/20 border-purple-500/30' },
-          { label: 'Total Views (Demo)', value: '12,430', icon: <Eye size={28} className="text-emerald-400" />, color: 'from-emerald-500/20 to-emerald-900/20 border-emerald-500/30' },
-        ].map((stat, i) => (
-          <div key={i} className={`bg-gradient-to-br ${stat.color} p-6 rounded-3xl border flex items-center gap-5 hover:-translate-y-2 transition-all duration-300 shadow-xl group`}>
-            <div className="p-4 bg-gray-950/50 rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-inner">
-              {stat.icon}
+          { label: 'Total Projects', value: data.projectsCount, icon: <FolderKanban size={22} className="text-indigo-400" />, link: '/projects' },
+          { label: 'Featured Projects', value: data.featuredCount, icon: <Star size={22} className="text-amber-400" />, link: '/projects' },
+          { label: 'Categories', value: data.categoriesCount, icon: <Tag size={22} className="text-emerald-400" />, link: '/categories' },
+          { label: 'Services', value: data.servicesCount, icon: <Code size={22} className="text-pink-400" />, link: '/services' }
+        ].map((card, idx) => (
+          <Link key={idx} to={card.link} className="glass-dark p-6 rounded-2xl border border-gray-800 flex items-center justify-between hover:border-indigo-500/30 transition-all group">
+            <div className="space-y-1">
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{card.label}</span>
+              <h3 className="text-3xl font-bold text-white group-hover:text-indigo-400 transition-colors">{card.value}</h3>
             </div>
-            <div>
-              <p className="text-gray-400 text-sm font-medium uppercase tracking-wider">{stat.label}</p>
-              <h3 className="text-4xl font-black text-white mt-1 drop-shadow-md">{stat.value}</h3>
+            <div className="p-3 bg-gray-950/60 rounded-xl border border-gray-900">
+              {card.icon}
             </div>
-          </div>
+          </Link>
         ))}
       </div>
-      
-      <div className="mt-12 p-8 glass-dark rounded-3xl border border-gray-800 relative overflow-hidden">
-        <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-indigo-600/10 rounded-full blur-[80px]"></div>
-        <h2 className="text-2xl font-bold text-white mb-4">Quick Tips</h2>
-        <ul className="space-y-3 text-gray-300">
-          <li className="flex items-center gap-3">
-            <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
-            Use the <strong className="text-indigo-400">Projects</strong> tab to add new case studies to your portfolio.
-          </li>
-          <li className="flex items-center gap-3">
-            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-            Head over to <strong className="text-purple-400">Profile Settings</strong> to update your resume and contact info.
-          </li>
-          <li className="flex items-center gap-3">
-            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-            Manage which sections appear on your live site using the <strong className="text-emerald-400">Sections Configuration</strong>.
-          </li>
-        </ul>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Recent Submissions */}
+        <div className="lg:col-span-2 glass-dark p-6 rounded-2xl border border-gray-800 space-y-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <Mail className="text-indigo-400" size={18} />
+              Recent Inquiries
+            </h2>
+            <Link to="/submissions" className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold uppercase tracking-wider flex items-center gap-1">
+              View All <ArrowRight size={12} />
+            </Link>
+          </div>
+
+          <div className="space-y-3">
+            {data.recentInquiries.length === 0 ? (
+              <p className="text-gray-400 text-sm py-4">No recent inquiries received.</p>
+            ) : (
+              data.recentInquiries.map((inq) => (
+                <div key={inq._id} className="p-4 bg-gray-950/40 border border-gray-900 rounded-xl space-y-1">
+                  <div className="flex justify-between items-baseline">
+                    <span className="font-bold text-white text-sm">{inq.name}</span>
+                    <span className="text-gray-500 text-[10px]">{new Date(inq.createdAt).toLocaleDateString()}</span>
+                  </div>
+                  <span className="block text-indigo-300 text-xs font-mono">{inq.email}</span>
+                  {inq.category && (
+                    <span className="inline-block mt-1 text-[9px] bg-indigo-950 text-indigo-300 px-2 py-0.5 rounded uppercase font-bold tracking-wider">
+                      {inq.category}
+                    </span>
+                  )}
+                  <p className="text-gray-400 text-xs mt-2 line-clamp-1">{inq.message}</p>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Quick Config Tips */}
+        <div className="glass-dark p-6 rounded-2xl border border-gray-800 space-y-4">
+          <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <UserCheck className="text-purple-400" size={18} />
+            CMS Shortcuts
+          </h2>
+          
+          <div className="flex flex-col gap-2">
+            {[
+              { label: 'Edit Profile Settings', desc: 'Configure bio statements and portrait visuals.', to: '/profile' },
+              { label: 'Configure Sections', desc: 'Enable or hide specific frontpage grids.', to: '/sections' },
+              { label: 'Adjust Branding Logo', desc: 'Change typography and logo elements.', to: '/settings' }
+            ].map((tip, idx) => (
+              <Link key={idx} to={tip.to} className="p-4 bg-gray-950/40 hover:bg-gray-950/80 border border-gray-900 hover:border-gray-800 rounded-xl space-y-1 text-left transition-all">
+                <span className="font-semibold text-white text-sm block">{tip.label}</span>
+                <p className="text-gray-500 text-xs">{tip.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

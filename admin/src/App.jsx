@@ -9,6 +9,9 @@ import Projects from './pages/Projects';
 import Sections from './pages/Sections';
 import SiteSettings from './pages/SiteSettings';
 import Submissions from './pages/Submissions';
+import Categories from './pages/Categories';
+import Services from './pages/Services';
+import Experience from './pages/Experience';
 
 const App = () => {
   return (
@@ -20,6 +23,9 @@ const App = () => {
             <Route index element={<Dashboard />} />
             <Route path="profile" element={<Profile />} />
             <Route path="projects" element={<Projects />} />
+            <Route path="categories" element={<Categories />} />
+            <Route path="services" element={<Services />} />
+            <Route path="experience" element={<Experience />} />
             <Route path="sections" element={<Sections />} />
             <Route path="settings" element={<SiteSettings />} />
             <Route path="submissions" element={<Submissions />} />

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Project, Profile, SiteContent, Section } from './models.js';
+import { Project, Profile, SiteContent, Section, Category, Service, Experience, User } from './models.js';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -196,19 +196,85 @@ const seedDatabase = async () => {
         }
     }
     
-    // Seed admin user
-    const { User } = await import('./models.js');
+    // Securely seed admin user
     const bcrypt = await import('bcryptjs');
-    const hashedPassword = await bcrypt.default.hash('qwerty21', 10);
-    
-    // Always ensure the admin user exists with the exact requested credentials
-    await User.deleteMany({ username: { $ne: 'sanjay239002@gmail.com' } }); // Remove any other generic users
-    await User.updateOne(
-        { username: 'sanjay239002@gmail.com' },
-        { $set: { password: hashedPassword } },
-        { upsert: true }
-    );
-    console.log('👤 Admin user credentials verified & synchronized');
+    const adminCount = await User.countDocuments();
+    if (adminCount === 0) {
+        const username = process.env.ADMIN_USERNAME || 'sanjay239002@gmail.com';
+        const password = process.env.ADMIN_PASSWORD || 'qwerty21';
+        const hashedPassword = await bcrypt.default.hash(password, 10);
+        await User.create({ username, password: hashedPassword });
+        console.log(`👤 Admin user created with username: ${username}`);
+    } else {
+        console.log('👤 Admin user already exists. Preserving credentials.');
+    }
+
+    // Run migration for Categories
+    const catCount = await Category.countDocuments();
+    if (catCount === 0) {
+        const site = await SiteContent.findOne();
+        const categories = site?.projects?.categories || defaultSite.projects.categories;
+        const categoryDocs = categories.map((cat, idx) => ({
+            name: cat,
+            slug: cat.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+            order: idx
+        }));
+        await Category.insertMany(categoryDocs);
+        console.log('📦 Seeded Categories collection');
+    }
+
+    // Run migration for Services
+    const serviceCount = await Service.countDocuments();
+    if (serviceCount === 0) {
+        const profile = await Profile.findOne();
+        const servicesList = profile?.about?.services || defaultProfile.about.services;
+        const serviceDocs = servicesList.map((ser, idx) => ({
+            title: ser.title,
+            desc: ser.desc,
+            icon: ser.icon,
+            capabilities: ser.capabilities || [],
+            order: idx
+        }));
+        await Service.insertMany(serviceDocs);
+        console.log('📦 Seeded Services collection');
+    }
+
+    // Run migration for Experiences & Education
+    const expCount = await Experience.countDocuments();
+    if (expCount === 0) {
+        const profile = await Profile.findOne();
+        const experienceList = profile?.about?.experience || defaultProfile.about.experience || [];
+        const educationList = profile?.about?.education || defaultProfile.about.education || [];
+        
+        const docs = [];
+        experienceList.forEach((item, idx) => {
+            docs.push({
+                type: 'experience',
+                date: item.date,
+                role: item.role,
+                company: item.company,
+                description: item.description || '',
+                location: item.location || '',
+                order: idx
+            });
+        });
+        educationList.forEach((item, idx) => {
+            docs.push({
+                type: 'education',
+                date: item.date,
+                role: item.role,
+                company: item.company,
+                description: item.description || '',
+                location: item.location || '',
+                order: idx
+            });
+        });
+        
+        if (docs.length > 0) {
+            await Experience.insertMany(docs);
+            console.log('📦 Seeded Experiences & Education collection');
+        }
+    }
 };
 
 /* ─────────────────────────────────────────────────────────

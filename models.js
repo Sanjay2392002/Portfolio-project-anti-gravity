@@ -73,3 +73,34 @@ const SubmissionSchema = new mongoose.Schema({
 
 export const Submission = mongoose.model('Submission', SubmissionSchema);
 
+const CategorySchema = new mongoose.Schema({
+    name: { type: String, required: true, unique: true },
+    slug: { type: String, required: true, unique: true },
+    order: { type: Number, default: 0 }
+}, { timestamps: true });
+
+export const Category = mongoose.model('Category', CategorySchema);
+
+const ServiceSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    desc: { type: String },
+    icon: { type: String },
+    capabilities: [{ type: String }],
+    order: { type: Number, default: 0 }
+}, { timestamps: true });
+
+export const Service = mongoose.model('Service', ServiceSchema);
+
+const ExperienceSchema = new mongoose.Schema({
+    type: { type: String, enum: ['experience', 'education'], default: 'experience' },
+    date: { type: String, required: true },
+    role: { type: String, required: true },
+    company: { type: String, required: true },
+    location: { type: String },
+    description: { type: String },
+    order: { type: Number, default: 0 }
+}, { timestamps: true });
+
+export const Experience = mongoose.model('Experience', ExperienceSchema);
+
+
