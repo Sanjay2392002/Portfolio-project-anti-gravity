@@ -1,0 +1,121 @@
+/* =============================================================
+   SERVICES SECTION
+   ============================================================= */
+.services-section {
+    background-color: var(--bg);
+    border-top: 1px solid var(--border);
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.service-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: transform var(--ease-med), border-color var(--ease-med), box-shadow var(--ease-med);
+    position: relative;
+    overflow: hidden;
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), #1E40AF);
+    opacity: 0;
+    transition: opacity var(--ease-fast);
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--border-hover);
+    box-shadow: 0 16px 40px rgba(var(--accent-rgb), 0.08);
+}
+
+.service-card:hover::before {
+    opacity: 1;
+}
+
+.service-icon-wrapper {
+    width: 50px; height: 50px;
+    border-radius: var(--radius-sm);
+    background-color: rgba(var(--accent-rgb), 0.06);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--ease-fast), color var(--ease-fast);
+}
+
+.service-card:hover .service-icon-wrapper {
+    background-color: var(--text);
+    color: var(--bg);
+}
+
+.service-icon-wrapper svg {
+    width: 24px;
+    height: 24px;
+}
+
+.service-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.3;
+}
+
+.service-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.service-capabilities {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.service-cap-item {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.service-cap-item::before {
+    content: '';
+    display: block;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background-color: var(--accent);
+}
+
+/* =============================================================
+   RESPONSIVE SERVICES
+   ============================================================= */
+@media (max-width: 768px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    .service-card {
+        padding: 2rem;
+    }
+}

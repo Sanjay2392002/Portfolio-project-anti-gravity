@@ -1,0 +1,32 @@
+/* =============================================================
+   DESIGN SYSTEM — VARIABLES
+   ============================================================= */
+:root {
+    --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-serif: 'Archivo', sans-serif;
+
+    /* Palette — light mode creative */
+    --bg:          #FAFAFA;
+    --bg-card:     #FFFFFF;
+    --text:        #09090B;
+    --text-muted:  #3F3F46;
+    --accent:      #2563EB;
+    --accent-rgb:  37, 99, 235;
+    --border:      #E4E4E7;
+    --border-hover:#D4D4D8;
+    --input-bg:    #FFFFFF;
+    --success:     #10B981;
+    --danger:      #EF4444;
+
+    /* Layout */
+    --max-w:       1300px;
+    --header-h:    76px;
+    --radius-sm:   8px;
+    --radius-md:   16px;
+    --radius-lg:   24px;
+
+    /* Motion */
+    --ease-fast:   0.22s cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-med:    0.42s cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-slow:   0.82s cubic-bezier(0.16, 1, 0.3, 1);
+}

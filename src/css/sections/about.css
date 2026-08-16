@@ -1,0 +1,175 @@
+/* =============================================================
+   ABOUT SECTION
+   ============================================================= */
+.about-section { background-color: var(--bg); }
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 5rem;
+    align-items: start;
+    margin-top: 2rem;
+}
+
+.about-portrait-frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #e8e6e0;
+    top: 0;
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+}
+
+.about-portrait-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: drop-shadow(0 0 30px rgba(var(--accent-rgb), 0.4));
+    animation: float-about 6s ease-in-out infinite;
+}
+
+@keyframes float-about {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.about-bio {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.78;
+    margin-bottom: 3rem;
+    border-left: 2px solid var(--border-hover);
+    padding-left: 1.8rem;
+}
+
+/* Timeline */
+.about-timeline-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.timeline-col h3 {
+    font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.4rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.timeline-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; }
+
+.timeline-list li {
+    display: flex; flex-direction: column; gap: 3px;
+    position: relative;
+    padding-left: 1rem;
+}
+
+.timeline-list li::before {
+    content: '';
+    position: absolute; left: 0; top: 8px;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--text);
+}
+
+.timeline-date {
+    font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.timeline-role {
+    font-size: 0.9rem; font-weight: 600;
+    color: var(--text);
+}
+
+.timeline-company {
+    font-size: 0.82rem; color: var(--text-muted);
+}
+
+/* Skills & capabilities */
+.about-skills-section {
+    display: flex; flex-direction: column; gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.skills-col h3 {
+    font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.skills-tags {
+    display: flex; flex-wrap: wrap; gap: 0.55rem;
+}
+
+.skill-tag {
+    font-size: 0.78rem; font-weight: 500;
+    padding: 0.38rem 0.85rem;
+    border: 1px solid var(--border-hover);
+    border-radius: 100px;
+    color: var(--text);
+    transition: var(--ease-fast);
+}
+
+.skill-tag:hover {
+    background-color: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+}
+
+/* Software icons */
+.software-icons {
+    display: flex; flex-wrap: wrap; gap: 0.8rem;
+}
+
+.software-item {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 5px;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: var(--ease-fast);
+    min-width: 64px;
+    cursor: default;
+    background-color: var(--bg-card);
+}
+
+.software-item:hover {
+    border-color: var(--text);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(var(--accent-rgb), 0.07);
+}
+
+.soft-icon {
+    font-size: 0.8rem; font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+}
+
+.soft-name {
+    font-size: 0.65rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-muted);
+}
+
+/* =============================================================
+   RESPONSIVE ABOUT
+   ============================================================= */
+@media (max-width: 1100px) {
+    .about-grid           { grid-template-columns: 1fr; }
+    .about-portrait-frame { position: static; max-width: 380px; aspect-ratio: 16/9; }
+}
+
+@media (max-width: 900px) {
+    .about-timeline-grid  { grid-template-columns: 1fr; gap: 2rem; }
+}

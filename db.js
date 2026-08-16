@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { Project, Profile, SiteContent, Section } from './models.js';
+import fs from 'fs/promises';
+import path from 'path';
 
 /* ─────────────────────────────────────────────────────────
    CONNECT
@@ -81,12 +83,13 @@ const defaultSite = {
     nav: [
         { label: 'Home', href: '#hero' },
         { label: 'About', href: '#about' },
+        { label: 'Services', href: '#services' },
         { label: 'Projects', href: '#projects' },
         { label: 'Contact', href: '#contact' }
     ],
     navCta: "Let's Work",
     projects: {
-        sectionBadge: '02 / Portfolio Work',
+        sectionBadge: '03 / Portfolio Work',
         title: 'Selected Case',
         titleItalic: 'Studies',
         categories: ['Logo Designs', 'Brand Identity']
@@ -104,26 +107,64 @@ const defaultSite = {
 };
 
 const seedDatabase = async () => {
-    const projCount = await Project.countDocuments();
-    if (projCount === 0) {
-        await Project.insertMany(seedProjects);
+    try {
+        const projCount = await Project.countDocuments();
+        if (projCount === 0) {
+            let projectsData = seedProjects;
+            try {
+                const projectsFile = await fs.readFile(path.join(process.cwd(), 'data', 'projects.json'), 'utf8');
+                projectsData = JSON.parse(projectsFile);
+            } catch (err) {
+                console.warn('📁 Could not load data/projects.json for seeding, falling back to default seed projects.');
+            }
+            await Project.insertMany(projectsData);
+        }
+
+        const profCount = await Profile.countDocuments();
+        if (profCount === 0) {
+            let profileData = defaultProfile;
+            try {
+                const profileFile = await fs.readFile(path.join(process.cwd(), 'data', 'profile.json'), 'utf8');
+                profileData = JSON.parse(profileFile);
+            } catch (err) {
+                console.warn('📁 Could not load data/profile.json for seeding, falling back to default profile.');
+            }
+            await Profile.create(profileData);
+        }
+
+        const siteCount = await SiteContent.countDocuments();
+        if (siteCount === 0) {
+            let siteData = defaultSite;
+            try {
+                const siteFile = await fs.readFile(path.join(process.cwd(), 'data', 'site.json'), 'utf8');
+                siteData = JSON.parse(siteFile);
+            } catch (err) {
+                console.warn('📁 Could not load data/site.json for seeding, falling back to default site content.');
+            }
+            await SiteContent.create(siteData);
+        }
+    } catch (err) {
+        console.error('❌ Database seeding error during dynamic file reads:', err);
     }
-    const profCount = await Profile.countDocuments();
-    if (profCount === 0) {
-        await Profile.create(defaultProfile);
-    }
-    const siteCount = await SiteContent.countDocuments();
-    if (siteCount === 0) {
-        await SiteContent.create(defaultSite);
-    }
+
     const sectionCount = await Section.countDocuments();
     if (sectionCount === 0) {
         await Section.insertMany([
             { name: 'Hero', type: 'hero', order: 1 },
             { name: 'About', type: 'about', order: 2 },
-            { name: 'Projects', type: 'projects', order: 3 },
-            { name: 'Contact', type: 'contact', order: 4 }
+            { name: 'Services', type: 'services', order: 3 },
+            { name: 'Projects', type: 'projects', order: 4 },
+            { name: 'Contact', type: 'contact', order: 5 }
         ]);
+    } else {
+        // Automatically inject services section if it is missing
+        const servicesSection = await Section.findOne({ type: 'services' });
+        if (!servicesSection) {
+            await Section.create({ name: 'Services', type: 'services', order: 3 });
+            await Section.updateOne({ type: 'projects' }, { $set: { order: 4 } });
+            await Section.updateOne({ type: 'contact' }, { $set: { order: 5 } });
+            console.log('⚡ Services section automatically injected and ordered in Sections collection.');
+        }
     }
     
     // Seed admin user

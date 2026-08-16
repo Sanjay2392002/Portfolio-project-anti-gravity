@@ -38,6 +38,7 @@
                 <ul id="nav-list">
                     <li><a href="#hero"       class="nav-link active" data-sec="hero">Home</a></li>
                     <li><a href="#about"      class="nav-link"        data-sec="about">About</a></li>
+                    <li><a href="#services"   class="nav-link"        data-sec="services">Services</a></li>
                     <li><a href="#projects"   class="nav-link"        data-sec="projects">Projects</a></li>
                     <li><a href="#contact"    class="nav-link"        data-sec="contact">Contact</a></li>
                     <li><a href="#about-resume" class="nav-link"      data-sec="about">Resume</a></li>
@@ -58,6 +59,7 @@
     <div class="side-nav-dots">
         <a href="#hero"     class="dot-link active" data-sec="hero"     aria-label="Home"></a>
         <a href="#about"    class="dot-link"         data-sec="about"    aria-label="About"></a>
+        <a href="#services" class="dot-link"         data-sec="services" aria-label="Services"></a>
         <a href="#projects" class="dot-link"         data-sec="projects" aria-label="Projects"></a>
         <a href="#contact"  class="dot-link"         data-sec="contact"  aria-label="Contact"></a>
     </div>
@@ -181,13 +183,29 @@
         </div>
     </section>
 
+    <!-- ═══════════════════════════ SERVICES ═══════════════════════════ -->
+    <section id="services" class="services-section">
+        <div class="section-content">
+            <span class="section-badge" id="services-badge">02 / Offerings</span>
+            <h2 class="section-title" id="services-title">
+                Core Services <br><span class="serif-italic" id="services-title-italic">&amp; Specialties</span>
+            </h2>
+            <div class="services-grid" id="services-grid-container">
+                <!-- Dynamically populated by Services.js -->
+            </div>
+        </div>
+    </section>
+
     <!-- ═══════════════════════════ PROJECTS ═══════════════════════════ -->
     <section id="projects" class="projects-section">
         <div class="section-content">
-            <span class="section-badge" id="projects-badge">02 / Portfolio Work</span>
+            <span class="section-badge" id="projects-badge">03 / Portfolio Work</span>
             <h2 class="section-title" id="projects-title">
                 Selected Case <br><span class="serif-italic" id="projects-title-italic">Studies</span>
             </h2>
+
+            <!-- Dynamic Category Filter Bar -->
+            <div id="project-filter-bar" class="filter-bar-container"></div>
 
             <div id="categories-container">
                 <div style="text-align:center;color:var(--text-muted);font-size:.95rem;padding:5rem 0;">
@@ -203,7 +221,7 @@
             <div class="contact-content">
 
                 <div class="contact-left">
-                    <span class="section-badge" id="contact-badge">03 / Conversation</span>
+                    <span class="section-badge" id="contact-badge">04 / Conversation</span>
                     <h2 class="contact-title" id="contact-heading">
                         Let's shape your <br><span class="serif-italic" id="contact-heading-italic">vision.</span>
                     </h2>
