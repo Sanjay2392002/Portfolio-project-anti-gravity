@@ -17,7 +17,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
 dotenv.config();
-connectDB();
+await connectDB();
 
 const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'production' 
     ? crypto.randomBytes(32).toString('hex') 
