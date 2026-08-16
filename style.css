@@ -1,6 +1,3 @@
-/* =============================================================
-   MAIN STYLESHEET ENTRYPOINT
-   ============================================================= */
 @import './src/css/variables.css';
 @import './src/css/base.css';
 @import './src/css/layout.css';
@@ -11,3 +8,4 @@
 @import './src/css/components/project-filters.css';
 @import './src/css/sections/contact.css';
 @import './src/css/components/modal.css';
+@import './src/css/redesign-v2.css';
