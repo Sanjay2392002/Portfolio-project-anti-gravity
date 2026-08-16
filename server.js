@@ -11,7 +11,7 @@ import {
     getSiteContent, saveSiteContent,
     connectDB, getSections
 } from './db.js';
-import { User, Section } from './models.js';
+import { User, Section, Submission } from './models.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
@@ -43,7 +43,8 @@ app.get('/', (req, res) => {
 /* ─── Multer local storage ─── */
 const storage = multer.diskStorage({
     destination: async (_req, _file, cb) => {
-        const dir = path.join(process.cwd(), 'public', 'uploads');
+        const isVercel = !!process.env.VERCEL;
+        const dir = isVercel ? '/tmp' : path.join(process.cwd(), 'public', 'uploads');
         await fs.mkdir(dir, { recursive: true });
         cb(null, dir);
     },
@@ -199,7 +200,7 @@ app.post('/api/projects', authenticateToken, upload.single('image'), async (req,
 
         const {
             title, category, year, duration, tools, client,
-            focus, output, concept, swatches, typography
+            focus, output, concept, swatches, typography, isFeatured
         } = req.body;
 
         const imgUrl    = await uploadFile(req.file);
@@ -221,7 +222,8 @@ app.post('/api/projects', authenticateToken, upload.single('image'), async (req,
             output: output || 'Digital Showcase',
             concept: concept || '',
             swatches: swatchArr,
-            typography: typoArr
+            typography: typoArr,
+            isFeatured: isFeatured === 'true' || isFeatured === true
         };
 
         const list = await getProjects();
@@ -242,7 +244,7 @@ app.put('/api/projects/:id', authenticateToken, upload.single('image'), async (r
         if (idx === -1) return res.status(404).json({ error: 'Project not found' });
 
         const p = list[idx];
-        const { title, category, year, duration, tools, client, focus, output, concept, swatches, typography } = req.body;
+        const { title, category, year, duration, tools, client, focus, output, concept, swatches, typography, isFeatured } = req.body;
 
         let imgUrl = p.img;
         if (req.file) {
@@ -267,7 +269,8 @@ app.put('/api/projects/:id', authenticateToken, upload.single('image'), async (r
             concept:  concept  !== undefined ? concept : p.concept,
             img: imgUrl,
             swatches: swatchArr,
-            typography: typoArr
+            typography: typoArr,
+            isFeatured: isFeatured !== undefined ? (isFeatured === 'true' || isFeatured === true) : p.isFeatured
         };
 
         await saveProjects(list);
@@ -338,6 +341,7 @@ app.put('/api/profile', authenticateToken, profileUpload, async (req, res) => {
         if (b.about_experience)   { try { profile.about.experience   = JSON.parse(b.about_experience); }   catch {} }
         if (b.about_education)    { try { profile.about.education    = JSON.parse(b.about_education); }    catch {} }
         if (b.about_software)     { try { profile.about.software     = JSON.parse(b.about_software); }     catch {} }
+        if (b.about_services)     { try { profile.about.services     = JSON.parse(b.about_services); }     catch {} }
         if (b.about_capabilities) {
             profile.about.capabilities = b.about_capabilities.split(',').map(s => s.trim()).filter(Boolean);
         }
@@ -396,6 +400,40 @@ app.put('/api/site', authenticateToken, async (req, res) => {
     } catch (e) {
         console.error(e);
         res.status(500).json({ error: 'Failed to update site content' });
+    }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   SUBMISSIONS  —  Contact Form Responses
+   ═══════════════════════════════════════════════════════════ */
+app.post('/api/contact', async (req, res) => {
+    const { name, email, category, message } = req.body;
+    if (!name || !email || !message) {
+        return res.status(400).json({ error: 'Name, email, and message are required.' });
+    }
+    try {
+        const sub = await Submission.create({ name, email, category, message });
+        res.status(201).json(sub);
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to save submission.' });
+    }
+});
+
+app.get('/api/submissions', authenticateToken, async (_req, res) => {
+    try {
+        const subs = await Submission.find().sort({ createdAt: -1 });
+        res.json(subs);
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to fetch submissions.' });
+    }
+});
+
+app.delete('/api/submissions/:id', authenticateToken, async (req, res) => {
+    try {
+        await Submission.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to delete submission.' });
     }
 });
 

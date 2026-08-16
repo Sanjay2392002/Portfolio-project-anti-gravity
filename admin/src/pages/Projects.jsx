@@ -10,7 +10,7 @@ const Projects = () => {
   const [formData, setFormData] = useState({
     title: '', category: '', year: '', duration: '', tools: '',
     client: '', focus: '', output: '', concept: '', swatches: '#0044FF,#C85A32,#FAF9F5,#141518',
-    typography: '[]'
+    typography: '[]', isFeatured: false
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
@@ -53,7 +53,8 @@ const Projects = () => {
         output: project.output || '',
         concept: project.concept || '',
         swatches: Array.isArray(project.swatches) ? project.swatches.join(',') : '#0044FF,#C85A32,#FAF9F5,#141518',
-        typography: project.typography ? JSON.stringify(project.typography) : '[]'
+        typography: project.typography ? JSON.stringify(project.typography) : '[]',
+        isFeatured: project.isFeatured || false
       });
       setImagePreview(project.img || '');
     } else {
@@ -61,7 +62,7 @@ const Projects = () => {
       setFormData({
         title: '', category: '', year: '', duration: '', tools: '',
         client: '', focus: '', output: '', concept: '', swatches: '#0044FF,#C85A32,#FAF9F5,#141518',
-        typography: '[]'
+        typography: '[]', isFeatured: false
       });
       setImagePreview('');
     }
@@ -74,7 +75,10 @@ const Projects = () => {
     setEditingProject(null);
   };
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    setFormData({ ...formData, [e.target.name]: value });
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -145,9 +149,16 @@ const Projects = () => {
               </div>
             </div>
             <div className="p-5 relative">
-              <span className="absolute -top-3.5 left-5 px-3 py-1 bg-indigo-900 text-indigo-300 text-xs font-semibold tracking-wider rounded-full border border-indigo-700/50 uppercase">
-                {proj.category || 'Uncategorized'}
-              </span>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="px-3 py-1 bg-indigo-900 text-indigo-300 text-xs font-semibold tracking-wider rounded-full border border-indigo-700/50 uppercase">
+                  {proj.category || 'Uncategorized'}
+                </span>
+                {proj.isFeatured && (
+                  <span className="px-2.5 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-bold tracking-wider rounded-full border border-amber-500/30 uppercase">
+                    ★ Featured
+                  </span>
+                )}
+              </div>
               <h3 className="text-xl font-bold text-white mt-1 mb-1 truncate">{proj.title}</h3>
               <p className="text-gray-400 text-sm mb-4 line-clamp-2">{proj.concept || 'No concept description provided.'}</p>
               
@@ -217,6 +228,20 @@ const Projects = () => {
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-300 ml-1">Swatches (Comma separated hex codes)</label>
                   <input name="swatches" value={formData.swatches} onChange={handleChange} className="w-full bg-gray-900/50 border border-gray-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" placeholder="#FF0000, #00FF00" />
+                </div>
+
+                <div className="flex items-center gap-3 p-4 bg-gray-900/40 border border-gray-800 rounded-xl">
+                  <input 
+                    type="checkbox" 
+                    id="isFeatured" 
+                    name="isFeatured" 
+                    checked={formData.isFeatured} 
+                    onChange={handleChange}
+                    className="w-5 h-5 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500 bg-gray-950 focus:ring-2 focus:ring-offset-gray-900"
+                  />
+                  <label htmlFor="isFeatured" className="text-sm font-medium text-gray-200 cursor-pointer select-none">
+                    Featured Project (Highlight this project on the homepage and show a visual badge)
+                  </label>
                 </div>
 
                 <div className="space-y-3">

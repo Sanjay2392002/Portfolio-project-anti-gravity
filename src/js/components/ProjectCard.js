@@ -20,12 +20,15 @@ export const renderProjectCard = (proj, idx) => {
            </div>`
         : '';
 
+    const featuredTag = proj.isFeatured ? `<span class="project-featured-tag">★ Featured</span>` : '';
+
     return `
-        <div class="project-editorial-card ${layout}" data-proj-category="${proj.category || ''}">
+        <div class="project-editorial-card ${layout}${proj.isFeatured ? ' featured-card' : ''}" data-proj-category="${proj.category || ''}">
             <div class="project-card-inner">
                 <div class="project-img-wrapper" data-project-id="${proj.id}">
                     <img src="${img}" alt="${proj.title}" loading="lazy" class="optimized-project-img">
                     <div class="project-img-overlay">
+                        ${featuredTag}
                         <span class="project-view-badge">View Case</span>
                     </div>
                 </div>

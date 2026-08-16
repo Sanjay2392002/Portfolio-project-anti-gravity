@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, UserCircle, Briefcase, ListTree, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, UserCircle, Briefcase, ListTree, Settings, LogOut, Mail } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 
 const Sidebar = () => {
@@ -12,6 +12,7 @@ const Sidebar = () => {
     { to: '/projects', label: 'Projects', icon: <Briefcase size={20} /> },
     { to: '/sections', label: 'Sections', icon: <ListTree size={20} /> },
     { to: '/settings', label: 'Settings', icon: <Settings size={20} /> },
+    { to: '/submissions', label: 'Inquiries', icon: <Mail size={20} /> },
   ];
 
   return (

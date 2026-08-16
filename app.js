@@ -20,6 +20,7 @@ import { initContact } from './src/js/sections/Contact.js';
 let allProjects      = [];
 let siteCategories   = [];
 let currentFilter    = 'all';
+let profileServices  = null;
 
 /* =============================================================
    DATA LOADING & COMPONENT BINDING
@@ -186,6 +187,9 @@ const applyProfile = (p) => {
     /* About section updates */
     if (p.about) {
         applyAboutProfile(p.about);
+        if (p.about.services) {
+            profileServices = p.about.services;
+        }
     }
 
     /* Contact details */
@@ -375,7 +379,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initModal(allProjects);
     initCursor();
     initNavbar();
-    initServices(); // Renders Services offerings
+    initServices(profileServices); // Renders Services offerings
     initContact();
     initScroll();
 

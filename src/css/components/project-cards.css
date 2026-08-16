@@ -178,3 +178,24 @@
     .project-card-portrait,
     .project-card-square { grid-column: span 1; }
 }
+
+/* Featured project styling */
+.project-featured-tag {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: var(--accent, #0044FF);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    z-index: 5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+}
+.featured-card .project-card-inner {
+    border-color: rgba(0, 68, 255, 0.3) !important;
+}

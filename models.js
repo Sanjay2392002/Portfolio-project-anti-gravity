@@ -25,7 +25,8 @@ const ProjectSchema = new mongoose.Schema({
         font: String,
         size: String
     }],
-    order: { type: Number, default: 0 }
+    order: { type: Number, default: 0 },
+    isFeatured: { type: Boolean, default: false }
 });
 
 export const Project = mongoose.model('Project', ProjectSchema);
@@ -61,3 +62,14 @@ const SectionSchema = new mongoose.Schema({
 });
 
 export const Section = mongoose.model('Section', SectionSchema);
+
+const SubmissionSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    category: { type: String },
+    message: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now }
+});
+
+export const Submission = mongoose.model('Submission', SubmissionSchema);
+

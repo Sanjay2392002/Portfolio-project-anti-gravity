@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../api/axiosInstance';
-import { Save, User, Briefcase, Mail, FileText, Camera } from 'lucide-react';
+import { Save, User, Briefcase, Mail, FileText, Camera, Plus, Trash2, Code } from 'lucide-react';
 
 const Profile = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +23,9 @@ const Profile = () => {
 
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [experience, setExperience] = useState([]);
+  const [education, setEducation] = useState([]);
+  const [services, setServices] = useState([]);
 
   useEffect(() => {
     fetchProfile();
@@ -54,6 +57,9 @@ const Profile = () => {
         hero_portrait: data.hero?.portrait || '',
         about_portrait: data.about?.portrait || ''
       });
+      setExperience(data.about?.experience || []);
+      setEducation(data.about?.education || []);
+      setServices(data.about?.services || []);
     } catch (error) {
       console.error('Failed to fetch profile', error);
     } finally {
@@ -73,6 +79,46 @@ const Profile = () => {
     }
   };
 
+  const handleAddExperience = () => {
+    setExperience([...experience, { date: '2024 - Present', role: 'Role Title', company: 'Company Name' }]);
+  };
+  const handleRemoveExperience = (idx) => {
+    setExperience(experience.filter((_, i) => i !== idx));
+  };
+  const handleExperienceChange = (idx, field, value) => {
+    const updated = [...experience];
+    updated[idx] = { ...updated[idx], [field]: value };
+    setExperience(updated);
+  };
+
+  const handleAddEducation = () => {
+    setEducation([...education, { date: '2020 - 2024', role: 'Degree/Certificate', company: 'Institution Name' }]);
+  };
+  const handleRemoveEducation = (idx) => {
+    setEducation(education.filter((_, i) => i !== idx));
+  };
+  const handleEducationChange = (idx, field, value) => {
+    const updated = [...education];
+    updated[idx] = { ...updated[idx], [field]: value };
+    setEducation(updated);
+  };
+
+  const handleAddService = () => {
+    setServices([...services, { title: 'New Service', desc: 'Description of service', icon: '', capabilities: [] }]);
+  };
+  const handleRemoveService = (idx) => {
+    setServices(services.filter((_, i) => i !== idx));
+  };
+  const handleServiceChange = (idx, field, value) => {
+    const updated = [...services];
+    if (field === 'capabilities') {
+      updated[idx] = { ...updated[idx], [field]: value.split(',').map(s => s.trim()).filter(Boolean) };
+    } else {
+      updated[idx] = { ...updated[idx], [field]: value };
+    }
+    setServices(updated);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -83,6 +129,10 @@ const Profile = () => {
       if (files.hero_portrait) data.append('hero_portrait', files.hero_portrait);
       if (files.about_portrait) data.append('about_portrait', files.about_portrait);
       if (files.resume_pdf) data.append('resume_pdf', files.resume_pdf);
+
+      data.append('about_experience', JSON.stringify(experience));
+      data.append('about_education', JSON.stringify(education));
+      data.append('about_services', JSON.stringify(services));
       
       await axiosInstance.put('/profile', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
@@ -250,6 +300,120 @@ const Profile = () => {
                 {files.resume_pdf ? files.resume_pdf.name : 'Choose File'}
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* SERVICES SECTION */}
+        <div className="glass-dark p-8 rounded-2xl border border-gray-800 shadow-xl relative overflow-hidden">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <Code className="text-indigo-400" /> Core Services & Specialties
+            </h2>
+            <button type="button" onClick={handleAddService} className="flex items-center gap-1.5 text-xs bg-indigo-500/10 hover:bg-indigo-500 text-indigo-300 hover:text-white px-3.5 py-2.5 rounded-xl border border-indigo-500/30 transition-all font-semibold uppercase tracking-wider">
+              <Plus size={14} /> Add Service
+            </button>
+          </div>
+          
+          <div className="space-y-6">
+            {services.map((ser, idx) => (
+              <div key={idx} className="p-6 bg-gray-950/40 border border-gray-800 rounded-2xl space-y-4 relative group">
+                <button type="button" onClick={() => handleRemoveService(idx)} className="absolute top-4 right-4 p-2 text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Trash2 size={14} />
+                </button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Service Title</label>
+                    <input type="text" value={ser.title} onChange={(e) => handleServiceChange(idx, 'title', e.target.value)} className="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm" placeholder="e.g. Brand Design" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Capabilities (Comma-separated)</label>
+                    <input type="text" value={Array.isArray(ser.capabilities) ? ser.capabilities.join(', ') : ''} onChange={(e) => handleServiceChange(idx, 'capabilities', e.target.value)} className="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm" placeholder="e.g. Logo Design, Color Strategy" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Service Description</label>
+                    <textarea value={ser.desc} onChange={(e) => handleServiceChange(idx, 'desc', e.target.value)} rows="2" className="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm" placeholder="A brief description of what you offer..." />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Icon SVG Markup</label>
+                    <textarea value={ser.icon} onChange={(e) => handleServiceChange(idx, 'icon', e.target.value)} rows="2" className="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-xs font-mono" placeholder="e.g. <svg viewBox='0 0 24 24' ...>...</svg>" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* EXPERIENCE SECTION */}
+        <div className="glass-dark p-8 rounded-2xl border border-gray-800 shadow-xl relative overflow-hidden">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <Briefcase className="text-indigo-400" /> Professional Experience
+            </h2>
+            <button type="button" onClick={handleAddExperience} className="flex items-center gap-1.5 text-xs bg-indigo-500/10 hover:bg-indigo-500 text-indigo-300 hover:text-white px-3.5 py-2.5 rounded-xl border border-indigo-500/30 transition-all font-semibold uppercase tracking-wider">
+              <Plus size={14} /> Add Experience
+            </button>
+          </div>
+          
+          <div className="space-y-4">
+            {experience.map((exp, idx) => (
+              <div key={idx} className="flex flex-col md:flex-row items-end md:items-center gap-4 p-4 bg-gray-950/40 border border-gray-800 rounded-2xl relative group">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Timeline / Date</label>
+                    <input type="text" value={exp.date} onChange={(e) => handleExperienceChange(idx, 'date', e.target.value)} className="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm" placeholder="2024 - Present" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Role Title</label>
+                    <input type="text" value={exp.role} onChange={(e) => handleExperienceChange(idx, 'role', e.target.value)} className="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm" placeholder="Lead Visual Designer" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Company / Agency</label>
+                    <input type="text" value={exp.company} onChange={(e) => handleExperienceChange(idx, 'company', e.target.value)} className="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm" placeholder="Agency Studio" />
+                  </div>
+                </div>
+                <button type="button" onClick={() => handleRemoveExperience(idx)} className="p-2.5 text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500 rounded-lg md:opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* EDUCATION SECTION */}
+        <div className="glass-dark p-8 rounded-2xl border border-gray-800 shadow-xl relative overflow-hidden">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <User className="text-indigo-400" /> Education Background
+            </h2>
+            <button type="button" onClick={handleAddEducation} className="flex items-center gap-1.5 text-xs bg-indigo-500/10 hover:bg-indigo-500 text-indigo-300 hover:text-white px-3.5 py-2.5 rounded-xl border border-indigo-500/30 transition-all font-semibold uppercase tracking-wider">
+              <Plus size={14} /> Add Education
+            </button>
+          </div>
+          
+          <div className="space-y-4">
+            {education.map((edu, idx) => (
+              <div key={idx} className="flex flex-col md:flex-row items-end md:items-center gap-4 p-4 bg-gray-950/40 border border-gray-800 rounded-2xl relative group">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Timeline / Date</label>
+                    <input type="text" value={edu.date} onChange={(e) => handleEducationChange(idx, 'date', e.target.value)} className="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm" placeholder="2017 - 2021" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Degree / Program</label>
+                    <input type="text" value={edu.role} onChange={(e) => handleEducationChange(idx, 'role', e.target.value)} className="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm" placeholder="Bachelor of Design" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Institution / School</label>
+                    <input type="text" value={edu.company} onChange={(e) => handleEducationChange(idx, 'company', e.target.value)} className="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm" placeholder="National Institute" />
+                  </div>
+                </div>
+                <button type="button" onClick={() => handleRemoveEducation(idx)} className="p-2.5 text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500 rounded-lg md:opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            ))}
           </div>
         </div>
 

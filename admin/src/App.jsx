@@ -8,6 +8,7 @@ import Profile from './pages/Profile';
 import Projects from './pages/Projects';
 import Sections from './pages/Sections';
 import SiteSettings from './pages/SiteSettings';
+import Submissions from './pages/Submissions';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="projects" element={<Projects />} />
             <Route path="sections" element={<Sections />} />
             <Route path="settings" element={<SiteSettings />} />
+            <Route path="submissions" element={<Submissions />} />
           </Route>
         </Routes>
       </AuthProvider>
