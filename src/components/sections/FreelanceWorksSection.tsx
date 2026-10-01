@@ -155,6 +155,7 @@ export const FreelanceWorksSection: React.FC = () => {
                   onClick={() => {
                     setActiveLogofolio(project.id);
                     setActiveIndex(null);
+                    document.getElementById('freelance-works')?.scrollIntoView({ behavior: 'smooth' });
                   }}
                   aria-label={`View ${project.title}`}
                 >
@@ -204,6 +205,7 @@ export const FreelanceWorksSection: React.FC = () => {
                     onClick={() => {
                       setActiveLogofolio(null);
                       setActiveIndex(null);
+                      document.getElementById('freelance-works')?.scrollIntoView({ behavior: 'smooth' });
                     }}
                     aria-label="Go back to logo designs"
                   >

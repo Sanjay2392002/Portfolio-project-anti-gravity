@@ -18,6 +18,7 @@ export const Footer: React.FC = () => {
         <div className="home-footer-main">
           <div className="home-footer-brand"><strong>{siteName}</strong><span>Visual Designer</span></div>
           <nav aria-label="Footer navigation">
+            <Link to="/work">SELECTED WORKS</Link>
             <a href="#about">ABOUT</a>
             <a href="#contact">CONTACT</a>
           </nav>
@@ -53,7 +54,7 @@ export const Footer: React.FC = () => {
           {/* Internal Navigation Links */}
           <nav className="flex flex-wrap gap-x-8 gap-y-3 text-[13px] font-medium tracking-tight">
             <Link to="/work" className="text-[#6B6B6B] hover:text-[#111111] transition-colors">
-              WORK
+              SELECTED WORKS
             </Link>
             <Link to="/about" className="text-[#6B6B6B] hover:text-[#111111] transition-colors">
               ABOUT

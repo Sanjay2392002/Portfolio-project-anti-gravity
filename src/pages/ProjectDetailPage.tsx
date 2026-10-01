@@ -57,7 +57,7 @@ export const ProjectDetailPage: React.FC = () => {
           className="inline-flex items-center space-x-2 px-6 py-3 rounded-[8px] bg-black text-white text-[14px] font-medium hover:bg-black/80 transition-colors"
         >
           <ArrowLeft size={16} />
-          <span>Back to Work</span>
+          <span>Back to Selected Works</span>
         </Link>
       </div>
     );
@@ -83,7 +83,7 @@ export const ProjectDetailPage: React.FC = () => {
           <span className="transform transition-transform group-hover:-translate-x-1 duration-200">
             <ArrowLeft size={14} />
           </span>
-          <span>ALL PROJECTS</span>
+          <span>SELECTED WORKS</span>
         </Link>
       </div>
 

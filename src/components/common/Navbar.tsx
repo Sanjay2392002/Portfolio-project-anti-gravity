@@ -38,6 +38,12 @@ export const Navbar: React.FC = () => {
         {/* Left: Brand Identity */}
         <Link
           to="/"
+          onClick={(e) => {
+            if (location.pathname === '/') {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }}
           className="text-[14px] font-semibold tracking-[-0.02em] text-[#111111] hover:opacity-70 transition-opacity"
         >
           {siteName}
@@ -54,7 +60,17 @@ export const Navbar: React.FC = () => {
           ) : (
             <>
               <Link to="/" className="transition-colors duration-200 text-[#6B6B6B] hover:text-[#111111]">HOME</Link>
-              <Link to="/work" className={`transition-colors duration-200 ${location.pathname === '/work' ? 'text-[#111111] font-semibold' : 'text-[#6B6B6B] hover:text-[#111111]'}`}>SELECTED WORKS</Link>
+              <Link
+                to="/work"
+                onClick={() => {
+                  if (location.pathname === '/work') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }}
+                className={`transition-colors duration-200 ${location.pathname === '/work' ? 'text-[#111111] font-semibold' : 'text-[#6B6B6B] hover:text-[#111111]'}`}
+              >
+                SELECTED WORKS
+              </Link>
               <Link to="/about" className={`transition-colors duration-200 ${location.pathname === '/about' ? 'text-[#111111] font-semibold' : 'text-[#6B6B6B] hover:text-[#111111]'}`}>ABOUT</Link>
               <Link to="/contact" className={`transition-colors duration-200 ${location.pathname === '/contact' ? 'text-[#111111] font-semibold' : 'text-[#6B6B6B] hover:text-[#111111]'}`}>CONTACT</Link>
             </>
@@ -91,8 +107,30 @@ export const Navbar: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <Link to="/" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>HOME</Link>
-                  <Link to="/work" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>SELECTED WORKS</Link>
+                  <Link
+                    to="/"
+                    className="text-[#6B6B6B] hover:text-[#111111] transition-colors"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      if (location.pathname === '/') {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
+                    }}
+                  >
+                    HOME
+                  </Link>
+                  <Link
+                    to="/work"
+                    className="text-[#6B6B6B] hover:text-[#111111] transition-colors"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      if (location.pathname === '/work') {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
+                    }}
+                  >
+                    SELECTED WORKS
+                  </Link>
                   <Link to="/about" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>ABOUT</Link>
                   <Link to="/contact" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>CONTACT</Link>
                 </>

@@ -1,9 +1,10 @@
 import React, { Suspense, lazy } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
 import { PortfolioProvider } from './context/PortfolioContext';
 import { AuthProvider } from './context/AuthContext';
 
 // Public Components & Pages
+import { ScrollToTop } from './components/common/ScrollToTop';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { Lightbox } from './components/common/Lightbox';
@@ -36,6 +37,9 @@ export const App: React.FC = () => {
     <AuthProvider>
       <PortfolioProvider>
         <div className={`min-h-screen flex flex-col bg-white text-[#111111]${isAdminRoute ? '' : ' cursor-site'}`}>
+          {/* Automatic scroll restoration and anchor navigation */}
+          <ScrollToTop />
+
           {/* Public Navbar (omitted in Admin area for clean focused CMS) */}
           {!isAdminRoute && <Navbar />}
 
@@ -72,12 +76,12 @@ export const App: React.FC = () => {
                   <div className="min-h-[70vh] flex flex-col items-center justify-center p-8 text-center">
                     <h1 className="text-[64px] font-bold tracking-tight">404</h1>
                     <p className="text-[#6B6B6B] mt-2 mb-6">Page not found.</p>
-                    <a
-                      href="/"
-                      className="px-6 py-2.5 rounded-[8px] bg-black text-white text-[14px] font-medium"
+                    <Link
+                      to="/"
+                      className="px-6 py-2.5 rounded-[8px] bg-black text-white text-[14px] font-medium hover:bg-black/80 transition-colors"
                     >
                       Return Home
-                    </a>
+                    </Link>
                   </div>
                 }
               />

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, ArrowUpRight, X } from 'lucide-react';
 import { selectedWorkBrands, selectedWorks, type SelectedWorkCategory, type SelectedWorkItem } from '../../data/selectedWorks';
@@ -105,8 +106,27 @@ const getBrandCuratedWorks = (brand: string, allWorks: SelectedWorkItem[]): Sele
 export const BrandArchive: React.FC = () => {
   const [works, setWorks] = useState(selectedWorks);
   const [brands, setBrands] = useState(selectedWorkBrands);
-  const [activeBrand, setActiveBrand] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const rawBrandParam = searchParams.get('brand');
+  const activeBrand = useMemo(() => {
+    if (!rawBrandParam) return null;
+    return brands.find((b) => b.toLowerCase() === rawBrandParam.toLowerCase()) || rawBrandParam;
+  }, [rawBrandParam, brands]);
+
+  const setActiveBrand = (brand: string | null) => {
+    if (brand) {
+      setSearchParams({ brand });
+    } else {
+      setSearchParams({});
+    }
+  };
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setActiveIndex(null);
+  }, [activeBrand]);
 
   useEffect(() => {
     let cancelled = false;
