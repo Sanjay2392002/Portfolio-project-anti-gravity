@@ -23,10 +23,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 let httpServer = null;
 app.disable('x-powered-by');
-const proxyHops = process.env.TRUST_PROXY_HOPS === undefined ? 0 : Number(process.env.TRUST_PROXY_HOPS);
-if (!Number.isInteger(proxyHops) || proxyHops < 0 || proxyHops > 5) {
-  throw new Error('TRUST_PROXY_HOPS must be a whole number between 0 and 5.');
-}
+const rawHops = process.env.TRUST_PROXY_HOPS !== undefined ? Number(process.env.TRUST_PROXY_HOPS) : (process.env.VERCEL ? 1 : 0);
+const proxyHops = Number.isInteger(rawHops) && rawHops >= 0 && rawHops <= 5 ? rawHops : (process.env.VERCEL ? 1 : 0);
 app.set('trust proxy', proxyHops);
 
 // CORS setup
@@ -106,36 +104,52 @@ app.use((err, req, res, next) => {
 });
 
 // Apply schema and one-time bootstrap before listening; failed initialization stays unavailable.
-initializeDatabase()
-  .then(() => seedDatabase())
-  .then(() => {
-    httpServer = app.listen(PORT, () => {
-      console.log(`[Server] Sanjay Portfolio API running on http://localhost:${PORT}`);
+if (!process.env.VERCEL) {
+  initializeDatabase()
+    .then(() => seedDatabase())
+    .then(() => {
+      httpServer = app.listen(PORT, () => {
+        console.log(`[Server] Sanjay Portfolio API running on http://localhost:${PORT}`);
+      });
+    })
+    .catch(async (err) => {
+      console.error('[Server] Database or administrator bootstrap failed:', err?.message || err);
+      try { await db.close(); } catch { /* preserve the startup error status */ }
+      process.exitCode = 1;
     });
-  })
-  .catch(async () => {
-    console.error('[Server] Database or administrator bootstrap failed. Configure the required environment and retry.');
-    try { await db.close(); } catch { /* preserve the startup error status */ }
-    process.exitCode = 1;
-  });
 
-let shuttingDown = false;
-const shutdown = () => {
-  if (!httpServer || shuttingDown) return;
-  shuttingDown = true;
-  const forceExit = setTimeout(() => process.exit(1), 10000);
-  forceExit.unref?.();
-  httpServer.close(async () => {
-    clearTimeout(forceExit);
-    try {
-      await db.close();
-      process.exit(0);
-    } catch {
-      process.exit(1);
+  let shuttingDown = false;
+  const shutdown = () => {
+    if (!httpServer || shuttingDown) return;
+    shuttingDown = true;
+    const forceExit = setTimeout(() => process.exit(1), 10000);
+    forceExit.unref?.();
+    httpServer.close(async () => {
+      clearTimeout(forceExit);
+      try {
+        await db.close();
+        process.exit(0);
+      } catch {
+        process.exit(1);
+      }
+    });
+  };
+  process.once('SIGINT', shutdown);
+  process.once('SIGTERM', shutdown);
+} else {
+  // In Vercel serverless functions, initialize in background without app.listen or process.exitCode
+  let initPromise = null;
+  const ensureInitialized = () => {
+    if (!initPromise) {
+      initPromise = initializeDatabase()
+        .then(() => seedDatabase())
+        .catch((err) => {
+          console.warn('[Serverless DB] Initialization warning (non-fatal):', err?.message || err);
+        });
     }
-  });
-};
-process.once('SIGINT', shutdown);
-process.once('SIGTERM', shutdown);
+    return initPromise;
+  };
+  ensureInitialized();
+}
 
 export default app;

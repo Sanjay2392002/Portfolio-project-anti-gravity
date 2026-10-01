@@ -24,13 +24,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const checkAuth = async () => {
     try {
       const res = await fetch('/api/admin/auth/me', { credentials: 'same-origin' });
-      const data = await res.json();
-      if (data.success && data.user) {
+      const data = await res.json().catch(() => null);
+      if (data && data.success && data.user) {
         setUser(data.user);
       } else {
         setUser(null);
       }
-    } catch (err) {
+    } catch {
       setUser(null);
     } finally {
       setLoading(false);
@@ -47,16 +47,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ identifier: email.trim(), email: email.trim(), username: email.trim(), password }),
       });
-      const data = await res.json();
-      if (data.success && data.user) {
+      const data = await res.json().catch(() => null);
+      if (data && data.success && data.user) {
         setUser(data.user);
         return { success: true };
       }
-      return { success: false, error: data.error || 'Login failed' };
+      if (data && data.error) {
+        return { success: false, error: data.error };
+      }
+      return {
+        success: false,
+        error: res.ok ? 'Login failed. Please verify your credentials.' : `Server error (${res.status}). Please try again shortly.`,
+      };
     } catch (err: any) {
-      return { success: false, error: err.message || 'Network error' };
+      return { success: false, error: err?.message || 'Network error. Please try again.' };
     }
   };
 

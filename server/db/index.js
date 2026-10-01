@@ -13,8 +13,12 @@ const DATA_DIR = path.resolve(__dirname, '../data');
 const JSON_DB_FILE = path.join(DATA_DIR, 'db.json');
 
 // Ensure data directory exists
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+try {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+} catch (err) {
+  // Read-only filesystem in serverless environments
 }
 
 let pool = null;
@@ -50,9 +54,15 @@ const emptyLocalData = () => ({
 
 export const initializeDatabase = async () => {
   if (!pool) return;
-  const schemaPath = path.join(__dirname, 'schema.sql');
-  await pool.query(fs.readFileSync(schemaPath, 'utf8'));
-  await pool.query('SELECT 1');
+  try {
+    const schemaPath = path.join(__dirname, 'schema.sql');
+    if (fs.existsSync(schemaPath)) {
+      await pool.query(fs.readFileSync(schemaPath, 'utf8'));
+    }
+    await pool.query('SELECT 1');
+  } catch (err) {
+    console.warn('[DB] initializeDatabase notice:', err.message);
+  }
 };
 
 const withTransaction = async (operation) => {
