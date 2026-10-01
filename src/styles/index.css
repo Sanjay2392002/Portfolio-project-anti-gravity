@@ -121,7 +121,7 @@
   --archive-ink: #111;
   --archive-muted: #707070;
   --archive-accent: #fff;
-  padding: clamp(5rem, 10vw, 9rem) clamp(1.25rem, 5vw, 5rem) 3rem;
+  padding: clamp(1.25rem, 2.5vw, 2.25rem) clamp(1.25rem, 5vw, 5rem) 3rem;
   background: #fff;
   color: var(--archive-ink);
 }
@@ -129,12 +129,12 @@
   width: min(100%, 1440px);
   margin-inline: auto;
 }
-.archive-heading { display: flex; justify-content: space-between; align-items: end; gap: 2rem; margin-bottom: 3.25rem; }
-.archive-kicker { display: block; margin-bottom: 1rem; color: var(--archive-muted); font-size: .78rem; font-weight: 650; letter-spacing: .12em; text-transform: uppercase; }
-.archive-heading h1, .archive-heading h2 { margin: 0; font-size: clamp(3rem, 7vw, 6.8rem); line-height: .92; letter-spacing: -.075em; font-weight: 650; }
+.archive-heading { display: flex; justify-content: space-between; align-items: end; gap: 2rem; margin-bottom: clamp(1.75rem, 3vw, 2.5rem); }
+.archive-kicker { display: block; margin-bottom: 0.65rem; color: var(--archive-muted); font-size: .78rem; font-weight: 650; letter-spacing: .12em; text-transform: uppercase; }
+.archive-heading h1, .archive-heading h2 { margin: 0; font-size: clamp(2.8rem, 6.5vw, 6.2rem); line-height: .92; letter-spacing: -.075em; font-weight: 650; }
 .archive-period { color: #111; }
 .archive-heading > p { max-width: 360px; margin: 0 0 .25rem; color: var(--archive-muted); font-size: 1.05rem; line-height: 1.65; }
-.archive-controls { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding-block: 1rem; border-top: 1px solid #dfe2d9; border-bottom: 1px solid #dfe2d9; margin-bottom: clamp(2.5rem, 4.5vw, 3.75rem); }
+.archive-controls { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding-block: 0.85rem; border-top: 1px solid #dfe2d9; border-bottom: 1px solid #dfe2d9; margin-bottom: clamp(1.5rem, 2.5vw, 2.25rem); }
 .brand-filters { display: flex; gap: .45rem; overflow-x: auto; scrollbar-width: none; }
 .brand-filters::-webkit-scrollbar { display: none; }
 .brand-filter { flex: 0 0 auto; display: inline-flex; align-items: center; gap: .5rem; border: 1px solid transparent; border-radius: 999px; padding: .62rem .95rem; background: transparent; color: #626b63; cursor: pointer; font: inherit; font-size: .82rem; transition: color .2s, background .2s, border-color .2s; }
