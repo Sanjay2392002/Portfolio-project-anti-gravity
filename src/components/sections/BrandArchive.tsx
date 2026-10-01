@@ -124,7 +124,21 @@ export const BrandArchive: React.FC = () => {
   };
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const html = document.documentElement;
+    const body = document.body;
+    const originalBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
+    body.style.scrollBehavior = 'auto';
+
+    window.scrollTo(0, 0);
+    html.scrollTop = 0;
+    body.scrollTop = 0;
+
+    requestAnimationFrame(() => {
+      html.style.scrollBehavior = originalBehavior;
+      body.style.scrollBehavior = '';
+    });
+
     setActiveIndex(null);
   }, [activeBrand]);
 
