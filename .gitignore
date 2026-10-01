@@ -1,21 +1,34 @@
+# Dependencies
 node_modules/
+.pnp/
+.pnp.js
+
+# Production build output
 dist/
+
+# Local Environment Variables (Keep credentials secret)
 .env
 .env.local
-.env.*.local
-*.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Runtime data files (seeded automatically on first run)
-data/projects.json
-data/profile.json
-data/site.json
-
-# Uploaded files
-public/uploads/*
-!public/uploads/.gitkeep
-
-.DS_Store
-*.db
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 *.log
+
+# Editor & OS files
+.vscode/
+.idea/
+.DS_Store
 Thumbs.db
-Backup file/
+
+# Preserved Credentials & Local Backup
+GIT AND ENV FILES/
+
+# Raw Design Working Assets (Kept locally; production assets are optimized in public/)
+Selected works/
+New folder/
+New folder (2)/

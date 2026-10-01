@@ -1,0 +1,4316 @@
+{
+  "users": [
+    {
+      "id": "usr_admin_sanjay_primary",
+      "email": "sanjaymurugesan23@gmail.com",
+      "password_hash": "$2b$12$EdctueeCd0YsJgQqvXxmCeFCUFYEq/wbKUIiXfNMhk.1.UETTTZgy",
+      "role": "admin",
+      "session_version": 2,
+      "updated_at": "2026-09-29T10:57:50.145Z"
+    },
+    {
+      "id": "usr_31c47d51-bfb5-4383-9c6a-33501264b141",
+      "email": "sanjay@portfolio.com",
+      "password_hash": "$2b$12$EdctueeCd0YsJgQqvXxmCeFCUFYEq/wbKUIiXfNMhk.1.UETTTZgy",
+      "role": "admin"
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat_social_media",
+      "name": "Social Media",
+      "slug": "social-media",
+      "description": "High-impact social media campaigns, continuous carousels, festive posters, and digital creatives",
+      "sort_order": 1
+    },
+    {
+      "id": "cat_branding",
+      "name": "Branding",
+      "slug": "branding",
+      "description": "Complete visual identity systems, brand guidelines, color palettes, and corporate marks",
+      "sort_order": 2
+    },
+    {
+      "id": "cat_packaging",
+      "name": "Packaging",
+      "slug": "packaging",
+      "description": "Rigid box diecuts, retail packaging systems, FMCG labels, and 3D product mockups",
+      "sort_order": 3
+    },
+    {
+      "id": "cat_print",
+      "name": "Print",
+      "slug": "print",
+      "description": "Editorial publications, large-format hoardings, calendars, brochures, and exhibition collateral",
+      "sort_order": 4
+    },
+    {
+      "id": "cat_digital_web",
+      "name": "Digital / Web",
+      "slug": "digital-web",
+      "description": "Modern responsive web experiences, e-commerce digital catalogs, and digital UI interfaces",
+      "sort_order": 5
+    },
+    {
+      "id": "cat_campaigns",
+      "name": "Campaigns",
+      "slug": "campaigns",
+      "description": "Multi-asset brand campaigns, thematic storytelling, and continuous narrative sequences",
+      "sort_order": 6
+    },
+    {
+      "id": "cat_thumbnails",
+      "name": "Thumbnails",
+      "slug": "thumbnails",
+      "description": "High-CTR YouTube thumbnails, digital covers, and high-contrast editorial video artwork",
+      "sort_order": 7
+    }
+  ],
+  "projects": [
+    {
+      "id": "prj_bakers_stall",
+      "title": "Bakers International — Exhibition Pavilions",
+      "slug": "bakers-international-stall",
+      "client": "Bakers International",
+      "category_id": "cat_print",
+      "year": "2025",
+      "role": "Visual Designer & Spatial Lead",
+      "services": [
+        "Stall Architecture",
+        "Spatial Design",
+        "3D Mockups",
+        "Large-Format Graphics",
+        "Exhibition Branding"
+      ],
+      "description": "Immersive spatial exhibition booth architecture and large-format graphics designed for Bakers International at Indus Food & Gulfood 2026.",
+      "hero_image": "/assets/bakers/bakers-stall-mockup.jpg",
+      "status": "published",
+      "featured": true,
+      "sort_order": 1,
+      "seo_title": "Bakers International — Exhibition Stall Architecture | Sanjay",
+      "seo_description": "Spatial exhibition stall architecture, 3D booth simulations, and large-format graphics for Bakers International FMCG.",
+      "brand_accent_color": "#E63946",
+      "created_at": "2026-09-18T10:00:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.711Z",
+      "published_at": "2026-09-18T10:00:00.000Z",
+      "category_name": "Print",
+      "category_slug": "print"
+    },
+    {
+      "id": "prj_bakers_crush",
+      "title": "Bakers International — Fruit Crush Packaging",
+      "slug": "bakers-crush-packaging",
+      "client": "Bakers International",
+      "category_id": "cat_packaging",
+      "year": "2025",
+      "role": "Packaging & Brand Designer",
+      "services": [
+        "Packaging Design",
+        "3D Bottle Mockups",
+        "Label Engineering",
+        "Print Production",
+        "FMCG Retail System"
+      ],
+      "description": "Complete 10-SKU premium fruit crush packaging system featuring custom typography, vibrant ingredient illustrations, and shelf-dominant label architecture.",
+      "hero_image": "/assets/bakers/bakers-crush-lineup.jpg",
+      "status": "published",
+      "featured": true,
+      "sort_order": 2,
+      "seo_title": "Bakers International — 750ml Fruit Crush Packaging Line | Sanjay",
+      "seo_description": "10-SKU fruit crush bottle packaging, 3D retail mockups, and label architecture for Bakers International.",
+      "brand_accent_color": "#E63946",
+      "created_at": "2026-09-18T10:30:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.716Z",
+      "published_at": "2026-09-18T10:30:00.000Z",
+      "category_name": "Packaging",
+      "category_slug": "packaging"
+    },
+    {
+      "id": "prj_bakers_social",
+      "title": "Bakers International — Brand & Social Campaigns",
+      "slug": "bakers-social-campaigns",
+      "client": "Bakers International",
+      "category_id": "cat_campaigns",
+      "year": "2025",
+      "role": "Lead Campaign Art Director",
+      "services": [
+        "Social Media Direction",
+        "Continuous Carousels",
+        "Food Retouching",
+        "Campaign Art Direction"
+      ],
+      "description": "High-conversion social media campaigns including continuous narrative carousels, regional festive greetings, and culinary appetite-appeal product posters.",
+      "hero_image": "/assets/bakers/bakers-campaign-garlic-mayo.jpg",
+      "status": "published",
+      "featured": false,
+      "sort_order": 3,
+      "seo_title": "Bakers International — Multi-Channel Social Campaigns | Sanjay",
+      "seo_description": "Social media posters, multi-slide narrative carousels, and food advertising visuals for Bakers International.",
+      "brand_accent_color": "#E63946",
+      "created_at": "2026-09-18T11:00:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.721Z",
+      "published_at": "2026-09-18T11:00:00.000Z",
+      "category_name": "Campaigns",
+      "category_slug": "campaigns"
+    },
+    {
+      "id": "prj_bkt_thumbnails",
+      "title": "Bro Knows Tech — High-CTR Video Artwork",
+      "slug": "bro-knows-tech-thumbnails",
+      "client": "Bro Knows Tech",
+      "category_id": "cat_thumbnails",
+      "year": "2025",
+      "role": "Thumbnail Artist & Visual Strategist",
+      "services": [
+        "Video Thumbnails",
+        "CTR Optimization",
+        "Dynamic Lighting",
+        "Visual Composition",
+        "Tech Art Direction"
+      ],
+      "description": "High-impact video thumbnail artwork engineered for maximum click-through rates across tech reviews, television shootouts, and creator podcasts.",
+      "hero_image": "/assets/bkt/bkt-thumb-bravia.jpg",
+      "status": "published",
+      "featured": true,
+      "sort_order": 4,
+      "seo_title": "Bro Knows Tech — High-CTR YouTube Video Thumbnails | Sanjay",
+      "seo_description": "High-converting video thumbnail design for tech creator Bro Knows Tech covering Sony, LG, Samsung, and Meta.",
+      "brand_accent_color": "#0066FF",
+      "created_at": "2026-09-18T11:30:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.725Z",
+      "published_at": "2026-09-18T11:30:00.000Z",
+      "category_name": "Thumbnails",
+      "category_slug": "thumbnails"
+    },
+    {
+      "id": "prj_bkt_logo",
+      "title": "Bro Knows Tech — Brand Mark & Identity System",
+      "slug": "bro-knows-tech-branding",
+      "client": "Bro Knows Tech",
+      "category_id": "cat_branding",
+      "year": "2025",
+      "role": "Brand Identity Designer",
+      "services": [
+        "Logo Design",
+        "Brand Identity System",
+        "Vector Geometry",
+        "Social Avatar Suite",
+        "Typography"
+      ],
+      "description": "Complete visual identity system, geometric monogram mark, and responsive badge suite built for a modern tech media and review network.",
+      "hero_image": "/assets/bkt/bkt-logo-primary.png",
+      "status": "published",
+      "featured": true,
+      "sort_order": 5,
+      "seo_title": "Bro Knows Tech — Brand Identity & Vector System | Sanjay",
+      "seo_description": "Logo mark, channel avatar suites, and visual guidelines for tech channel Bro Knows Tech.",
+      "brand_accent_color": "#0066FF",
+      "created_at": "2026-09-18T12:00:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.730Z",
+      "published_at": "2026-09-18T12:00:00.000Z",
+      "category_name": "Branding",
+      "category_slug": "branding"
+    },
+    {
+      "id": "prj_bkt_carousels",
+      "title": "Bro Knows Tech — Tech Breakdown Carousels",
+      "slug": "bro-knows-tech-carousels",
+      "client": "Bro Knows Tech",
+      "category_id": "cat_social_media",
+      "year": "2025",
+      "role": "Infographic & Carousel Designer",
+      "services": [
+        "Carousel Design",
+        "Tech Explainer Infographics",
+        "Social Media Marketing",
+        "Visual Storytelling"
+      ],
+      "description": "High-retention technical explainer carousels simplifying complex consumer tech concepts like OLED panel lifespans and smart inverter technology.",
+      "hero_image": "/assets/bkt/bkt-carousel-bosch.jpg",
+      "status": "published",
+      "featured": false,
+      "sort_order": 6,
+      "seo_title": "Bro Knows Tech — Technical Breakdown Carousels | Sanjay",
+      "seo_description": "Educational tech carousels and infographic slides for Bro Knows Tech.",
+      "brand_accent_color": "#0066FF",
+      "created_at": "2026-09-18T12:30:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.735Z",
+      "published_at": "2026-09-18T12:30:00.000Z",
+      "category_name": "Social Media",
+      "category_slug": "social-media"
+    },
+    {
+      "id": "prj_pavizham_campaigns",
+      "title": "Pavizham Jewellers — Royal Heritage Campaigns",
+      "slug": "pavizham-jewellers-campaigns",
+      "client": "Pavizham Jewellers",
+      "category_id": "cat_campaigns",
+      "year": "2024",
+      "role": "Visual Designer & Art Director",
+      "services": [
+        "Luxury Art Direction",
+        "Jewellery Editorial",
+        "Festive Campaigns",
+        "Retouching",
+        "Typography"
+      ],
+      "description": "High-glamour campaign posters and multi-grid social direction celebrating heirloom gold, solitaire diamonds, and festive celebrations.",
+      "hero_image": "/assets/pavizham/pavizham-campaign-sona.jpg",
+      "status": "published",
+      "featured": true,
+      "sort_order": 7,
+      "seo_title": "Pavizham Jewellers — Heritage Gold & Diamond Campaigns | Sanjay",
+      "seo_description": "Luxury jewellery art direction, festival social media campaigns, and diamond editorial direction for Pavizham Jewellers.",
+      "brand_accent_color": "#D4AF37",
+      "created_at": "2026-09-18T13:00:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.740Z",
+      "published_at": "2026-09-18T13:00:00.000Z",
+      "category_name": "Campaigns",
+      "category_slug": "campaigns"
+    },
+    {
+      "id": "prj_pavizham_print",
+      "title": "Pavizham Jewellers — Editorial Print & Hoardings",
+      "slug": "pavizham-print-collateral",
+      "client": "Pavizham Jewellers",
+      "category_id": "cat_print",
+      "year": "2024",
+      "role": "Print Production & Editorial Designer",
+      "services": [
+        "Print Design",
+        "Outdoor Advertising",
+        "Event Collateral",
+        "Catalogue Layout",
+        "Typography"
+      ],
+      "description": "Large-format showroom launch hoardings, foil-stamped luxury inauguration invitation suites, and an A4 diamond collection editorial lookbook.",
+      "hero_image": "/assets/pavizham/pavizham-print-hoarding.jpg",
+      "status": "published",
+      "featured": false,
+      "sort_order": 8,
+      "seo_title": "Pavizham Jewellers — Print Collateral & Hoardings | Sanjay",
+      "seo_description": "Showroom inauguration hoardings, editorial catalogs, and luxury invitations for Pavizham Jewellers.",
+      "brand_accent_color": "#D4AF37",
+      "created_at": "2026-09-18T13:30:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.745Z",
+      "published_at": "2026-09-18T13:30:00.000Z",
+      "category_name": "Print",
+      "category_slug": "print"
+    },
+    {
+      "id": "prj_kings",
+      "title": "KINGS — Shirts For A Higher Standard",
+      "slug": "kings",
+      "client": "KINGS",
+      "category_id": "cat_branding",
+      "year": "2026",
+      "role": "Lead Brand Designer & Digital Builder",
+      "services": [
+        "Branding",
+        "Art Direction",
+        "Packaging Design",
+        "Website Design",
+        "Digital Experience"
+      ],
+      "description": "End-to-end brand architecture, luxury packaging engineering, and digital wholesale platform for KINGS — premium shirts, dhoties, and traditional wear.",
+      "hero_image": "/assets/kings/kings-box-model.jpg",
+      "status": "published",
+      "featured": true,
+      "sort_order": 9,
+      "seo_title": "KINGS — Luxury Menswear Brand & Digital Platform | Sanjay",
+      "seo_description": "Complete independent branding, packaging design, and responsive digital experience for KINGS.",
+      "brand_accent_color": "#8B2635",
+      "live_url": "https://kings-app.vercel.app",
+      "created_at": "2026-09-18T14:00:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.749Z",
+      "published_at": "2026-09-18T14:00:00.000Z",
+      "category_name": "Branding",
+      "category_slug": "branding"
+    },
+    {
+      "id": "prj_zen_thumbnails",
+      "title": "Zen Spaces — Architecture & Ergonomics Artwork",
+      "slug": "zen-spaces-thumbnails",
+      "client": "Zen Spaces",
+      "category_id": "cat_thumbnails",
+      "year": "2025",
+      "role": "Thumbnail Strategist & 3D Artist",
+      "services": [
+        "YouTube Thumbnails",
+        "3D Spatial Layout",
+        "Visual Composition",
+        "CTR Strategy",
+        "Commercial Interiors"
+      ],
+      "description": "High-performing video thumbnails showcasing custom office furniture design, ergonomics science, and modern commercial office fitouts.",
+      "hero_image": "/assets/zen/zen-thumb-science.jpg",
+      "status": "published",
+      "featured": true,
+      "sort_order": 10,
+      "seo_title": "Zen Spaces — Workspace Planning Video Thumbnails | Sanjay",
+      "seo_description": "YouTube thumbnails and digital cover art for Zen Spaces office architecture and custom furniture.",
+      "brand_accent_color": "#2A9D8F",
+      "created_at": "2026-09-18T14:30:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.753Z",
+      "published_at": "2026-09-18T14:30:00.000Z",
+      "category_name": "Thumbnails",
+      "category_slug": "thumbnails"
+    },
+    {
+      "id": "prj_zen_furniture",
+      "title": "Zen Spaces — Custom Furniture Thought Leadership",
+      "slug": "zen-spaces-furniture",
+      "client": "Zen Spaces",
+      "category_id": "cat_social_media",
+      "year": "2025",
+      "role": "Editorial & Social Designer",
+      "services": [
+        "Social Media Posters",
+        "Thought Leadership Carousels",
+        "Brand Communications",
+        "Ergonomics Design"
+      ],
+      "description": "Multi-part educational social poster campaign breaking down the ergonomics, cost benefits, and productivity impact of custom commercial furniture.",
+      "hero_image": "/assets/zen/zen-post-furniture-part1.jpg",
+      "status": "published",
+      "featured": false,
+      "sort_order": 11,
+      "seo_title": "Zen Spaces — Custom Furniture Social Series | Sanjay",
+      "seo_description": "Educational carousel series and campaign posters on office furniture engineering for Zen Spaces.",
+      "brand_accent_color": "#2A9D8F",
+      "created_at": "2026-09-18T15:00:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.758Z",
+      "published_at": "2026-09-18T15:00:00.000Z",
+      "category_name": "Social Media",
+      "category_slug": "social-media"
+    },
+    {
+      "id": "prj_loft_posters",
+      "title": "Loft — Cinema, F1 Culture & Event Series",
+      "slug": "loft-cinema-culture",
+      "client": "Loft",
+      "category_id": "cat_print",
+      "year": "2025",
+      "role": "Brand & Cultural Poster Designer",
+      "services": [
+        "Editorial Poster Design",
+        "Film Art Direction",
+        "Event Promotion",
+        "Pop Culture Visuals",
+        "Typography"
+      ],
+      "description": "Cult cinema tribute series celebrating unsung visionary filmmakers, Formula 1 Grand Prix race-day posters, and immersive Halloween events.",
+      "hero_image": "/assets/loft/loft-posters-unsung-presentation.jpg",
+      "status": "published",
+      "featured": true,
+      "sort_order": 12,
+      "seo_title": "Loft — Cinema, F1 & Nightlife Event Posters | Sanjay",
+      "seo_description": "Editorial posters, Formula 1 Grand Prix artwork, and filmmaker tribute series for Loft venue.",
+      "brand_accent_color": "#E76F51",
+      "created_at": "2026-09-18T15:30:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.762Z",
+      "published_at": "2026-09-18T15:30:00.000Z",
+      "category_name": "Print",
+      "category_slug": "print"
+    },
+    {
+      "id": "prj_loft_calendars",
+      "title": "Loft — Monthly Sports Calendars & Pantry Identity",
+      "slug": "loft-calendars-pantry",
+      "client": "Loft",
+      "category_id": "cat_social_media",
+      "year": "2025",
+      "role": "Print & Editorial Layout Designer",
+      "services": [
+        "Editorial Layout",
+        "Typography",
+        "Monthly Event Schedules",
+        "Menu Branding",
+        "Print Collateral"
+      ],
+      "description": "Clean typographic sports broadcast calendars, curated movie streaming recommendations, and mouth-watering artisanal cafe menu collateral.",
+      "hero_image": "/assets/loft/loft-calendar-dec.jpg",
+      "status": "published",
+      "featured": false,
+      "sort_order": 13,
+      "seo_title": "Loft — Editorial Sports Calendars & Pantry Design | Sanjay",
+      "seo_description": "Sports screening calendars, cafe menu identities, and editorial layouts for Loft.",
+      "brand_accent_color": "#E76F51",
+      "created_at": "2026-09-18T16:00:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.770Z",
+      "published_at": "2026-09-18T16:00:00.000Z",
+      "category_name": "Social Media",
+      "category_slug": "social-media"
+    },
+    {
+      "id": "prj_woneten",
+      "title": "Woneten — Contemporary Ethnic & Festive Couture",
+      "slug": "woneten-fashion-campaigns",
+      "client": "Woneten",
+      "category_id": "cat_campaigns",
+      "year": "2025",
+      "role": "Fashion Art Director & Campaign Designer",
+      "services": [
+        "Fashion Art Direction",
+        "Carousel Design",
+        "Festive Campaigns",
+        "Apparel Marketing",
+        "Social Media"
+      ],
+      "description": "Vibrant ethnic fashion marketing campaigns: multi-slide Kurti lookbook carousels, AI-augmented fashion posters, and festive collections.",
+      "hero_image": "/assets/woneten/woneten-carousel-presentation.jpg",
+      "status": "published",
+      "featured": true,
+      "sort_order": 14,
+      "seo_title": "Woneten — Contemporary Ethnic Fashion Campaigns | Sanjay",
+      "seo_description": "Apparel lookbooks, multi-slide Kurti carousels, and festive fashion campaigns for Woneten.",
+      "brand_accent_color": "#D62828",
+      "created_at": "2026-09-18T16:30:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.774Z",
+      "published_at": "2026-09-18T16:30:00.000Z",
+      "category_name": "Campaigns",
+      "category_slug": "campaigns"
+    },
+    {
+      "id": "prj_bea",
+      "title": "BEA — Retail Appliance Video Artwork",
+      "slug": "bea-retail-appliances",
+      "client": "BEA",
+      "category_id": "cat_thumbnails",
+      "year": "2025",
+      "role": "Digital Marketing & Thumbnail Designer",
+      "services": [
+        "YouTube Thumbnails",
+        "Retail Creative",
+        "Appliance Marketing",
+        "Festival Posters",
+        "Visual Hierarchy"
+      ],
+      "description": "High-conversion AC and home appliance review thumbnails for top consumer brands including Bluestar, Hitachi, Godrej, IFB, and Samsung.",
+      "hero_image": "/assets/bea/bea-thumb-bluestar.jpg",
+      "status": "published",
+      "featured": false,
+      "sort_order": 15,
+      "seo_title": "BEA — Home Appliance Video Thumbnails | Sanjay",
+      "seo_description": "Consumer appliance thumbnails and retail campaigns for BEA Electronics.",
+      "brand_accent_color": "#1D3557",
+      "created_at": "2026-09-18T17:00:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.778Z",
+      "published_at": "2026-09-18T17:00:00.000Z",
+      "category_name": "Thumbnails",
+      "category_slug": "thumbnails"
+    },
+    {
+      "id": "prj_siggis",
+      "title": "SIGGIS — Zero-Preservative Condiments & Packaging",
+      "slug": "siggis-preservative-free",
+      "client": "SIGGIS",
+      "category_id": "cat_packaging",
+      "year": "2025",
+      "role": "Packaging & Brand Designer",
+      "services": [
+        "Packaging Design",
+        "Food Labeling",
+        "Social Creative",
+        "Product Launch",
+        "Brand System"
+      ],
+      "description": "Eco-conscious food packaging for zero-preservative pickles, organic food colors, and natural spices celebrating authentic culinary heritage.",
+      "hero_image": "/assets/siggis/siggis-pack-citron-pickle.jpg",
+      "status": "published",
+      "featured": false,
+      "sort_order": 16,
+      "seo_title": "SIGGIS — Food Packaging & Campaign Design | Sanjay",
+      "seo_description": "Zero-preservative food packaging, organic spice labels, and campaign creatives for SIGGIS.",
+      "brand_accent_color": "#F4A261",
+      "created_at": "2026-09-18T17:30:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.783Z",
+      "published_at": "2026-09-18T17:30:00.000Z",
+      "category_name": "Packaging",
+      "category_slug": "packaging"
+    },
+    {
+      "id": "prj_bevis",
+      "title": "Bevis — Pure Mineral Water & Corporate Identity",
+      "slug": "bevis-mineral-water",
+      "client": "Bevis",
+      "category_id": "cat_packaging",
+      "year": "2025",
+      "role": "Packaging & Identity Designer",
+      "services": [
+        "Bottle Mockups",
+        "Packaging Design",
+        "Hiring Ad Campaigns",
+        "Festive Creatives",
+        "3D Visualization"
+      ],
+      "description": "3D mineral water bottle engineering, corporate visual identity, and high-engagement dynamic recruitment campaign posters.",
+      "hero_image": "/assets/bevis/bevis-pack-bottle-mockup-1.jpg",
+      "status": "published",
+      "featured": false,
+      "sort_order": 17,
+      "seo_title": "Bevis — Mineral Water Packaging & Brand Collateral | Sanjay",
+      "seo_description": "3D bottle mockups, recruitment campaigns, and corporate branding for Bevis Mineral Water.",
+      "brand_accent_color": "#0077B6",
+      "created_at": "2026-09-18T18:00:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.787Z",
+      "published_at": "2026-09-18T18:00:00.000Z",
+      "category_name": "Packaging",
+      "category_slug": "packaging"
+    },
+    {
+      "id": "prj_sms",
+      "title": "SMS — Educational Brand Carousels & Storytelling",
+      "slug": "sms-educational-branding",
+      "client": "Senthil Matric School",
+      "category_id": "cat_social_media",
+      "year": "2025",
+      "role": "Educational Visual Strategist",
+      "services": [
+        "Educational Infographics",
+        "Multi-Slide Carousels",
+        "Brand Storytelling",
+        "Social Strategy"
+      ],
+      "description": "Empathetic educational carousels exploring modern pedagogy: '5 Things Every School Must Make a Child Feel' and 'Step Inside Learning Spaces'.",
+      "hero_image": "/assets/sms/sms-carousel-5things-presentation.jpg",
+      "status": "published",
+      "featured": false,
+      "sort_order": 18,
+      "seo_title": "Senthil Matric School — Educational Carousels & Branding | Sanjay",
+      "seo_description": "Values-based education storytelling carousels and school branding for Senthil Matric School.",
+      "brand_accent_color": "#1E3A8A",
+      "created_at": "2026-09-18T18:30:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.792Z",
+      "published_at": "2026-09-18T18:30:00.000Z",
+      "category_name": "Social Media",
+      "category_slug": "social-media"
+    },
+    {
+      "id": "prj_yaazhi",
+      "title": "Yaazhi — 3D E-Commerce Jewellery Visual System",
+      "slug": "yaazhi-jewellery-renders",
+      "client": "Yaazhi",
+      "category_id": "cat_digital_web",
+      "year": "2025",
+      "role": "3D Product Visualizer & Digital Catalog Designer",
+      "services": [
+        "3D Product Visuals",
+        "E-Commerce Asset Design",
+        "Digital Catalog",
+        "UI Graphics",
+        "Lighting Simulation"
+      ],
+      "description": "Precision photorealistic 3D pendant jewelry renders and clean e-commerce digital catalog system across 9 distinct jewelry collections.",
+      "hero_image": "/assets/yaazhi/yaazhi-render-composite.jpg",
+      "status": "published",
+      "featured": false,
+      "sort_order": 19,
+      "seo_title": "Yaazhi — 3D E-Commerce Jewellery Renders | Sanjay",
+      "seo_description": "Photorealistic 3D jewelry renders and e-commerce digital storefront assets for Yaazhi.",
+      "brand_accent_color": "#9A7B38",
+      "created_at": "2026-09-18T19:00:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.801Z",
+      "published_at": "2026-09-18T19:00:00.000Z",
+      "category_name": "Branding",
+      "category_slug": "branding"
+    },
+    {
+      "id": "prj_thriveni",
+      "title": "Thriveni — Industrial Power & Mining Campaigns",
+      "slug": "thriveni-industrial-campaigns",
+      "client": "Thriveni",
+      "category_id": "cat_print",
+      "year": "2024",
+      "role": "Industrial & Corporate Art Director",
+      "services": [
+        "Corporate Print",
+        "Industrial Storytelling",
+        "Commemorative Posters",
+        "Large Format Design"
+      ],
+      "description": "High-impact industrial visuals celebrating 'Powering India\\'s Gold', national resource development, and heavy engineering workforces.",
+      "hero_image": "/assets/thriveni/thriveni-post-gold.jpg",
+      "status": "published",
+      "featured": false,
+      "sort_order": 20,
+      "seo_title": "Thriveni — Industrial Power & Mining Campaigns | Sanjay",
+      "seo_description": "Corporate industrial print campaigns and commemorative artwork for Thriveni Mining.",
+      "brand_accent_color": "#B45309",
+      "created_at": "2026-09-18T19:30:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.808Z",
+      "published_at": "2026-09-18T19:30:00.000Z",
+      "category_name": "Social Media",
+      "category_slug": "social-media"
+    },
+    {
+      "id": "prj_tmg_subiksham",
+      "title": "TMG & Subiksham — Commercial Retail & Festive Promotions",
+      "slug": "tmg-subiksham-commercial",
+      "client": "TMG / Subiksham",
+      "category_id": "cat_campaigns",
+      "year": "2025",
+      "role": "Commercial Advertising Designer",
+      "services": [
+        "Commercial Advertising",
+        "Retail Offer Creatives",
+        "Festive Fashion Posters",
+        "Social Collateral"
+      ],
+      "description": "High-energy retail sales campaigns, 'Why TMG?' value carousels, and festive ethnic fashion campaigns for Subiksham Aadi & Onam sales.",
+      "hero_image": "/assets/tmg/tmg-campaign-why.jpg",
+      "status": "published",
+      "featured": false,
+      "sort_order": 21,
+      "seo_title": "TMG & Subiksham — Retail & Festive Commercial Posters | Sanjay",
+      "seo_description": "Commercial supermarket promotions, retail value carousels, and ethnic fashion posters for TMG and Subiksham.",
+      "brand_accent_color": "#059669",
+      "created_at": "2026-09-18T20:00:00.000Z",
+      "updated_at": "2026-09-28T10:24:39.815Z",
+      "published_at": "2026-09-18T20:00:00.000Z",
+      "category_name": "Campaigns",
+      "category_slug": "campaigns"
+    }
+  ],
+  "content_blocks": [
+    {
+      "id": "blk_bakers_stall_meta",
+      "project_id": "prj_bakers_stall",
+      "block_type": "PROJECT_METADATA",
+      "sort_order": 0,
+      "content": {
+        "client": "Bakers International",
+        "year": "2025",
+        "role": "Visual Designer & Spatial Lead",
+        "services": [
+          "Stall Architecture",
+          "Spatial Design",
+          "3D Mockups",
+          "Large-Format Graphics",
+          "Exhibition Branding"
+        ]
+      },
+      "updated_at": "2026-09-28T10:24:39.712Z"
+    },
+    {
+      "id": "blk_bakers_stall_text1",
+      "project_id": "prj_bakers_stall",
+      "block_type": "TEXT",
+      "sort_order": 1,
+      "content": {
+        "eyebrow": "SPATIAL ARCHITECTURE",
+        "headline": "Engineering High-Impact Trade Presence",
+        "body": "For Bakers International's marquee presence at Indus Food and Gulfood 2026, the objective was creating an unmistakable retail presence in high-traffic exhibition halls. We crafted an architectural stall design featuring illuminated 3D bulkheads, continuous product discovery zones, and dedicated live mocktail tasting counters."
+      },
+      "updated_at": "2026-09-28T10:24:39.712Z"
+    },
+    {
+      "id": "blk_bakers_stall_hero",
+      "project_id": "prj_bakers_stall",
+      "block_type": "FULL_BLEED_IMAGE",
+      "sort_order": 2,
+      "content": {
+        "url": "/assets/bakers/bakers-stall-mockup.jpg",
+        "caption": "3D Spatial Booth Simulation & Modular Display Architecture at Indus Food"
+      },
+      "updated_at": "2026-09-28T10:24:39.712Z"
+    },
+    {
+      "id": "blk_bakers_stall_counters",
+      "project_id": "prj_bakers_stall",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 3,
+      "content": {
+        "image1": {
+          "url": "/assets/bakers/bakers-stall-live-counter-1.jpg",
+          "caption": "Live Counter Graphic: Green Apple, Strawberry & Mojito (1500x900mm)"
+        },
+        "image2": {
+          "url": "/assets/bakers/bakers-stall-live-counter-2.jpg",
+          "caption": "Live Counter Graphic: Nannari & Passion Fruit Mojito (1500x900mm)"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.712Z"
+    },
+    {
+      "id": "blk_bakers_stall_fascia",
+      "project_id": "prj_bakers_stall",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 4,
+      "content": {
+        "image1": {
+          "url": "/assets/bakers/bakers-stall-casapinoy.jpg",
+          "caption": "Casapinoy Backlit Pavilion Wall Display (1000x400mm)"
+        },
+        "image2": {
+          "url": "/assets/bakers/bakers-stall-invite.jpg",
+          "caption": "Official Gulfood 2026 Exhibition VIP Invitation Key Art"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.712Z"
+    },
+    {
+      "id": "blk_bakers_stall_quote",
+      "project_id": "prj_bakers_stall",
+      "block_type": "QUOTE",
+      "sort_order": 5,
+      "content": {
+        "quote": "The exhibition booth design elevated Bakers from a standard FMCG display to an immersive flavor destination that drove record trade inquiries.",
+        "author": "Trade & Global Export Team",
+        "title": "Bakers International"
+      },
+      "updated_at": "2026-09-28T10:24:39.712Z"
+    },
+    {
+      "id": "blk_bakers_crush_meta",
+      "project_id": "prj_bakers_crush",
+      "block_type": "PROJECT_METADATA",
+      "sort_order": 0,
+      "content": {
+        "client": "Bakers International",
+        "year": "2025",
+        "role": "Packaging & Brand Designer",
+        "services": [
+          "Packaging Design",
+          "3D Bottle Mockups",
+          "Label Engineering",
+          "FMCG Retail Architecture"
+        ]
+      },
+      "updated_at": "2026-09-28T10:24:39.716Z"
+    },
+    {
+      "id": "blk_bakers_crush_text1",
+      "project_id": "prj_bakers_crush",
+      "block_type": "TEXT",
+      "sort_order": 1,
+      "content": {
+        "eyebrow": "RETAIL PACKAGING SYSTEM",
+        "headline": "Sensory Flavor Storytelling Across 10 SKUs",
+        "body": "Designed for instantaneous visual distinction on modern supermarket shelves and quick-service restaurant backbars. The 750ml Fruit Crush system unifies 10 diverse flavor profiles—ranging from tropical Mango and Strawberry to exotic Kulfi Falooda and Rose—under a cohesive, premium label hierarchy."
+      },
+      "updated_at": "2026-09-28T10:24:39.716Z"
+    },
+    {
+      "id": "blk_bakers_crush_hero",
+      "project_id": "prj_bakers_crush",
+      "block_type": "FULL_BLEED_IMAGE",
+      "sort_order": 2,
+      "content": {
+        "url": "/assets/bakers/bakers-crush-lineup.jpg",
+        "caption": "750ml Fruit Crush 10-SKU Range Retail Mockup & Shelf Placement"
+      },
+      "updated_at": "2026-09-28T10:24:39.716Z"
+    },
+    {
+      "id": "blk_bakers_crush_bottles1",
+      "project_id": "prj_bakers_crush",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 3,
+      "content": {
+        "image1": {
+          "url": "/assets/bakers/bakers-crush-mango.jpg",
+          "caption": "Bakers Mango Crush 750ml Individual Bottle Presentation"
+        },
+        "image2": {
+          "url": "/assets/bakers/bakers-crush-strawberry.jpg",
+          "caption": "Bakers Strawberry Crush 750ml Individual Bottle Presentation"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.716Z"
+    },
+    {
+      "id": "blk_bakers_crush_bottles2",
+      "project_id": "prj_bakers_crush",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 4,
+      "content": {
+        "image1": {
+          "url": "/assets/bakers/bakers-crush-falooda.jpg",
+          "caption": "Bakers Rose Falooda Crush 750ml Bottle Presentation"
+        },
+        "image2": {
+          "url": "/assets/bakers/bakers-crush-kulfi.jpg",
+          "caption": "Bakers Kulfi Falooda Crush 750ml Bottle Presentation"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.716Z"
+    },
+    {
+      "id": "blk_bakers_crush_bottles3",
+      "project_id": "prj_bakers_crush",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 5,
+      "content": {
+        "image1": {
+          "url": "/assets/bakers/bakers-crush-blueberry.jpg",
+          "caption": "Bakers Blueberry Crush 750ml Bottle Presentation"
+        },
+        "image2": {
+          "url": "/assets/bakers/bakers-crush-butterscotch.jpg",
+          "caption": "Bakers Butterscotch Crush 750ml Bottle Presentation"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.716Z"
+    },
+    {
+      "id": "blk_bakers_social_meta",
+      "project_id": "prj_bakers_social",
+      "block_type": "PROJECT_METADATA",
+      "sort_order": 0,
+      "content": {
+        "client": "Bakers International",
+        "year": "2025",
+        "role": "Lead Campaign Art Director",
+        "services": [
+          "Social Media Direction",
+          "Continuous Carousels",
+          "Food Retouching",
+          "Campaign Art Direction"
+        ]
+      },
+      "updated_at": "2026-09-28T10:24:39.721Z"
+    },
+    {
+      "id": "blk_bakers_social_hero",
+      "project_id": "prj_bakers_social",
+      "block_type": "FULL_BLEED_IMAGE",
+      "sort_order": 1,
+      "content": {
+        "url": "/assets/bakers/bakers-campaign-garlic-mayo.jpg",
+        "caption": "'This Is Where It Gets Good' — Garlic Mayo Continuous Carousel Presentation"
+      },
+      "updated_at": "2026-09-28T10:24:39.721Z"
+    },
+    {
+      "id": "blk_bakers_social_iconic",
+      "project_id": "prj_bakers_social",
+      "block_type": "FULL_BLEED_IMAGE",
+      "sort_order": 2,
+      "content": {
+        "url": "/assets/bakers/bakers-campaign-iconic-places.jpg",
+        "caption": "'Iconic Places' Multi-Slide Carousel Campaign Celebrating Regional Street Delights"
+      },
+      "updated_at": "2026-09-28T10:24:39.721Z"
+    },
+    {
+      "id": "blk_bakers_social_posts1",
+      "project_id": "prj_bakers_social",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 3,
+      "content": {
+        "image1": {
+          "url": "/assets/bakers/bakers-post-bbq-sauce.jpg",
+          "caption": "Smoky BBQ Sauce Product Highlight Poster"
+        },
+        "image2": {
+          "url": "/assets/bakers/bakers-post-chocolate-syrup.jpg",
+          "caption": "Velvety Chocolate Syrup Dessert Creative"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.721Z"
+    },
+    {
+      "id": "blk_bakers_social_posts2",
+      "project_id": "prj_bakers_social",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 4,
+      "content": {
+        "image1": {
+          "url": "/assets/bakers/bakers-post-passion-fruit.jpg",
+          "caption": "Tropical Passion Fruit Syrup Refreshment Visual"
+        },
+        "image2": {
+          "url": "/assets/bakers/bakers-post-chikki.jpg",
+          "caption": "Traditional Peanut & Sesame Candy Festive Visual"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.721Z"
+    },
+    {
+      "id": "blk_bkt_thumb_meta",
+      "project_id": "prj_bkt_thumbnails",
+      "block_type": "PROJECT_METADATA",
+      "sort_order": 0,
+      "content": {
+        "client": "Bro Knows Tech",
+        "year": "2025 - 2026",
+        "role": "Thumbnail Artist & Visual Strategist",
+        "services": [
+          "Video Thumbnails",
+          "CTR Optimization",
+          "Dynamic Lighting",
+          "Visual Composition"
+        ]
+      },
+      "updated_at": "2026-09-28T10:24:39.725Z"
+    },
+    {
+      "id": "blk_bkt_thumb_text",
+      "project_id": "prj_bkt_thumbnails",
+      "block_type": "TEXT",
+      "sort_order": 1,
+      "content": {
+        "eyebrow": "YOUTUBE VISUAL STRATEGY",
+        "headline": "Engineering Contrast & Emotion for 12%+ CTR",
+        "body": "In the ultra-competitive consumer electronics YouTube niche, thumbnails are the first and most crucial touchpoint. Each thumbnail is constructed with hyper-defined focal points, rim lighting, punchy product cutouts, and emotion-driven typography that commands viewer attention on mobile feeds."
+      },
+      "updated_at": "2026-09-28T10:24:39.725Z"
+    },
+    {
+      "id": "blk_bkt_thumb_hero",
+      "project_id": "prj_bkt_thumbnails",
+      "block_type": "FULL_BLEED_IMAGE",
+      "sort_order": 2,
+      "content": {
+        "url": "/assets/bkt/bkt-thumb-bravia.jpg",
+        "caption": "Sony Bravia 2 Flagship Review Thumbnail (CTR 14.2%)"
+      },
+      "updated_at": "2026-09-28T10:24:39.725Z"
+    },
+    {
+      "id": "blk_bkt_thumb_pair1",
+      "project_id": "prj_bkt_thumbnails",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 3,
+      "content": {
+        "image1": {
+          "url": "/assets/bkt/bkt-thumb-oled.jpg",
+          "caption": "LG OLED Smart TV Cinema Breakdown"
+        },
+        "image2": {
+          "url": "/assets/bkt/bkt-thumb-meta-glasses.jpg",
+          "caption": "Oakley Meta Smart Glasses Field Test"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.725Z"
+    },
+    {
+      "id": "blk_bkt_thumb_pair2",
+      "project_id": "prj_bkt_thumbnails",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 4,
+      "content": {
+        "image1": {
+          "url": "/assets/bkt/bkt-thumb-samsung-rgb.jpg",
+          "caption": "Samsung Next-Gen RGB Display Shootout"
+        },
+        "image2": {
+          "url": "/assets/bkt/bkt-thumb-podcast.jpg",
+          "caption": "Bro Knows Tech Podcast Episode 1 (Neon Glow Edition)"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.725Z"
+    },
+    {
+      "id": "blk_bkt_thumb_pair3",
+      "project_id": "prj_bkt_thumbnails",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 5,
+      "content": {
+        "image1": {
+          "url": "/assets/bkt/bkt-thumb-french-fridge.jpg",
+          "caption": "LG Smart French Door Refrigerator Appliance Deep Dive"
+        },
+        "image2": {
+          "url": "/assets/bkt/bkt-thumb-bravia-launch.jpg",
+          "caption": "Sony Bravia 2 Launch Edition Key Art"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.725Z"
+    },
+    {
+      "id": "blk_bkt_logo_meta",
+      "project_id": "prj_bkt_logo",
+      "block_type": "PROJECT_METADATA",
+      "sort_order": 0,
+      "content": {
+        "client": "Bro Knows Tech",
+        "year": "2025",
+        "role": "Brand Identity Designer",
+        "services": [
+          "Logo Design",
+          "Brand Identity System",
+          "Vector Geometry",
+          "Social Avatar Suite"
+        ]
+      },
+      "updated_at": "2026-09-28T10:24:39.730Z"
+    },
+    {
+      "id": "blk_bkt_logo_text",
+      "project_id": "prj_bkt_logo",
+      "block_type": "TEXT",
+      "sort_order": 1,
+      "content": {
+        "eyebrow": "IDENTITY ARCHITECTURE",
+        "headline": "A Technical Mark with Human Charisma",
+        "body": "The Bro Knows Tech logo balances tech precision with creator warmth. Constructed with pure geometric grids, the emblem scales effortlessly from a 16px YouTube channel favicon to a 4K broadcast watermark and physical merchandise embroidery."
+      },
+      "updated_at": "2026-09-28T10:24:39.730Z"
+    },
+    {
+      "id": "blk_bkt_logo_hero",
+      "project_id": "prj_bkt_logo",
+      "block_type": "FULL_BLEED_IMAGE",
+      "sort_order": 2,
+      "content": {
+        "url": "/assets/bkt/bkt-logo-primary.png",
+        "caption": "Bro Knows Tech Master Lockup & Geometry System"
+      },
+      "updated_at": "2026-09-28T10:24:39.730Z"
+    },
+    {
+      "id": "blk_bkt_logo_pair1",
+      "project_id": "prj_bkt_logo",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 3,
+      "content": {
+        "image1": {
+          "url": "/assets/bkt/bkt-logo-badge.png",
+          "caption": "Circular Channel Badge & App Icon Lockup"
+        },
+        "image2": {
+          "url": "/assets/bkt/bkt-logo-mark.png",
+          "caption": "Isolated Monogram Icon for Digital Watermarking"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.730Z"
+    },
+    {
+      "id": "blk_bkt_logo_pair2",
+      "project_id": "prj_bkt_logo",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 4,
+      "content": {
+        "image1": {
+          "url": "/assets/bkt/bkt-logo-typography.png",
+          "caption": "Custom Wordmark Typography & Kerning Architecture"
+        },
+        "image2": {
+          "url": "/assets/bkt/bkt-post-reveal.jpg",
+          "caption": "Brand Reveal & Channel Launch Campaign Artwork"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.730Z"
+    },
+    {
+      "id": "blk_pavizham_camp_meta",
+      "project_id": "prj_pavizham_campaigns",
+      "block_type": "PROJECT_METADATA",
+      "sort_order": 0,
+      "content": {
+        "client": "Pavizham Jewellers",
+        "year": "2024",
+        "role": "Visual Designer & Art Director",
+        "services": [
+          "Luxury Art Direction",
+          "Jewellery Editorial",
+          "Festive Campaigns",
+          "Retouching"
+        ]
+      },
+      "updated_at": "2026-09-28T10:24:39.740Z"
+    },
+    {
+      "id": "blk_pavizham_camp_text",
+      "project_id": "prj_pavizham_campaigns",
+      "block_type": "TEXT",
+      "sort_order": 1,
+      "content": {
+        "eyebrow": "HERITAGE ART DIRECTION",
+        "headline": "Capturing the Brilliance of Solitaire & Gold",
+        "body": "Pavizham Jewellers is an established luxury jewellery atelier. The campaign strategy harmonized deep emerald tones, warm golden ambient lighting, and razor-sharp macro focus on diamond cuts to convey uncompromising opulence across festive print and digital media."
+      },
+      "updated_at": "2026-09-28T10:24:39.740Z"
+    },
+    {
+      "id": "blk_pavizham_camp_hero",
+      "project_id": "prj_pavizham_campaigns",
+      "block_type": "FULL_BLEED_IMAGE",
+      "sort_order": 2,
+      "content": {
+        "url": "/assets/pavizham/pavizham-campaign-sona.jpg",
+        "caption": "Pavizham Sona Collection Master 9-Grid Campaign Presentation"
+      },
+      "updated_at": "2026-09-28T10:24:39.740Z"
+    },
+    {
+      "id": "blk_pavizham_camp_pair1",
+      "project_id": "prj_pavizham_campaigns",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 3,
+      "content": {
+        "image1": {
+          "url": "/assets/pavizham/pavizham-campaign-sona-1.jpg",
+          "caption": "Sona Editorial Hero Poster 1: Heritage Temple Choker"
+        },
+        "image2": {
+          "url": "/assets/pavizham/pavizham-campaign-sona-2.jpg",
+          "caption": "Sona Editorial Hero Poster 2: Polki Emerald Bangles"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.740Z"
+    },
+    {
+      "id": "blk_pavizham_camp_pair2",
+      "project_id": "prj_pavizham_campaigns",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 4,
+      "content": {
+        "image1": {
+          "url": "/assets/pavizham/pavizham-post-emerald.jpg",
+          "caption": "Emerald Royale Diamond Necklace Editorial"
+        },
+        "image2": {
+          "url": "/assets/pavizham/pavizham-post-diamond-grid.jpg",
+          "caption": "Pavizham Diamond Collection Festive Grid"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.740Z"
+    },
+    {
+      "id": "blk_pavizham_camp_pair3",
+      "project_id": "prj_pavizham_campaigns",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 5,
+      "content": {
+        "image1": {
+          "url": "/assets/pavizham/pavizham-post-diwali.jpg",
+          "caption": "Auspicious Diwali Gold Celebration Poster"
+        },
+        "image2": {
+          "url": "/assets/pavizham/pavizham-post-christmas.jpg",
+          "caption": "Christmas Diamond Solitaire Season Feature"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.740Z"
+    },
+    {
+      "id": "blk_kings_meta",
+      "project_id": "prj_kings",
+      "block_type": "PROJECT_METADATA",
+      "sort_order": 0,
+      "content": {
+        "client": "KINGS",
+        "year": "2026",
+        "role": "Lead Brand Designer & Digital Builder",
+        "services": [
+          "Branding",
+          "Art Direction",
+          "Packaging Design",
+          "Website Design",
+          "Digital Experience"
+        ]
+      },
+      "updated_at": "2026-09-28T10:24:39.749Z"
+    },
+    {
+      "id": "blk_kings_text1",
+      "project_id": "prj_kings",
+      "block_type": "TEXT",
+      "sort_order": 1,
+      "content": {
+        "eyebrow": "THE FOUNDATION",
+        "headline": "Shirts For A Higher Standard",
+        "body": "KINGS was founded on the conviction that everyday Indian men's formalwear deserved royal craftsmanship. We built an identity balancing regal pride with contemporary Scandinavian precision."
+      },
+      "updated_at": "2026-09-28T10:24:39.749Z"
+    },
+    {
+      "id": "blk_kings_hero",
+      "project_id": "prj_kings",
+      "block_type": "FULL_BLEED_IMAGE",
+      "sort_order": 2,
+      "content": {
+        "url": "/assets/kings/kings-box-model.jpg",
+        "caption": "Rigid Two-Piece Gold-Embossed Shirt Box Prototype"
+      },
+      "updated_at": "2026-09-28T10:24:39.749Z"
+    },
+    {
+      "id": "blk_kings_pair1",
+      "project_id": "prj_kings",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 3,
+      "content": {
+        "image1": {
+          "url": "/assets/kings/kings-shirt-1.jpg",
+          "caption": "Single-Needle Pure Cotton Tailoring"
+        },
+        "image2": {
+          "url": "/assets/kings/kings-shirt-2.jpg",
+          "caption": "Mother of Pearl Button & Stitch Precision"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.749Z"
+    },
+    {
+      "id": "blk_kings_pair2",
+      "project_id": "prj_kings",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 4,
+      "content": {
+        "image1": {
+          "url": "/assets/kings/kings-tags.jpg",
+          "caption": "Dual-Ply Woven Neck Labels & 600gsm Cotton Hangtags"
+        },
+        "image2": {
+          "url": "/assets/kings/kings-packaging-detail.jpg",
+          "caption": "Matte Black Foil Stamped Luxury Seal"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.749Z"
+    },
+    {
+      "id": "blk_zen_thumb_meta",
+      "project_id": "prj_zen_thumbnails",
+      "block_type": "PROJECT_METADATA",
+      "sort_order": 0,
+      "content": {
+        "client": "Zen Spaces",
+        "year": "2025",
+        "role": "Thumbnail Strategist & 3D Artist",
+        "services": [
+          "YouTube Thumbnails",
+          "3D Spatial Layout",
+          "Visual Composition",
+          "CTR Strategy"
+        ]
+      },
+      "updated_at": "2026-09-28T10:24:39.753Z"
+    },
+    {
+      "id": "blk_zen_thumb_hero",
+      "project_id": "prj_zen_thumbnails",
+      "block_type": "FULL_BLEED_IMAGE",
+      "sort_order": 1,
+      "content": {
+        "url": "/assets/zen/zen-thumb-science.jpg",
+        "caption": "The Science Behind ZEN Spaces (CTR 13.8%)"
+      },
+      "updated_at": "2026-09-28T10:24:39.753Z"
+    },
+    {
+      "id": "blk_zen_thumb_pair1",
+      "project_id": "prj_zen_thumbnails",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 2,
+      "content": {
+        "image1": {
+          "url": "/assets/zen/zen-thumb-future-workspaces.jpg",
+          "caption": "Afrah Future of Workspaces Thought Leadership"
+        },
+        "image2": {
+          "url": "/assets/zen/zen-thumb-workspace-planning.jpg",
+          "caption": "Workspace Planning — Elecon Engineering Enterprise Case"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.753Z"
+    },
+    {
+      "id": "blk_zen_thumb_pair2",
+      "project_id": "prj_zen_thumbnails",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 3,
+      "content": {
+        "image1": {
+          "url": "/assets/zen/zen-thumb-designed-success.jpg",
+          "caption": "Designed for Success: Vignesh Founder Spotlight"
+        },
+        "image2": {
+          "url": "/assets/zen/zen-thumb-office-designed.jpg",
+          "caption": "How Your Office Is Designed Behind the Scenes"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.753Z"
+    },
+    {
+      "id": "blk_loft_meta",
+      "project_id": "prj_loft_posters",
+      "block_type": "PROJECT_METADATA",
+      "sort_order": 0,
+      "content": {
+        "client": "Loft",
+        "year": "2025",
+        "role": "Brand & Cultural Poster Designer",
+        "services": [
+          "Editorial Poster Design",
+          "Film Art Direction",
+          "Event Promotion",
+          "Pop Culture Visuals"
+        ]
+      },
+      "updated_at": "2026-09-28T10:24:39.762Z"
+    },
+    {
+      "id": "blk_loft_hero",
+      "project_id": "prj_loft_posters",
+      "block_type": "FULL_BLEED_IMAGE",
+      "sort_order": 1,
+      "content": {
+        "url": "/assets/loft/loft-posters-unsung-presentation.jpg",
+        "caption": "Unsung Directors Master Cinema Series Presentation"
+      },
+      "updated_at": "2026-09-28T10:24:39.762Z"
+    },
+    {
+      "id": "blk_loft_pair1",
+      "project_id": "prj_loft_posters",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 2,
+      "content": {
+        "image1": {
+          "url": "/assets/loft/loft-posters-unsung-1.jpg",
+          "caption": "Unsung Directors Chapter 1: Atmospheric Indie Cinephile Tribute"
+        },
+        "image2": {
+          "url": "/assets/loft/loft-posters-unsung-2.jpg",
+          "caption": "Unsung Directors Chapter 2: Neo-Noir & Psychological Drama"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.762Z"
+    },
+    {
+      "id": "blk_loft_pair2",
+      "project_id": "prj_loft_posters",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 3,
+      "content": {
+        "image1": {
+          "url": "/assets/loft/loft-posters-f1-british.jpg",
+          "caption": "British Grand Prix Race Weekend Poster: High Octane at Silverstone"
+        },
+        "image2": {
+          "url": "/assets/loft/loft-posters-f1-italy.jpg",
+          "caption": "Italian Grand Prix Race Weekend Poster: Temple of Speed Monza"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.762Z"
+    },
+    {
+      "id": "blk_loft_pair3",
+      "project_id": "prj_loft_posters",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 4,
+      "content": {
+        "image1": {
+          "url": "/assets/loft/loft-posters-halloween.jpg",
+          "caption": "Haunted Halloween Night Social Poster & Event Key Art"
+        },
+        "image2": {
+          "url": "/assets/loft/loft-posters-singles-day.jpg",
+          "caption": "Singles Day Rooftop Celebration Poster"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.762Z"
+    },
+    {
+      "id": "blk_woneten_meta",
+      "project_id": "prj_woneten",
+      "block_type": "PROJECT_METADATA",
+      "sort_order": 0,
+      "content": {
+        "client": "Woneten",
+        "year": "2025",
+        "role": "Fashion Art Director & Campaign Designer",
+        "services": [
+          "Fashion Art Direction",
+          "Carousel Design",
+          "Festive Campaigns",
+          "Apparel Marketing"
+        ]
+      },
+      "updated_at": "2026-09-28T10:24:39.774Z"
+    },
+    {
+      "id": "blk_woneten_hero",
+      "project_id": "prj_woneten",
+      "block_type": "FULL_BLEED_IMAGE",
+      "sort_order": 1,
+      "content": {
+        "url": "/assets/woneten/woneten-carousel-presentation.jpg",
+        "caption": "Woneten Designer Kurti Carousel Full Presentation"
+      },
+      "updated_at": "2026-09-28T10:24:39.774Z"
+    },
+    {
+      "id": "blk_woneten_pair1",
+      "project_id": "prj_woneten",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 2,
+      "content": {
+        "image1": {
+          "url": "/assets/woneten/woneten-post-ai.jpg",
+          "caption": "Woneten AI-Assisted Modern Fashion Campaign Poster"
+        },
+        "image2": {
+          "url": "/assets/woneten/woneten-post-mens.jpg",
+          "caption": "Woneten Premium Menswear Autumn / Festive Collection"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.774Z"
+    },
+    {
+      "id": "blk_woneten_pair2",
+      "project_id": "prj_woneten",
+      "block_type": "TWO_IMAGE",
+      "sort_order": 3,
+      "content": {
+        "image1": {
+          "url": "/assets/woneten/woneten-post-luxe-bakrid.jpg",
+          "caption": "Luxe Bakrid Festive Couture Editorial"
+        },
+        "image2": {
+          "url": "/assets/woneten/woneten-post-onam.jpg",
+          "caption": "Onam Tradition Reimagined Festive Poster"
+        }
+      },
+      "updated_at": "2026-09-28T10:24:39.774Z"
+    }
+  ],
+  "media": [],
+  "site_settings": {
+    "site_settings": {
+      "site_name": "SANJAY",
+      "hero_eyebrow": "Hi, I'm Sanjay.",
+      "hero_headline": "VISUAL DESIGNER",
+      "hero_description": "Creating visual identities, campaigns and digital experiences.",
+      "email": "sanjaymurugesan23@gmail.com",
+      "phone": "+91 7010948452",
+      "linkedin_url": "https://www.linkedin.com/in/sanjaym23",
+      "behance_url": "https://www.behance.net/sanjayuiuxgd",
+      "dribbble_url": "https://dribbble.com",
+      "github_url": "https://github.com/Sanjay2392002",
+      "instagram_url": "https://instagram.com/sanjay.visuals",
+      "resume_url": "/cv-sanjay.pdf",
+      "availability": "Available for select commissions",
+      "footer_text": "© 2026 SANJAY. All rights reserved.",
+      "seo_title": "Sanjay — Visual Designer",
+      "seo_description": "Portfolio of Sanjay. Visual Designer creating visual identities, campaigns and digital experiences.",
+      "og_image": "/assets/kings/kings-box-model.jpg"
+    },
+    "about_content": {
+      "headline": "A Computer Science Engineer who found a career in graphic design.",
+      "subheadline": "Crafting intentional brand identities, multi-platform campaigns, packaging, and digital experiences.",
+      "biography_paragraph_1": "I am a Computer Science Engineer who found a career in graphic design. Working in a fast-paced agency environment, I create visual identities, commercial campaigns, structural packaging, and digital experiences where mathematical precision meets pure editorial aesthetic.",
+      "biography_paragraph_2": "With 1.5 years in an agency environment, I have created social media designs, print creatives, stall designs, packaging, branding, and digital experiences across diverse sectors. I also integrate AI into my creative workflow and explore creative technology.",
+      "experiences": [
+        {
+          "id": "exp_1",
+          "role": "Graphic Designer",
+          "company": "Bevis Creatives",
+          "period": "April 2025 to August 2026",
+          "description": "Led end-to-end Graphic design,Social Ads & Campaigns, brand collateral, exhibition architecture, and multi-channel campaign creative for consumer brands and FMCG clients."
+        },
+        {
+          "id": "exp_2",
+          "role": "Visual Designer & Creative Builder",
+          "company": "Independent Practice",
+          "period": "Present",
+          "description": "Directing comprehensive brand identity systems, packaging engineering, responsive digital interfaces, and modern AI-assisted web applications."
+        }
+      ],
+      "capabilities": [
+        {
+          "category": "Graphic design",
+          "skills": [
+            "Branding & Identity Systems",
+            "Logo Design & Typography",
+            "Social Media Posters",
+            "Video Thumbnails & Covers",
+            "Packaging Design & Diecuts",
+            "Print & Editorial Design",
+            "Exhibition Stall Architecture"
+          ]
+        },
+        {
+          "category": "DIGITAL",
+          "skills": [
+            "Website Design & UI/UX",
+            "Digital Experiences",
+            "Design Systems & Tokens",
+            "Responsive Interfaces",
+            "AI-assisted Creative Development"
+          ]
+        }
+      ],
+      "tools": [
+        "Adobe Illustrator",
+        "Adobe Photoshop",
+        "Adobe InDesign",
+        "Figma",
+        "Vibe coding"
+      ],
+      "availability": "Available for selected commissions and brand building partnerships."
+    },
+    "hero_eyebrow": "Hi, I'm Sanjay.",
+    "hero_headline": "VISUAL DESIGNER",
+    "hero_description": "Creating visual identities, campaigns and digital experiences.",
+    "dribbble_url": "https://dribbble.com",
+    "email": "sanjaymurugesan23@gmail.com",
+    "phone": "+91 7010948452",
+    "linkedin_url": "https://www.linkedin.com/in/sanjaym23",
+    "behance_url": "https://www.behance.net/sanjayuiuxgd",
+    "github_url": "https://github.com/Sanjay2392002"
+  },
+  "activity_logs": [
+    {
+      "id": "act_b5935b7c-18d5-4b65-83ac-49c9d37680ed",
+      "action": "Delete Inquiry",
+      "details": "Deleted inquiry msg_1790532974765_sjwwk.",
+      "created_at": "2026-10-01T11:46:16.799Z"
+    },
+    {
+      "id": "act_4617e0f2-6bc4-468c-9f16-496566583803",
+      "action": "Delete Inquiry",
+      "details": "Deleted inquiry msg_1790533084949_puee4.",
+      "created_at": "2026-10-01T11:46:15.007Z"
+    },
+    {
+      "id": "act_ae1f3ea7-21ef-4d96-87d4-fa68b8605e92",
+      "action": "Delete Inquiry",
+      "details": "Deleted inquiry msg_1790533935679_8a9ux.",
+      "created_at": "2026-10-01T11:46:12.476Z"
+    },
+    {
+      "id": "act_5493fdd2-d970-4efe-aa42-2ff72ecdf47c",
+      "action": "Admin Login",
+      "details": "Administrator usr_admin_sanjay_primary signed in.",
+      "created_at": "2026-10-01T11:45:47.793Z"
+    },
+    {
+      "id": "act_6cfe6df8-8e56-4a0c-be75-5587fc3b7072",
+      "action": "Update About",
+      "details": "Updated profile content.",
+      "created_at": "2026-09-30T08:46:59.349Z"
+    },
+    {
+      "id": "act_69109fda-965d-4ab3-a00c-c80fa5b29893",
+      "action": "Update About",
+      "details": "Updated profile content.",
+      "created_at": "2026-09-30T08:35:44.825Z"
+    },
+    {
+      "id": "act_0e661712-0fe0-49fd-a63c-5664a9b1aa66",
+      "action": "Admin Login",
+      "details": "Administrator usr_admin_sanjay_primary signed in.",
+      "created_at": "2026-09-30T08:33:06.904Z"
+    },
+    {
+      "id": "act_1790594533994_hg9l5",
+      "action": "Admin Login",
+      "details": "User sanjaymurugesan23@gmail.com signed in.",
+      "created_at": "2026-09-28T11:22:13.994Z"
+    },
+    {
+      "id": "act_1790591079819_kx3kn",
+      "action": "System Seed",
+      "details": "Updated 7 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-28T10:24:39.819Z"
+    },
+    {
+      "id": "act_1790588557963_mkheu",
+      "action": "System Seed",
+      "details": "Updated 7 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-28T09:42:37.963Z"
+    },
+    {
+      "id": "act_1790586293339_w2rcn",
+      "action": "System Seed",
+      "details": "Updated 7 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-28T09:04:53.339Z"
+    },
+    {
+      "id": "act_1790580543513_oud40",
+      "action": "System Seed",
+      "details": "Updated 7 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-28T07:29:03.513Z"
+    },
+    {
+      "id": "act_1790579278199_w7b67",
+      "action": "System Seed",
+      "details": "Updated 7 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-28T07:07:58.199Z"
+    },
+    {
+      "id": "act_1790534611598_g8oni",
+      "action": "Admin Login",
+      "details": "User sanjaymurugesan23@gmail.com signed in.",
+      "created_at": "2026-09-27T18:43:31.598Z"
+    },
+    {
+      "id": "act_1790534588065_ifm2o",
+      "action": "System Seed",
+      "details": "Updated 7 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-27T18:43:08.065Z"
+    },
+    {
+      "id": "act_1790534269324_hxo87",
+      "action": "System Seed",
+      "details": "Updated 7 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-27T18:37:49.324Z"
+    },
+    {
+      "id": "act_1790533952244_lekk1",
+      "action": "System Seed",
+      "details": "Updated 7 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-27T18:32:32.244Z"
+    },
+    {
+      "id": "act_1790533935681_molsf",
+      "action": "New Contact Inquiry",
+      "details": "From: Design Director (director@studio.design)",
+      "created_at": "2026-09-27T18:32:15.681Z"
+    },
+    {
+      "id": "act_1790533935607_hudy1",
+      "action": "System Seed",
+      "details": "Updated 7 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-27T18:32:15.607Z"
+    },
+    {
+      "id": "act_1790533084952_gz6vs",
+      "action": "New Contact Inquiry",
+      "details": "From: Design Director (director@studio.design)",
+      "created_at": "2026-09-27T18:18:04.952Z"
+    },
+    {
+      "id": "act_1790533084875_50mha",
+      "action": "System Seed",
+      "details": "Updated 7 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-27T18:18:04.875Z"
+    },
+    {
+      "id": "act_1790532974768_5o9ba",
+      "action": "New Contact Inquiry",
+      "details": "From: Design Director (director@studio.design)",
+      "created_at": "2026-09-27T18:16:14.768Z"
+    },
+    {
+      "id": "act_1790532974569_fpo4b",
+      "action": "System Seed",
+      "details": "Updated 8 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-27T18:16:14.570Z"
+    },
+    {
+      "id": "act_1790532802739_a6wir",
+      "action": "System Seed",
+      "details": "Updated 8 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-27T18:13:22.739Z"
+    },
+    {
+      "id": "act_1790532664313_6nv5s",
+      "action": "New Contact Inquiry",
+      "details": "From: Design Director (director@studio.design)",
+      "created_at": "2026-09-27T18:11:04.313Z"
+    },
+    {
+      "id": "act_1790532664022_9xtje",
+      "action": "System Seed",
+      "details": "Updated 8 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-27T18:11:04.022Z"
+    },
+    {
+      "id": "act_1790349491541_a4yih",
+      "action": "System Seed",
+      "details": "Updated 8 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-25T15:18:11.541Z"
+    },
+    {
+      "id": "act_1789919260816_iwmog",
+      "action": "System Seed",
+      "details": "Updated 8 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-20T15:47:40.816Z"
+    },
+    {
+      "id": "act_1789919201374_7y60a",
+      "action": "System Seed",
+      "details": "Updated 8 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-20T15:46:41.374Z"
+    },
+    {
+      "id": "act_1789754132530_ag74j",
+      "action": "System Seed",
+      "details": "Updated 8 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-18T17:55:32.530Z"
+    },
+    {
+      "id": "act_1789753994647_yc8f5",
+      "action": "System Seed",
+      "details": "Updated 8 official categories and mapped projects accordingly.",
+      "created_at": "2026-09-18T17:53:14.647Z"
+    },
+    {
+      "id": "act_1789753590192_x1cq7",
+      "action": "Update About",
+      "details": "Updated about narrative and capabilities.",
+      "created_at": "2026-09-18T17:46:30.192Z"
+    },
+    {
+      "id": "act_1789753542882_u7330",
+      "action": "Update About",
+      "details": "Updated about narrative and capabilities.",
+      "created_at": "2026-09-18T17:45:42.882Z"
+    },
+    {
+      "id": "act_1789753344744_b3jwo",
+      "action": "Admin Login",
+      "details": "User sanjaymurugesan23@gmail.com signed in.",
+      "created_at": "2026-09-18T17:42:24.744Z"
+    },
+    {
+      "id": "act_1789752224807_g3wwb",
+      "action": "Update Categories",
+      "details": "Updated 2 categories.",
+      "created_at": "2026-09-18T17:23:44.807Z"
+    },
+    {
+      "id": "act_1789752214500_0nxop",
+      "action": "Update Categories",
+      "details": "Updated 3 categories.",
+      "created_at": "2026-09-18T17:23:34.500Z"
+    },
+    {
+      "id": "act_1789752108647_7ix7n",
+      "action": "Admin Login",
+      "details": "User sanjaymurugesan23@gmail.com signed in.",
+      "created_at": "2026-09-18T17:21:48.647Z"
+    },
+    {
+      "id": "act_1789751219344_lgcdk",
+      "action": "Admin Login",
+      "details": "User sanjaymurugesan23@gmail.com signed in.",
+      "created_at": "2026-09-18T17:06:59.344Z"
+    },
+    {
+      "id": "act_1789751183865_jgrfo",
+      "action": "System Seed",
+      "details": "Database initialized with authentic portfolio projects, blocks, and settings.",
+      "created_at": "2026-09-18T17:06:23.866Z"
+    },
+    {
+      "id": "act_1789750086518_pqvqb",
+      "action": "System Seed",
+      "details": "Database initialized with authentic portfolio projects, blocks, and settings.",
+      "created_at": "2026-09-18T16:48:06.518Z"
+    },
+    {
+      "id": "act_1789749970514_mh3jy",
+      "action": "System Seed",
+      "details": "Database initialized with authentic portfolio projects, blocks, and settings.",
+      "created_at": "2026-09-18T16:46:10.514Z"
+    }
+  ],
+  "contact_messages": [
+    {
+      "id": "msg_1790532664311_q48wf",
+      "name": "Design Director",
+      "email": "director@studio.design",
+      "message": "Loved your visual work and branding case studies. Let us discuss an upcoming project!",
+      "created_at": "2026-09-27T18:11:04.311Z",
+      "read": false
+    }
+  ],
+  "selected_works": [
+    {
+      "id": "1",
+      "brand": "Anivom",
+      "title": "Anivom Rakshabandhan story",
+      "image": "/selected-works/Anivom/Anivom%20-%20Rakshabandhan%20story.webp",
+      "type": "image",
+      "width": 1080,
+      "height": 1920,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 0,
+      "sort_order": 0
+    },
+    {
+      "id": "2",
+      "brand": "BAKERS",
+      "title": "Bakers Apple CIder vinegar",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Apple%20CIder%20vinegar.webp",
+      "type": "image",
+      "width": 4320,
+      "height": 5760,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 1
+    },
+    {
+      "id": "3",
+      "brand": "BAKERS",
+      "title": "Bakers Blue Coraco Syrup",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Blue%20Coraco%20Syrup.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 2
+    },
+    {
+      "id": "4",
+      "brand": "BAKERS",
+      "title": "Bakers Chocolate Syrup",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Chocolate%20Syrup.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 3
+    },
+    {
+      "id": "5",
+      "brand": "BAKERS",
+      "title": "Bakers Customer Testimonial",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Customer%20Testimonial.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 4
+    },
+    {
+      "id": "6",
+      "brand": "BAKERS",
+      "title": "Bakers Fathers day Story",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Fathers%20day_Story.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 5
+    },
+    {
+      "id": "7",
+      "brand": "BAKERS",
+      "title": "Bakers Garlic mayo Carousel presentation",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Garlic%20mayo%20Carousel/Bakers%20-%20Garlic%20mayo%20Carousel%20presentation.webp",
+      "type": "image",
+      "width": 5675,
+      "height": 1598,
+      "category": "Carousels",
+      "collection": "Garlic mayo",
+      "brand_order": 1,
+      "sort_order": 6
+    },
+    {
+      "id": "8",
+      "brand": "BAKERS",
+      "title": "Bakers Garlic mayo carousel 1",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Garlic%20mayo%20Carousel/Bakers%20-%20Garlic%20mayo%20carousel_1.webp",
+      "type": "image",
+      "width": 1080,
+      "height": 1350,
+      "category": "Carousels",
+      "collection": "Garlic mayo",
+      "brand_order": 1,
+      "sort_order": 7
+    },
+    {
+      "id": "9",
+      "brand": "BAKERS",
+      "title": "Bakers Garlic mayo carousel 2",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Garlic%20mayo%20Carousel/Bakers%20-%20Garlic%20mayo%20carousel_2.webp",
+      "type": "image",
+      "width": 1080,
+      "height": 1350,
+      "category": "Carousels",
+      "collection": "Garlic mayo",
+      "brand_order": 1,
+      "sort_order": 8
+    },
+    {
+      "id": "10",
+      "brand": "BAKERS",
+      "title": "Bakers Garlic mayo carousel 3",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Garlic%20mayo%20Carousel/Bakers%20-%20Garlic%20mayo%20carousel_3.webp",
+      "type": "image",
+      "width": 1080,
+      "height": 1350,
+      "category": "Carousels",
+      "collection": "Garlic mayo",
+      "brand_order": 1,
+      "sort_order": 9
+    },
+    {
+      "id": "11",
+      "brand": "BAKERS",
+      "title": "Bakers Garlic mayo carousel 4",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Garlic%20mayo%20Carousel/Bakers%20-%20Garlic%20mayo%20carousel_4.webp",
+      "type": "image",
+      "width": 1080,
+      "height": 1350,
+      "category": "Carousels",
+      "collection": "Garlic mayo",
+      "brand_order": 1,
+      "sort_order": 10
+    },
+    {
+      "id": "12",
+      "brand": "BAKERS",
+      "title": "Bakers Garlic mayo carousel 5",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Garlic%20mayo%20Carousel/Bakers%20-%20Garlic%20mayo%20carousel_5.webp",
+      "type": "image",
+      "width": 1080,
+      "height": 1350,
+      "category": "Carousels",
+      "collection": "Garlic mayo",
+      "brand_order": 1,
+      "sort_order": 11
+    },
+    {
+      "id": "13",
+      "brand": "BAKERS",
+      "title": "Bakers Mickey's tomato sauce 1 thumbnail",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Mickey's%20tomato%20sauce_1_thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 12
+    },
+    {
+      "id": "14",
+      "brand": "BAKERS",
+      "title": "Bakers mothers day story",
+      "image": "/selected-works/BAKERS/Bakers%20-%20mothers%20day%20story.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 13
+    },
+    {
+      "id": "15",
+      "brand": "BAKERS",
+      "title": "Bakers Mr.B intro carousel 1",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Mr.B%20intro%20carousel/Bakers%20-%20Mr.B%20intro%20carousel_1.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Carousels",
+      "collection": "Mr.B intro",
+      "brand_order": 1,
+      "sort_order": 14
+    },
+    {
+      "id": "16",
+      "brand": "BAKERS",
+      "title": "Bakers Mr.B intro carousel 2",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Mr.B%20intro%20carousel/Bakers%20-%20Mr.B%20intro%20carousel_2.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Carousels",
+      "collection": "Mr.B intro",
+      "brand_order": 1,
+      "sort_order": 15
+    },
+    {
+      "id": "17",
+      "brand": "BAKERS",
+      "title": "Bakers Mr.B intro carousel 3",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Mr.B%20intro%20carousel/Bakers%20-%20Mr.B%20intro%20carousel_3.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Carousels",
+      "collection": "Mr.B intro",
+      "brand_order": 1,
+      "sort_order": 16
+    },
+    {
+      "id": "18",
+      "brand": "BAKERS",
+      "title": "Bakers soye sauce",
+      "image": "/selected-works/BAKERS/Bakers%20-%20soye%20sauce.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 17
+    },
+    {
+      "id": "19",
+      "brand": "BAKERS",
+      "title": "Bakers Tomato ketchup 8g",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Tomato%20ketchup%208g.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 18
+    },
+    {
+      "id": "20",
+      "brand": "BAKERS",
+      "title": "Bakers Tomato sauce",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Tomato%20sauce.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 19
+    },
+    {
+      "id": "21",
+      "brand": "BAKERS",
+      "title": "Bakers Veg Mayo poster",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Veg%20Mayo%20poster.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 20
+    },
+    {
+      "id": "22",
+      "brand": "BAKERS",
+      "title": "Bakers Workers Day story",
+      "image": "/selected-works/BAKERS/Bakers%20-%20Workers%20Day%20story.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 21
+    },
+    {
+      "id": "23",
+      "brand": "BAKERS",
+      "title": "Bakers onam story",
+      "image": "/selected-works/BAKERS/Bakers%20onam%20story.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 22
+    },
+    {
+      "id": "24",
+      "brand": "BAKERS",
+      "title": "Bakers Peanut Candy",
+      "image": "/selected-works/BAKERS/Bakers%20Peanut%20Candy.webp",
+      "type": "image",
+      "width": 4320,
+      "height": 5400,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 23
+    },
+    {
+      "id": "25",
+      "brand": "BAKERS",
+      "title": "Bakers Sesame Candy",
+      "image": "/selected-works/BAKERS/Bakers%20Sesame%20Candy.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 24
+    },
+    {
+      "id": "26",
+      "brand": "BAKERS",
+      "title": "Bakers Gulf mailer",
+      "image": "/selected-works/BAKERS/Bakers_Gulf_mailer.webp",
+      "type": "image",
+      "width": 443,
+      "height": 1280,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 25
+    },
+    {
+      "id": "27",
+      "brand": "BAKERS",
+      "title": "Bakers Stall invite",
+      "image": "/selected-works/BAKERS/Bakers_Stall_invite.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 1,
+      "sort_order": 26
+    },
+    {
+      "id": "28",
+      "brand": "BEA",
+      "title": "Bea Labours Day story",
+      "image": "/selected-works/BEA/Bea%20-%20Labours%20Day%20story.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 2,
+      "sort_order": 27
+    },
+    {
+      "id": "29",
+      "brand": "BEA",
+      "title": "BEA Panasonic 8 in 1 Convertible AC Thumbnail",
+      "image": "/selected-works/BEA/BEA%20-%20Panasonic%208%20in%201%20Convertible%20AC%20-%20Thumbnail.webp",
+      "type": "image",
+      "width": 1080,
+      "height": 1920,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 2,
+      "sort_order": 28
+    },
+    {
+      "id": "30",
+      "brand": "BEA",
+      "title": "BEA Samsung Windfree AC Thumbnail",
+      "image": "/selected-works/BEA/BEA%20-%20Samsung%20Windfree%20AC%20Thumbnail.webp",
+      "type": "image",
+      "width": 1080,
+      "height": 1920,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 2,
+      "sort_order": 29
+    },
+    {
+      "id": "31",
+      "brand": "BEA",
+      "title": "Bea Summer Sale Wrap Thumbnail",
+      "image": "/selected-works/BEA/Bea%20-%20Summer%20Sale%20Wrap%20-%20Thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 2,
+      "sort_order": 30
+    },
+    {
+      "id": "32",
+      "brand": "BEA",
+      "title": "BEA Trusted by Millions Daiken AC Thumbnail",
+      "image": "/selected-works/BEA/BEA%20-%20Trusted%20by%20Millions%20-%20Daiken%20AC%20-%20Thumbnail.webp",
+      "type": "image",
+      "width": 1080,
+      "height": 1920,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 2,
+      "sort_order": 31
+    },
+    {
+      "id": "33",
+      "brand": "BEA",
+      "title": "BEA Reel 1 thumbnail",
+      "image": "/selected-works/BEA/BEA%20Reel%201%20-%20thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 2,
+      "sort_order": 32
+    },
+    {
+      "id": "34",
+      "brand": "BEA",
+      "title": "Bea Godrej AC Thumbnail",
+      "image": "/selected-works/BEA/Bea-Godrej%20AC%20Thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 2,
+      "sort_order": 33
+    },
+    {
+      "id": "35",
+      "brand": "BEVIS",
+      "title": "Bevis Fathers Day Story",
+      "image": "/selected-works/BEVIS/Bevis%20-%20Fathers%20Day%20Story.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 34
+    },
+    {
+      "id": "36",
+      "brand": "BEVIS",
+      "title": "Bevis Hiring ad 2",
+      "image": "/selected-works/BEVIS/Bevis%20-%20Hiring%20ad%202.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 35
+    },
+    {
+      "id": "37",
+      "brand": "BEVIS",
+      "title": "Bevis Hiring ad 3",
+      "image": "/selected-works/BEVIS/Bevis%20-%20Hiring%20ad%203.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 36
+    },
+    {
+      "id": "38",
+      "brand": "BEVIS",
+      "title": "Bevis Diwali Thumbnail",
+      "image": "/selected-works/BEVIS/Bevis%20-Diwali%20Thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 37
+    },
+    {
+      "id": "39",
+      "brand": "BEVIS",
+      "title": "Bevis Dear Entrepeneur Thumbnail",
+      "image": "/selected-works/BEVIS/Bevis%20Dear%20Entrepeneur%20Thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 38
+    },
+    {
+      "id": "40",
+      "brand": "BEVIS",
+      "title": "Bevis Hiring ad 1",
+      "image": "/selected-works/BEVIS/Bevis%20Hiring%20ad%201.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 39
+    },
+    {
+      "id": "41",
+      "brand": "BEVIS",
+      "title": "Bevis Republic Day Story",
+      "image": "/selected-works/BEVIS/Bevis_Republic%20Day%20Story.webp",
+      "type": "image",
+      "width": 2184,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 40
+    },
+    {
+      "id": "42",
+      "brand": "BEVIS",
+      "title": "Bevis Naatu Sakkarai Mockup",
+      "image": "/selected-works/BEVIS/Packaging/Bottle%201/Bevis%20-%20Naatu%20Sakkarai%20-%20Mockup.webp",
+      "type": "image",
+      "width": 1024,
+      "height": 1024,
+      "category": "Other",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 41
+    },
+    {
+      "id": "43",
+      "brand": "BEVIS",
+      "title": "Naatu Sakkarai Label",
+      "image": "/selected-works/BEVIS/Packaging/Bottle%201/Naatu%20Sakkarai%20Label.webp",
+      "type": "image",
+      "width": 1654,
+      "height": 415,
+      "category": "Other",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 42
+    },
+    {
+      "id": "44",
+      "brand": "BEVIS",
+      "title": "Bevis Curry leaf Bottle Mockup",
+      "image": "/selected-works/BEVIS/Packaging/Bottle%202/Bevis%20-%20Curry%20leaf%20Bottle%20-%20Mockup.webp",
+      "type": "image",
+      "width": 1024,
+      "height": 1024,
+      "category": "Other",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 43
+    },
+    {
+      "id": "45",
+      "brand": "BEVIS",
+      "title": "CurryLeaf Label",
+      "image": "/selected-works/BEVIS/Packaging/Bottle%202/CurryLeaf%20Label.webp",
+      "type": "image",
+      "width": 1654,
+      "height": 414,
+      "category": "Other",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 44
+    },
+    {
+      "id": "46",
+      "brand": "BEVIS",
+      "title": "Bevis Box Mockup 1",
+      "image": "/selected-works/BEVIS/Packaging/Gift%20box/Bevis%20-%20Box%20Mockup%201.webp",
+      "type": "image",
+      "width": 3000,
+      "height": 3000,
+      "category": "Other",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 45
+    },
+    {
+      "id": "47",
+      "brand": "BEVIS",
+      "title": "Bevis Box Mockup 2",
+      "image": "/selected-works/BEVIS/Packaging/Gift%20box/Bevis%20-%20Box%20Mockup%202.webp",
+      "type": "image",
+      "width": 2880,
+      "height": 3840,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 46
+    },
+    {
+      "id": "48",
+      "brand": "BEVIS",
+      "title": "Box Design Diecut",
+      "image": "/selected-works/BEVIS/Packaging/Gift%20box/Box%20Design%20Diecut.webp",
+      "type": "image",
+      "width": 3901,
+      "height": 5701,
+      "category": "Other",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 47
+    },
+    {
+      "id": "49",
+      "brand": "BEVIS",
+      "title": "Output of the package design",
+      "image": "/selected-works/BEVIS/Packaging/Output%20of%20the%20package%20design.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 3,
+      "sort_order": 48
+    },
+    {
+      "id": "50",
+      "brand": "Bro Knows Tech",
+      "title": "BKT Bravia 2 II Launch",
+      "image": "/selected-works/Bro%20Knows%20Tech/BKT%20-%20Bravia%202%20II%20Launch.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 49
+    },
+    {
+      "id": "51",
+      "brand": "Bro Knows Tech",
+      "title": "BKT Rakshabandhan story",
+      "image": "/selected-works/Bro%20Knows%20Tech/BKT%20-%20Rakshabandhan%20story.webp",
+      "type": "image",
+      "width": 1080,
+      "height": 1920,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 50
+    },
+    {
+      "id": "52",
+      "brand": "Bro Knows Tech",
+      "title": "BKT Sasmung Next Gen RGB thumbnail",
+      "image": "/selected-works/Bro%20Knows%20Tech/BKT%20-%20Sasmung%20Next%20Gen%20RGB%20thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 51
+    },
+    {
+      "id": "53",
+      "brand": "Bro Knows Tech",
+      "title": "Bro Knows Tech Bosch SBS refrigirator carousel 1",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bkt%20bosch%20carousel/Bro%20Knows%20Tech%20-%20Bosch%20SBS%20refrigirator%20carousel_1.webp",
+      "type": "image",
+      "width": 1081,
+      "height": 1351,
+      "category": "Carousels",
+      "collection": "Bosch",
+      "brand_order": 4,
+      "sort_order": 52
+    },
+    {
+      "id": "54",
+      "brand": "Bro Knows Tech",
+      "title": "Bro Knows Tech Bosch SBS refrigirator carousel 2",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bkt%20bosch%20carousel/Bro%20Knows%20Tech%20-%20Bosch%20SBS%20refrigirator%20carousel_2.webp",
+      "type": "image",
+      "width": 1081,
+      "height": 1351,
+      "category": "Carousels",
+      "collection": "Bosch",
+      "brand_order": 4,
+      "sort_order": 53
+    },
+    {
+      "id": "55",
+      "brand": "Bro Knows Tech",
+      "title": "Bro Knows Tech Bosch SBS refrigirator carousel 3",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bkt%20bosch%20carousel/Bro%20Knows%20Tech%20-%20Bosch%20SBS%20refrigirator%20carousel_3.webp",
+      "type": "image",
+      "width": 1081,
+      "height": 1351,
+      "category": "Carousels",
+      "collection": "Bosch",
+      "brand_order": 4,
+      "sort_order": 54
+    },
+    {
+      "id": "56",
+      "brand": "Bro Knows Tech",
+      "title": "Bro Knows Tech Bosch SBS refrigirator carousel 4",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bkt%20bosch%20carousel/Bro%20Knows%20Tech%20-%20Bosch%20SBS%20refrigirator%20carousel_4.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Carousels",
+      "collection": "Bosch",
+      "brand_order": 4,
+      "sort_order": 55
+    },
+    {
+      "id": "57",
+      "brand": "Bro Knows Tech",
+      "title": "Bro Knows Tech Bosch SBS refrigirator carousel 5",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bkt%20bosch%20carousel/Bro%20Knows%20Tech%20-%20Bosch%20SBS%20refrigirator%20carousel_5.webp",
+      "type": "image",
+      "width": 1081,
+      "height": 1351,
+      "category": "Carousels",
+      "collection": "Bosch",
+      "brand_order": 4,
+      "sort_order": 56
+    },
+    {
+      "id": "58",
+      "brand": "Bro Knows Tech",
+      "title": "Bro Knows Tech Bosch SBS refrigirator carousel 6",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bkt%20bosch%20carousel/Bro%20Knows%20Tech%20-%20Bosch%20SBS%20refrigirator%20carousel_6.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Carousels",
+      "collection": "Bosch",
+      "brand_order": 4,
+      "sort_order": 57
+    },
+    {
+      "id": "59",
+      "brand": "Bro Knows Tech",
+      "title": "Bro Knows Tech Bosch SBS refrigirator carousel 7",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bkt%20bosch%20carousel/Bro%20Knows%20Tech%20-%20Bosch%20SBS%20refrigirator%20carousel_7.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Carousels",
+      "collection": "Bosch",
+      "brand_order": 4,
+      "sort_order": 58
+    },
+    {
+      "id": "60",
+      "brand": "Bro Knows Tech",
+      "title": "Bro Knows Tech Bosch SBS refrigirator carousel 8",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bkt%20bosch%20carousel/Bro%20Knows%20Tech%20-%20Bosch%20SBS%20refrigirator%20carousel_8.webp",
+      "type": "image",
+      "width": 1081,
+      "height": 1351,
+      "category": "Carousels",
+      "collection": "Bosch",
+      "brand_order": 4,
+      "sort_order": 59
+    },
+    {
+      "id": "61",
+      "brand": "Bro Knows Tech",
+      "title": "Bro Knows Tech Bosch SBS refrigirator carousel 9",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bkt%20bosch%20carousel/Bro%20Knows%20Tech%20-%20Bosch%20SBS%20refrigirator%20carousel_9.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Carousels",
+      "collection": "Bosch",
+      "brand_order": 4,
+      "sort_order": 60
+    },
+    {
+      "id": "62",
+      "brand": "Bro Knows Tech",
+      "title": "Bro Knows Tech Bosch SBS refrigirator carousel presentation",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bkt%20bosch%20carousel/Bro%20Knows%20Tech%20-%20Bosch%20SBS%20refrigirator%20carousel_presentation.webp",
+      "type": "image",
+      "width": 2161,
+      "height": 3179,
+      "category": "Carousels",
+      "collection": "Bosch",
+      "brand_order": 4,
+      "sort_order": 61
+    },
+    {
+      "id": "63",
+      "brand": "Bro Knows Tech",
+      "title": "BKT Podcast 1 thumbnail",
+      "image": "/selected-works/Bro%20Knows%20Tech/BKT%20Podcast%201%20thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 62
+    },
+    {
+      "id": "64",
+      "brand": "Bro Knows Tech",
+      "title": "BKT Podcast 2 Thumbnail",
+      "image": "/selected-works/Bro%20Knows%20Tech/BKT%20Podcast%202%20Thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 63
+    },
+    {
+      "id": "65",
+      "brand": "Bro Knows Tech",
+      "title": "Bro knows tech LG French Door Fridge Thumbnail",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bro%20knows%20tech%20-%20LG%20-%20French%20Door%20Fridge_Thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 64
+    },
+    {
+      "id": "66",
+      "brand": "Bro Knows Tech",
+      "title": "Bro Knows Tech Logo Presentation",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bro%20Knows%20Tech%20-%20Logo%20Presentation.pdf",
+      "type": "pdf",
+      "width": 0,
+      "height": 0,
+      "category": "Logo Presentation",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 65
+    },
+    {
+      "id": "67",
+      "brand": "Bro Knows Tech",
+      "title": "Bro knows tech Revealing poster v1",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bro%20knows%20tech%20-%20Revealing%20poster%20v1.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 66
+    },
+    {
+      "id": "68",
+      "brand": "Bro Knows Tech",
+      "title": "Bro knows tech Revealing poster v2",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bro%20knows%20tech%20-%20Revealing%20poster_v2.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 67
+    },
+    {
+      "id": "69",
+      "brand": "Bro Knows Tech",
+      "title": "Bro knows tech Revealing poster V3",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bro%20knows%20tech%20-%20Revealing%20poster_V3.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 68
+    },
+    {
+      "id": "70",
+      "brand": "Bro Knows Tech",
+      "title": "Bro knows tech Revealing poster V4",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bro%20knows%20tech%20-%20Revealing%20poster_V4.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 69
+    },
+    {
+      "id": "71",
+      "brand": "Bro Knows Tech",
+      "title": "Bro knows tech Revealing poster V5",
+      "image": "/selected-works/Bro%20Knows%20Tech/Bro%20knows%20tech%20-%20Revealing%20poster_V5.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 70
+    },
+    {
+      "id": "72",
+      "brand": "Bro Knows Tech",
+      "title": "Samsung Next gen rRGB",
+      "image": "/selected-works/Bro%20Knows%20Tech/Samsung%20Next%20gen%20rRGB.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 4,
+      "sort_order": 71
+    },
+    {
+      "id": "73",
+      "brand": "LOFT",
+      "title": "Loft Anime Carousel 1",
+      "image": "/selected-works/LOFT/Loft%20%20-%20Anime%20to%20watch/Loft%20-%20Anime%20%20Carousel%201.webp",
+      "type": "image",
+      "width": 4320,
+      "height": 5400,
+      "category": "Carousels",
+      "collection": "Anime to watch",
+      "brand_order": 5,
+      "sort_order": 72
+    },
+    {
+      "id": "74",
+      "brand": "LOFT",
+      "title": "Loft Anime Carousel 2",
+      "image": "/selected-works/LOFT/Loft%20%20-%20Anime%20to%20watch/Loft%20-%20Anime%20%20Carousel%202.webp",
+      "type": "image",
+      "width": 4320,
+      "height": 5400,
+      "category": "Carousels",
+      "collection": "Anime to watch",
+      "brand_order": 5,
+      "sort_order": 73
+    },
+    {
+      "id": "75",
+      "brand": "LOFT",
+      "title": "Loft Anime Carousel 3",
+      "image": "/selected-works/LOFT/Loft%20%20-%20Anime%20to%20watch/Loft%20-%20Anime%20%20Carousel%203.webp",
+      "type": "image",
+      "width": 4320,
+      "height": 5400,
+      "category": "Carousels",
+      "collection": "Anime to watch",
+      "brand_order": 5,
+      "sort_order": 74
+    },
+    {
+      "id": "76",
+      "brand": "LOFT",
+      "title": "Loft Anime Carousel 4",
+      "image": "/selected-works/LOFT/Loft%20%20-%20Anime%20to%20watch/Loft%20-%20Anime%20%20Carousel%204.webp",
+      "type": "image",
+      "width": 4320,
+      "height": 5400,
+      "category": "Carousels",
+      "collection": "Anime to watch",
+      "brand_order": 5,
+      "sort_order": 75
+    },
+    {
+      "id": "77",
+      "brand": "LOFT",
+      "title": "Loft Anime Carousel 5",
+      "image": "/selected-works/LOFT/Loft%20%20-%20Anime%20to%20watch/Loft%20-%20Anime%20%20Carousel%205.webp",
+      "type": "image",
+      "width": 4320,
+      "height": 5400,
+      "category": "Carousels",
+      "collection": "Anime to watch",
+      "brand_order": 5,
+      "sort_order": 76
+    },
+    {
+      "id": "78",
+      "brand": "LOFT",
+      "title": "Loft Anime Carousel 6",
+      "image": "/selected-works/LOFT/Loft%20%20-%20Anime%20to%20watch/Loft%20-%20Anime%20%20Carousel%206.webp",
+      "type": "image",
+      "width": 4320,
+      "height": 5400,
+      "category": "Carousels",
+      "collection": "Anime to watch",
+      "brand_order": 5,
+      "sort_order": 77
+    },
+    {
+      "id": "79",
+      "brand": "LOFT",
+      "title": "Loft Anime Carousel Cover",
+      "image": "/selected-works/LOFT/Loft%20%20-%20Anime%20to%20watch/Loft%20-%20Anime%20%20Carousel%20Cover.webp",
+      "type": "image",
+      "width": 4320,
+      "height": 5400,
+      "category": "Carousels",
+      "collection": "Anime to watch",
+      "brand_order": 5,
+      "sort_order": 78
+    },
+    {
+      "id": "80",
+      "brand": "LOFT",
+      "title": "Loft Anime Carousel Presentation",
+      "image": "/selected-works/LOFT/Loft%20%20-%20Anime%20to%20watch/Loft%20-%20Anime%20%20Carousel%20Presentation.webp",
+      "type": "image",
+      "width": 3841,
+      "height": 2161,
+      "category": "Carousels",
+      "collection": "Anime to watch",
+      "brand_order": 5,
+      "sort_order": 79
+    },
+    {
+      "id": "81",
+      "brand": "LOFT",
+      "title": "Loft 10K Followers Story",
+      "image": "/selected-works/LOFT/Loft%20-%2010K%20Followers%20Story.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 80
+    },
+    {
+      "id": "82",
+      "brand": "LOFT",
+      "title": "Loft Book 1 Get 1 2",
+      "image": "/selected-works/LOFT/Loft%20-%20Book%201%20Get%201_%202.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 81
+    },
+    {
+      "id": "83",
+      "brand": "LOFT",
+      "title": "Loft Dude Story",
+      "image": "/selected-works/LOFT/Loft%20-%20Dude%20Story.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 82
+    },
+    {
+      "id": "84",
+      "brand": "LOFT",
+      "title": "Loft Easter Wishes",
+      "image": "/selected-works/LOFT/Loft%20-%20Easter%20Wishes.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 83
+    },
+    {
+      "id": "85",
+      "brand": "LOFT",
+      "title": "Austrian GP v2",
+      "image": "/selected-works/LOFT/Loft%20-%20F1%20posters/Austrian%20GP%20v2.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 84
+    },
+    {
+      "id": "86",
+      "brand": "LOFT",
+      "title": "Austrian GP v3",
+      "image": "/selected-works/LOFT/Loft%20-%20F1%20posters/Austrian%20GP%20v3.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 85
+    },
+    {
+      "id": "87",
+      "brand": "LOFT",
+      "title": "Austrian GP",
+      "image": "/selected-works/LOFT/Loft%20-%20F1%20posters/Austrian%20GP.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 86
+    },
+    {
+      "id": "88",
+      "brand": "LOFT",
+      "title": "Azerbaizan GP",
+      "image": "/selected-works/LOFT/Loft%20-%20F1%20posters/Azerbaizan%20GP.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 87
+    },
+    {
+      "id": "89",
+      "brand": "LOFT",
+      "title": "Belgium GP",
+      "image": "/selected-works/LOFT/Loft%20-%20F1%20posters/Belgium%20GP.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 88
+    },
+    {
+      "id": "90",
+      "brand": "LOFT",
+      "title": "Brazilian GP",
+      "image": "/selected-works/LOFT/Loft%20-%20F1%20posters/Brazilian%20GP.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 89
+    },
+    {
+      "id": "91",
+      "brand": "LOFT",
+      "title": "British GP",
+      "image": "/selected-works/LOFT/Loft%20-%20F1%20posters/British%20GP.webp",
+      "type": "image",
+      "width": 4320,
+      "height": 5400,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 90
+    },
+    {
+      "id": "92",
+      "brand": "LOFT",
+      "title": "Melbourne GP",
+      "image": "/selected-works/LOFT/Loft%20-%20F1%20posters/Melbourne%20GP.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 91
+    },
+    {
+      "id": "93",
+      "brand": "LOFT",
+      "title": "Netherlands GP",
+      "image": "/selected-works/LOFT/Loft%20-%20F1%20posters/Netherlands%20GP.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 92
+    },
+    {
+      "id": "94",
+      "brand": "LOFT",
+      "title": "Qatar GP",
+      "image": "/selected-works/LOFT/Loft%20-%20F1%20posters/Qatar%20GP.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 93
+    },
+    {
+      "id": "95",
+      "brand": "LOFT",
+      "title": "Loft Fathers day Story",
+      "image": "/selected-works/LOFT/Loft%20-%20Fathers%20day%20Story.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 94
+    },
+    {
+      "id": "96",
+      "brand": "LOFT",
+      "title": "Loft Football poster",
+      "image": "/selected-works/LOFT/Loft%20-%20Football%20poster.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 95
+    },
+    {
+      "id": "97",
+      "brand": "LOFT",
+      "title": "Loft Halloween",
+      "image": "/selected-works/LOFT/Loft%20-%20Halloween.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 96
+    },
+    {
+      "id": "98",
+      "brand": "LOFT",
+      "title": "Loft July Ott Presentation",
+      "image": "/selected-works/LOFT/Loft%20-%20July%20ott/Loft%20-%20July%20Ott%20Presentation.webp",
+      "type": "image",
+      "width": 13051,
+      "height": 9001,
+      "category": "Carousels",
+      "collection": "July ott",
+      "brand_order": 5,
+      "sort_order": 97
+    },
+    {
+      "id": "99",
+      "brand": "LOFT",
+      "title": "Loft July Ott 1",
+      "image": "/selected-works/LOFT/Loft%20-%20July%20ott/Loft%20-%20July%20Ott_1.webp",
+      "type": "image",
+      "width": 2881,
+      "height": 3601,
+      "category": "Carousels",
+      "collection": "July ott",
+      "brand_order": 5,
+      "sort_order": 98
+    },
+    {
+      "id": "100",
+      "brand": "LOFT",
+      "title": "Loft July Ott 2",
+      "image": "/selected-works/LOFT/Loft%20-%20July%20ott/Loft%20-%20July%20Ott_2.webp",
+      "type": "image",
+      "width": 2881,
+      "height": 3601,
+      "category": "Carousels",
+      "collection": "July ott",
+      "brand_order": 5,
+      "sort_order": 99
+    },
+    {
+      "id": "101",
+      "brand": "LOFT",
+      "title": "Loft July Ott 3",
+      "image": "/selected-works/LOFT/Loft%20-%20July%20ott/Loft%20-%20July%20Ott_3.webp",
+      "type": "image",
+      "width": 2881,
+      "height": 3601,
+      "category": "Carousels",
+      "collection": "July ott",
+      "brand_order": 5,
+      "sort_order": 100
+    },
+    {
+      "id": "102",
+      "brand": "LOFT",
+      "title": "Loft July Ott 4",
+      "image": "/selected-works/LOFT/Loft%20-%20July%20ott/Loft%20-%20July%20Ott_4.webp",
+      "type": "image",
+      "width": 2881,
+      "height": 3601,
+      "category": "Carousels",
+      "collection": "July ott",
+      "brand_order": 5,
+      "sort_order": 101
+    },
+    {
+      "id": "103",
+      "brand": "LOFT",
+      "title": "Loft July Ott 5",
+      "image": "/selected-works/LOFT/Loft%20-%20July%20ott/Loft%20-%20July%20Ott_5.webp",
+      "type": "image",
+      "width": 2881,
+      "height": 3601,
+      "category": "Carousels",
+      "collection": "July ott",
+      "brand_order": 5,
+      "sort_order": 102
+    },
+    {
+      "id": "104",
+      "brand": "LOFT",
+      "title": "Loft July Ott 6",
+      "image": "/selected-works/LOFT/Loft%20-%20July%20ott/Loft%20-%20July%20Ott_6.webp",
+      "type": "image",
+      "width": 2881,
+      "height": 3601,
+      "category": "Carousels",
+      "collection": "July ott",
+      "brand_order": 5,
+      "sort_order": 103
+    },
+    {
+      "id": "105",
+      "brand": "LOFT",
+      "title": "Loft July Ott 7",
+      "image": "/selected-works/LOFT/Loft%20-%20July%20ott/Loft%20-%20July%20Ott_7.webp",
+      "type": "image",
+      "width": 2881,
+      "height": 3601,
+      "category": "Carousels",
+      "collection": "July ott",
+      "brand_order": 5,
+      "sort_order": 104
+    },
+    {
+      "id": "106",
+      "brand": "LOFT",
+      "title": "Loft Loft returns poster",
+      "image": "/selected-works/LOFT/Loft%20-%20Loft%20returns%20poster.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 105
+    },
+    {
+      "id": "107",
+      "brand": "LOFT",
+      "title": "Loft Mothers Day Story",
+      "image": "/selected-works/LOFT/Loft%20-%20Mothers%20Day%20Story.webp",
+      "type": "image",
+      "width": 3001,
+      "height": 5334,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 106
+    },
+    {
+      "id": "108",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie 1",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%201.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 107
+    },
+    {
+      "id": "109",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie 10",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%2010.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 108
+    },
+    {
+      "id": "110",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie 11",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%2011.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 109
+    },
+    {
+      "id": "111",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie 12",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%2012.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 110
+    },
+    {
+      "id": "112",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie 2",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%202.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 111
+    },
+    {
+      "id": "113",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie 3",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%203.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 112
+    },
+    {
+      "id": "114",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie 4",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%204.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 113
+    },
+    {
+      "id": "115",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie 5",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%205.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 114
+    },
+    {
+      "id": "116",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie 6",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%206.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 115
+    },
+    {
+      "id": "117",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie 7",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%207.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 116
+    },
+    {
+      "id": "118",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie 8",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%208.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 117
+    },
+    {
+      "id": "119",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie 9",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%209.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 118
+    },
+    {
+      "id": "120",
+      "brand": "LOFT",
+      "title": "Loft Fathers Day movie presentation",
+      "image": "/selected-works/LOFT/Loft%20-%20Movies%20to%20watch%20with%20dad/Loft%20-%20Fathers%20Day%20movie%20presentation.webp",
+      "type": "image",
+      "width": 8001,
+      "height": 3683,
+      "category": "Carousels",
+      "collection": "Movies to watch with dad",
+      "brand_order": 5,
+      "sort_order": 119
+    },
+    {
+      "id": "121",
+      "brand": "LOFT",
+      "title": "Loft Onam Story",
+      "image": "/selected-works/LOFT/Loft%20-%20Onam%20Story.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 120
+    },
+    {
+      "id": "122",
+      "brand": "LOFT",
+      "title": "Loft Rajini Bday Story",
+      "image": "/selected-works/LOFT/Loft%20-%20Rajini%20Bday%20Story.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 121
+    },
+    {
+      "id": "123",
+      "brand": "LOFT",
+      "title": "Loft T20 Worldcup Final",
+      "image": "/selected-works/LOFT/Loft%20-%20T20%20Worldcup%20Final.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 122
+    },
+    {
+      "id": "124",
+      "brand": "LOFT",
+      "title": "Loft The Boys Screening",
+      "image": "/selected-works/LOFT/Loft%20-%20The%20Boys%20Screening.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 123
+    },
+    {
+      "id": "125",
+      "brand": "LOFT",
+      "title": "Loft Ultimate theatre Departures Poster",
+      "image": "/selected-works/LOFT/Loft%20-%20Ultimate%20theatre%20Departures%20Poster.webp",
+      "type": "image",
+      "width": 2881,
+      "height": 3601,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 124
+    },
+    {
+      "id": "126",
+      "brand": "LOFT",
+      "title": "Loft Sing along",
+      "image": "/selected-works/LOFT/Loft%20Sing%20along.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 125
+    },
+    {
+      "id": "127",
+      "brand": "LOFT",
+      "title": "Loft Customer Review",
+      "image": "/selected-works/LOFT/Loft_Customer%20Review.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 5,
+      "sort_order": 126
+    },
+    {
+      "id": "128",
+      "brand": "LOFT",
+      "title": "Loft OTT Binge watch 1",
+      "image": "/selected-works/LOFT/OTT%20Binge%20watch%20June%203/Loft%20-%20OTT%20Binge%20watch%201.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "OTT Binge watch June",
+      "brand_order": 5,
+      "sort_order": 127
+    },
+    {
+      "id": "129",
+      "brand": "LOFT",
+      "title": "Loft OTT Binge watch 10",
+      "image": "/selected-works/LOFT/OTT%20Binge%20watch%20June%203/Loft%20-%20OTT%20Binge%20watch%2010.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "OTT Binge watch June",
+      "brand_order": 5,
+      "sort_order": 128
+    },
+    {
+      "id": "130",
+      "brand": "LOFT",
+      "title": "Loft OTT Binge watch 2",
+      "image": "/selected-works/LOFT/OTT%20Binge%20watch%20June%203/Loft%20-%20OTT%20Binge%20watch%202.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "OTT Binge watch June",
+      "brand_order": 5,
+      "sort_order": 129
+    },
+    {
+      "id": "131",
+      "brand": "LOFT",
+      "title": "Loft OTT Binge watch 3",
+      "image": "/selected-works/LOFT/OTT%20Binge%20watch%20June%203/Loft%20-%20OTT%20Binge%20watch%203.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "OTT Binge watch June",
+      "brand_order": 5,
+      "sort_order": 130
+    },
+    {
+      "id": "132",
+      "brand": "LOFT",
+      "title": "Loft OTT Binge watch 4",
+      "image": "/selected-works/LOFT/OTT%20Binge%20watch%20June%203/Loft%20-%20OTT%20Binge%20watch%204.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "OTT Binge watch June",
+      "brand_order": 5,
+      "sort_order": 131
+    },
+    {
+      "id": "133",
+      "brand": "LOFT",
+      "title": "Loft OTT Binge watch 5",
+      "image": "/selected-works/LOFT/OTT%20Binge%20watch%20June%203/Loft%20-%20OTT%20Binge%20watch%205.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "OTT Binge watch June",
+      "brand_order": 5,
+      "sort_order": 132
+    },
+    {
+      "id": "134",
+      "brand": "LOFT",
+      "title": "Loft OTT Binge watch 6",
+      "image": "/selected-works/LOFT/OTT%20Binge%20watch%20June%203/Loft%20-%20OTT%20Binge%20watch%206.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "OTT Binge watch June",
+      "brand_order": 5,
+      "sort_order": 133
+    },
+    {
+      "id": "135",
+      "brand": "LOFT",
+      "title": "Loft OTT Binge watch 7",
+      "image": "/selected-works/LOFT/OTT%20Binge%20watch%20June%203/Loft%20-%20OTT%20Binge%20watch%207.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "OTT Binge watch June",
+      "brand_order": 5,
+      "sort_order": 134
+    },
+    {
+      "id": "136",
+      "brand": "LOFT",
+      "title": "Loft OTT Binge watch 8",
+      "image": "/selected-works/LOFT/OTT%20Binge%20watch%20June%203/Loft%20-%20OTT%20Binge%20watch%208.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "OTT Binge watch June",
+      "brand_order": 5,
+      "sort_order": 135
+    },
+    {
+      "id": "137",
+      "brand": "LOFT",
+      "title": "Loft OTT Binge watch 9",
+      "image": "/selected-works/LOFT/OTT%20Binge%20watch%20June%203/Loft%20-%20OTT%20Binge%20watch%209.webp",
+      "type": "image",
+      "width": 4501,
+      "height": 5626,
+      "category": "Carousels",
+      "collection": "OTT Binge watch June",
+      "brand_order": 5,
+      "sort_order": 136
+    },
+    {
+      "id": "138",
+      "brand": "LOFT",
+      "title": "Loft OTT Binge watch presentation",
+      "image": "/selected-works/LOFT/OTT%20Binge%20watch%20June%203/Loft%20-%20OTT%20Binge%20watch%20presentation.webp",
+      "type": "image",
+      "width": 8001,
+      "height": 4404,
+      "category": "Carousels",
+      "collection": "OTT Binge watch June",
+      "brand_order": 5,
+      "sort_order": 137
+    },
+    {
+      "id": "139",
+      "brand": "LOFT",
+      "title": "Loft November Sports Calendar 1",
+      "image": "/selected-works/LOFT/Sports%20calendar/Loft%20-%20November%20Sports%20Calendar%20%201.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Carousels",
+      "collection": "Sports calendar",
+      "brand_order": 5,
+      "sort_order": 138
+    },
+    {
+      "id": "140",
+      "brand": "LOFT",
+      "title": "Loft November Sports Calendar 2",
+      "image": "/selected-works/LOFT/Sports%20calendar/Loft%20-%20November%20Sports%20Calendar%20%202.webp",
+      "type": "image",
+      "width": 3001,
+      "height": 4001,
+      "category": "Carousels",
+      "collection": "Sports calendar",
+      "brand_order": 5,
+      "sort_order": 139
+    },
+    {
+      "id": "141",
+      "brand": "LOFT",
+      "title": "Loft November Sports Calendar 3",
+      "image": "/selected-works/LOFT/Sports%20calendar/Loft%20-%20November%20Sports%20Calendar%203.webp",
+      "type": "image",
+      "width": 3001,
+      "height": 4001,
+      "category": "Carousels",
+      "collection": "Sports calendar",
+      "brand_order": 5,
+      "sort_order": 140
+    },
+    {
+      "id": "142",
+      "brand": "LOFT",
+      "title": "Loft November Sports Calendar 4",
+      "image": "/selected-works/LOFT/Sports%20calendar/Loft%20-%20November%20Sports%20Calendar%204.webp",
+      "type": "image",
+      "width": 3001,
+      "height": 4001,
+      "category": "Carousels",
+      "collection": "Sports calendar",
+      "brand_order": 5,
+      "sort_order": 141
+    },
+    {
+      "id": "143",
+      "brand": "LOFT",
+      "title": "Loft November Sports Calendar 5",
+      "image": "/selected-works/LOFT/Sports%20calendar/Loft%20-%20November%20Sports%20Calendar%205.webp",
+      "type": "image",
+      "width": 3001,
+      "height": 4001,
+      "category": "Carousels",
+      "collection": "Sports calendar",
+      "brand_order": 5,
+      "sort_order": 142
+    },
+    {
+      "id": "144",
+      "brand": "LOFT",
+      "title": "Loft November Sports Calendar 6",
+      "image": "/selected-works/LOFT/Sports%20calendar/Loft%20-%20November%20Sports%20Calendar%206.webp",
+      "type": "image",
+      "width": 3001,
+      "height": 4001,
+      "category": "Carousels",
+      "collection": "Sports calendar",
+      "brand_order": 5,
+      "sort_order": 143
+    },
+    {
+      "id": "145",
+      "brand": "LOFT",
+      "title": "Loft November Sports Calendar Presentation",
+      "image": "/selected-works/LOFT/Sports%20calendar/Loft%20-%20November%20Sports%20Calendar%20Presentation.webp",
+      "type": "image",
+      "width": 3001,
+      "height": 3001,
+      "category": "Carousels",
+      "collection": "Sports calendar",
+      "brand_order": 5,
+      "sort_order": 144
+    },
+    {
+      "id": "146",
+      "brand": "PAVIZHAM",
+      "title": "Pavizham Diwali Poster",
+      "image": "/selected-works/PAVIZHAM/Pavizham%20-%20Diwali%20%20Poster.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 6,
+      "sort_order": 145
+    },
+    {
+      "id": "147",
+      "brand": "PAVIZHAM",
+      "title": "Pavizham Emerald Necklace",
+      "image": "/selected-works/PAVIZHAM/Pavizham%20-%20Emerald%20Necklace.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 6,
+      "sort_order": 146
+    },
+    {
+      "id": "148",
+      "brand": "PAVIZHAM",
+      "title": "Pavizham Aalaya thumbnail",
+      "image": "/selected-works/PAVIZHAM/Pavizham%20Aalaya%20-%20%20thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 6,
+      "sort_order": 147
+    },
+    {
+      "id": "149",
+      "brand": "PAVIZHAM",
+      "title": "Pavizham Brand Guidelines",
+      "image": "/selected-works/PAVIZHAM/Pavizham%20Brand%20Guidelines.pdf",
+      "type": "pdf",
+      "width": 0,
+      "height": 0,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 6,
+      "sort_order": 148
+    },
+    {
+      "id": "150",
+      "brand": "PAVIZHAM",
+      "title": "Pavizham Diamond thumbnail",
+      "image": "/selected-works/PAVIZHAM/Pavizham%20Diamond%20thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 6,
+      "sort_order": 149
+    },
+    {
+      "id": "151",
+      "brand": "PAVIZHAM",
+      "title": "Pavizham Opening Hoarding",
+      "image": "/selected-works/PAVIZHAM/Pavizham%20Opening%20Hoarding.webp",
+      "type": "image",
+      "width": 3721,
+      "height": 5262,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 6,
+      "sort_order": 150
+    },
+    {
+      "id": "152",
+      "brand": "PAVIZHAM",
+      "title": "Pavizham thumbnail Tejasvi",
+      "image": "/selected-works/PAVIZHAM/Pavizham%20thumbnail%20-%20Tejasvi.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 6,
+      "sort_order": 151
+    },
+    {
+      "id": "153",
+      "brand": "PAVIZHAM",
+      "title": "Pavizham thumbnail Abhivriddhi",
+      "image": "/selected-works/PAVIZHAM/Pavizham%20thumbnail_Abhivriddhi.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 6,
+      "sort_order": 152
+    },
+    {
+      "id": "154",
+      "brand": "PAVIZHAM",
+      "title": "Pavizham Black Friday offer",
+      "image": "/selected-works/PAVIZHAM/Pavizham-Black%20Friday%20offer.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 6,
+      "sort_order": 153
+    },
+    {
+      "id": "155",
+      "brand": "SIGGIS",
+      "title": "Citron Pickle Siggis",
+      "image": "/selected-works/SIGGIS/Citron%20Pickle%20-%20Siggis.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 7,
+      "sort_order": 154
+    },
+    {
+      "id": "156",
+      "brand": "SIGGIS",
+      "title": "Siggis Mango thokku poster",
+      "image": "/selected-works/SIGGIS/Siggis%20-%20Mango%20thokku%20poster.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 7,
+      "sort_order": 155
+    },
+    {
+      "id": "157",
+      "brand": "SIGGIS",
+      "title": "Siggis Spiderman poster 3",
+      "image": "/selected-works/SIGGIS/Siggis%20-%20Spiderman%20poster%203.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 7,
+      "sort_order": 156
+    },
+    {
+      "id": "158",
+      "brand": "SMS",
+      "title": "1",
+      "image": "/selected-works/SMS/5%20things/1.webp",
+      "type": "image",
+      "width": 4500,
+      "height": 5625,
+      "category": "Carousels",
+      "collection": "5 things",
+      "brand_order": 8,
+      "sort_order": 157
+    },
+    {
+      "id": "159",
+      "brand": "SMS",
+      "title": "2",
+      "image": "/selected-works/SMS/5%20things/2.webp",
+      "type": "image",
+      "width": 4500,
+      "height": 5625,
+      "category": "Carousels",
+      "collection": "5 things",
+      "brand_order": 8,
+      "sort_order": 158
+    },
+    {
+      "id": "160",
+      "brand": "SMS",
+      "title": "3",
+      "image": "/selected-works/SMS/5%20things/3.webp",
+      "type": "image",
+      "width": 4500,
+      "height": 5625,
+      "category": "Carousels",
+      "collection": "5 things",
+      "brand_order": 8,
+      "sort_order": 159
+    },
+    {
+      "id": "161",
+      "brand": "SMS",
+      "title": "4",
+      "image": "/selected-works/SMS/5%20things/4.webp",
+      "type": "image",
+      "width": 4500,
+      "height": 5625,
+      "category": "Carousels",
+      "collection": "5 things",
+      "brand_order": 8,
+      "sort_order": 160
+    },
+    {
+      "id": "162",
+      "brand": "SMS",
+      "title": "5",
+      "image": "/selected-works/SMS/5%20things/5.webp",
+      "type": "image",
+      "width": 4500,
+      "height": 5625,
+      "category": "Carousels",
+      "collection": "5 things",
+      "brand_order": 8,
+      "sort_order": 161
+    },
+    {
+      "id": "163",
+      "brand": "SMS",
+      "title": "6",
+      "image": "/selected-works/SMS/5%20things/6.webp",
+      "type": "image",
+      "width": 4500,
+      "height": 5625,
+      "category": "Carousels",
+      "collection": "5 things",
+      "brand_order": 8,
+      "sort_order": 162
+    },
+    {
+      "id": "164",
+      "brand": "SMS",
+      "title": "7",
+      "image": "/selected-works/SMS/5%20things/7.webp",
+      "type": "image",
+      "width": 4500,
+      "height": 5625,
+      "category": "Carousels",
+      "collection": "5 things",
+      "brand_order": 8,
+      "sort_order": 163
+    },
+    {
+      "id": "165",
+      "brand": "SMS",
+      "title": "8",
+      "image": "/selected-works/SMS/5%20things/8.webp",
+      "type": "image",
+      "width": 4500,
+      "height": 5625,
+      "category": "Carousels",
+      "collection": "5 things",
+      "brand_order": 8,
+      "sort_order": 164
+    },
+    {
+      "id": "166",
+      "brand": "SMS",
+      "title": "Senthil Matric School 5 things every school must make a child feel (Carousel)",
+      "image": "/selected-works/SMS/5%20things/Senthil%20Matric%20School%20-%205%20things%20every%20school%20must%20make%20a%20child%20feel%20(Carousel).webp",
+      "type": "image",
+      "width": 19567,
+      "height": 12910,
+      "category": "Carousels",
+      "collection": "5 things",
+      "brand_order": 8,
+      "sort_order": 165
+    },
+    {
+      "id": "167",
+      "brand": "SMS",
+      "title": "SPS Friendship day",
+      "image": "/selected-works/SMS/SPS%20-%20Friendship%20day.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 8,
+      "sort_order": 166
+    },
+    {
+      "id": "168",
+      "brand": "Subiksham",
+      "title": "Subiksham Aadi sale 2",
+      "image": "/selected-works/Subiksham/Subiksham%20-%20Aadi%20sale_2.webp",
+      "type": "image",
+      "width": 1801,
+      "height": 2250,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 9,
+      "sort_order": 167
+    },
+    {
+      "id": "169",
+      "brand": "Subiksham",
+      "title": "Subiksham Aadi sale",
+      "image": "/selected-works/Subiksham/Subiksham%20-%20Aadi%20sale.webp",
+      "type": "image",
+      "width": 9000,
+      "height": 11250,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 9,
+      "sort_order": 168
+    },
+    {
+      "id": "170",
+      "brand": "Subiksham",
+      "title": "Subiksham Independence story",
+      "image": "/selected-works/Subiksham/Subiksham%20-%20Independence%20story.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 9,
+      "sort_order": 169
+    },
+    {
+      "id": "171",
+      "brand": "Subiksham",
+      "title": "Subiksham Aadi sale Kurthi 1",
+      "image": "/selected-works/Subiksham/Subiksham%20Aadi%20sale%20-%20Kurthi_1.webp",
+      "type": "image",
+      "width": 1080,
+      "height": 1350,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 9,
+      "sort_order": 170
+    },
+    {
+      "id": "172",
+      "brand": "Subiksham",
+      "title": "Subiksham Aadi sale Kurthi 2",
+      "image": "/selected-works/Subiksham/Subiksham%20Aadi%20sale%20-%20Kurthi_2.webp",
+      "type": "image",
+      "width": 1081,
+      "height": 1350,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 9,
+      "sort_order": 171
+    },
+    {
+      "id": "173",
+      "brand": "Subiksham",
+      "title": "Subiksham Onam 1",
+      "image": "/selected-works/Subiksham/Subiksham_Onam_1.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 9,
+      "sort_order": 172
+    },
+    {
+      "id": "174",
+      "brand": "Subiksham",
+      "title": "Subiksham Onam 2",
+      "image": "/selected-works/Subiksham/Subiksham_Onam_2.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 9,
+      "sort_order": 173
+    },
+    {
+      "id": "175",
+      "brand": "Tarangi",
+      "title": "Tarangi Ayudha Pooja",
+      "image": "/selected-works/Tarangi/Tarangi%20-%20Ayudha%20Pooja.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 10,
+      "sort_order": 174
+    },
+    {
+      "id": "176",
+      "brand": "Thriveni",
+      "title": "Thriveni onam story 2",
+      "image": "/selected-works/Thriveni/Thriveni%20onam%20story_2.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Stories",
+      "collection": "",
+      "brand_order": 11,
+      "sort_order": 175
+    },
+    {
+      "id": "177",
+      "brand": "TMG",
+      "title": "TMG Valentines Wishes",
+      "image": "/selected-works/TMG/TMG%20-Valentines%20Wishes.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 12,
+      "sort_order": 176
+    },
+    {
+      "id": "178",
+      "brand": "TMG",
+      "title": "TMG Classic Collections 1@2x",
+      "image": "/selected-works/TMG/TMG_Classic_Collections_1%402x.webp",
+      "type": "image",
+      "width": 2184,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 12,
+      "sort_order": 177
+    },
+    {
+      "id": "179",
+      "brand": "TMG",
+      "title": "TMG Kangeyam Exclusive",
+      "image": "/selected-works/TMG/TMG_Kangeyam%20Exclusive.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 12,
+      "sort_order": 178
+    },
+    {
+      "id": "180",
+      "brand": "TMG",
+      "title": "Why TMG 1",
+      "image": "/selected-works/TMG/Why%20TMG_1/Why%20TMG_1.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Carousels",
+      "collection": "Why TMG",
+      "brand_order": 12,
+      "sort_order": 179
+    },
+    {
+      "id": "181",
+      "brand": "TMG",
+      "title": "Why TMG 2",
+      "image": "/selected-works/TMG/Why%20TMG_1/Why%20TMG_2.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Carousels",
+      "collection": "Why TMG",
+      "brand_order": 12,
+      "sort_order": 180
+    },
+    {
+      "id": "182",
+      "brand": "TMG",
+      "title": "Why TMG 3",
+      "image": "/selected-works/TMG/Why%20TMG_1/Why%20TMG_3.webp",
+      "type": "image",
+      "width": 9001,
+      "height": 12001,
+      "category": "Carousels",
+      "collection": "Why TMG",
+      "brand_order": 12,
+      "sort_order": 181
+    },
+    {
+      "id": "183",
+      "brand": "TMG",
+      "title": "Why TMG 4",
+      "image": "/selected-works/TMG/Why%20TMG_1/Why%20TMG_4.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Carousels",
+      "collection": "Why TMG",
+      "brand_order": 12,
+      "sort_order": 182
+    },
+    {
+      "id": "184",
+      "brand": "TMG",
+      "title": "Why TMG&#x3f;",
+      "image": "/selected-works/TMG/Why%20TMG_1/Why%20TMG%26%23x3f%3B.webp",
+      "type": "image",
+      "width": 6588,
+      "height": 9041,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 12,
+      "sort_order": 183
+    },
+    {
+      "id": "185",
+      "brand": "Woneten",
+      "title": "Woneten Ai Poster FInal",
+      "image": "/selected-works/Woneten/Woneten%20Ai%20Poster%20%20FInal.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 13,
+      "sort_order": 184
+    },
+    {
+      "id": "186",
+      "brand": "Woneten",
+      "title": "Wonten Diwali Sale Starts OUT",
+      "image": "/selected-works/Woneten/Wonten%20Diwali%20Sale%20Starts%20-OUT.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2880,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 13,
+      "sort_order": 185
+    },
+    {
+      "id": "187",
+      "brand": "Yaazhi",
+      "title": "Pendant Chain 2 1",
+      "image": "/selected-works/Yaazhi/Pendant%202/Pendant%20Chain%202_1.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 14,
+      "sort_order": 186
+    },
+    {
+      "id": "188",
+      "brand": "Yaazhi",
+      "title": "Pendant Chain 2 2",
+      "image": "/selected-works/Yaazhi/Pendant%202/Pendant%20Chain%202_2.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 14,
+      "sort_order": 187
+    },
+    {
+      "id": "189",
+      "brand": "Yaazhi",
+      "title": "Pendant Chain 2 3",
+      "image": "/selected-works/Yaazhi/Pendant%202/Pendant%20Chain%202_3.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 2700,
+      "category": "Posters & Ads",
+      "collection": "",
+      "brand_order": 14,
+      "sort_order": 188
+    },
+    {
+      "id": "190",
+      "brand": "ZEN",
+      "title": "Afrah Future of Workspaces thumbnail",
+      "image": "/selected-works/ZEN/Afrah%20Future%20of%20Workspaces%20-%20thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 15,
+      "sort_order": 189
+    },
+    {
+      "id": "191",
+      "brand": "ZEN",
+      "title": "Factory Manager thumbnail",
+      "image": "/selected-works/ZEN/Factory%20Manager%20%20-%20%20thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 15,
+      "sort_order": 190
+    },
+    {
+      "id": "192",
+      "brand": "ZEN",
+      "title": "How your office is designed thumbnail",
+      "image": "/selected-works/ZEN/How%20your%20office%20is%20designed%20-%20thumbnail.webp",
+      "type": "image",
+      "width": 2160,
+      "height": 3840,
+      "category": "Thumbnails",
+      "collection": "",
+      "brand_order": 15,
+      "sort_order": 191
+    }
+  ],
+  "app_meta": {
+    "initial_portfolio_seed_complete": true
+  }
+}
