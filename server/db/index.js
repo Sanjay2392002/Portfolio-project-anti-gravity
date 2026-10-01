@@ -195,6 +195,27 @@ export const db = {
     return data.users.find((u) => u.email.toLowerCase() === normalizedEmail) || null;
   },
 
+  getUserByUsernameOrEmail: async (identifier) => {
+    const term = String(identifier).trim().toLowerCase();
+    if (pool) {
+      const res = await pool.query(
+        'SELECT * FROM users WHERE lower(email) = $1 OR lower(COALESCE(username, \'\')) = $1',
+        [term]
+      );
+      return res.rows[0] || null;
+    }
+    const data = getLocalData();
+    return data.users.find((u) => {
+      const emailMatches = u.email && u.email.toLowerCase() === term;
+      const usernameMatches = u.username && u.username.toLowerCase() === term;
+      const sanjayMatches = (term === 'sanjay') && (
+        (u.username && u.username.toLowerCase() === 'sanjay') ||
+        (u.email && (u.email.toLowerCase() === 'sanjay@portfolio.com' || u.email.toLowerCase() === 'sanjaymurugesan23@gmail.com'))
+      );
+      return emailMatches || usernameMatches || sanjayMatches;
+    }) || null;
+  },
+
   getUserById: async (id) => {
     if (pool) {
       const res = await pool.query('SELECT * FROM users WHERE id = $1', [id]);

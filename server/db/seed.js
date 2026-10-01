@@ -11,8 +11,9 @@ const selectedWorkCatalog = JSON.parse(fs.readFileSync(path.resolve(__dirname, '
 
 export const seedDatabase = async () => {
   const adminEmail = (process.env.ADMIN_EMAIL || 'sanjaymurugesan23@gmail.com').trim().toLowerCase();
+  const adminUsername = (process.env.ADMIN_USERNAME || 'Sanjay').trim();
   const adminPassword = process.env.ADMIN_PASSWORD;
-  const strongBootstrapPassword = typeof adminPassword === 'string' && adminPassword.length >= 14 && Buffer.byteLength(adminPassword, 'utf8') <= 72;
+  const strongBootstrapPassword = typeof adminPassword === 'string' && adminPassword.length >= 8 && Buffer.byteLength(adminPassword, 'utf8') <= 72;
   if (!isValidEmail(adminEmail)) throw new Error('ADMIN_EMAIL must be a valid email address.');
   const configuredUser = await db.getUserByEmail(adminEmail);
   const admins = await db.getAdminUsers();
@@ -22,7 +23,7 @@ export const seedDatabase = async () => {
   }
   const needsCredential = !configuredUser || configuredUser.role !== 'admin' || legacyAdmins.some((admin) => admin.id === configuredUser.id);
   if (needsCredential && !strongBootstrapPassword) {
-    throw new Error('Set ADMIN_PASSWORD to a unique password with at least 14 characters before bootstrapping or replacing legacy administrator credentials.');
+    throw new Error('Set ADMIN_PASSWORD to a unique password with at least 8 characters before bootstrapping or replacing legacy administrator credentials.');
   }
 
   for (const legacyAdmin of legacyAdmins) {
@@ -36,11 +37,12 @@ export const seedDatabase = async () => {
 
   if (!configuredUser) {
     if (!strongBootstrapPassword) {
-      throw new Error('Set ADMIN_PASSWORD to a unique password with at least 14 characters before creating the first administrator.');
+      throw new Error('Set ADMIN_PASSWORD to a unique password with at least 8 characters before creating the first administrator.');
     }
     const password_hash = await bcrypt.hash(adminPassword, 12);
     await db.createUser({
       id: `usr_${crypto.randomUUID()}`,
+      username: adminUsername,
       email: adminEmail,
       password_hash,
       role: 'admin',

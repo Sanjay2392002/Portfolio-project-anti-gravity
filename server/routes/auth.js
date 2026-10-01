@@ -38,22 +38,24 @@ const issueAdminSession = (res, user) => {
 router.use(requireSameOrigin);
 
 router.post('/login', loginRateLimit, async (req, res) => {
-  const email = typeof req.body?.email === 'string' ? req.body.email.trim().toLowerCase() : '';
+  const identifier = typeof (req.body?.email || req.body?.username || req.body?.identifier) === 'string'
+    ? String(req.body.email || req.body.username || req.body.identifier).trim()
+    : '';
   const password = typeof req.body?.password === 'string' ? req.body.password : '';
-  if (!isValidEmail(email) || password.length < 1 || Buffer.byteLength(password, 'utf8') > 72) {
-    return res.status(400).json({ success: false, error: 'Enter a valid email and password.' });
+  if (!identifier || password.length < 1 || Buffer.byteLength(password, 'utf8') > 72) {
+    return res.status(400).json({ success: false, error: 'Enter your username or email and password.' });
   }
 
   try {
-    const user = await db.getUserByEmail(email);
+    const user = await db.getUserByUsernameOrEmail(identifier);
     const passwordMatches = await bcrypt.compare(password, user?.password_hash || dummyHash);
     if (!user || user.role !== 'admin' || !passwordMatches) {
-      return res.status(401).json({ success: false, error: 'Invalid email or password.' });
+      return res.status(401).json({ success: false, error: 'Invalid username/email or password.' });
     }
 
     issueAdminSession(res, user);
-    await db.logActivity('Admin Login', `Administrator ${user.id} signed in.`);
-    return res.json({ success: true, user: { id: user.id, email: user.email, role: user.role } });
+    await db.logActivity('Admin Login', `Administrator ${user.username || user.email} signed in.`);
+    return res.json({ success: true, user: { id: user.id, username: user.username || 'Sanjay', email: user.email, role: user.role } });
   } catch {
     return res.status(500).json({ success: false, error: 'Sign-in is temporarily unavailable.' });
   }
@@ -62,8 +64,8 @@ router.post('/login', loginRateLimit, async (req, res) => {
 router.post('/password', requireAdmin, passwordRateLimit, async (req, res) => {
   const currentPassword = typeof req.body?.current_password === 'string' ? req.body.current_password : '';
   const newPassword = typeof req.body?.new_password === 'string' ? req.body.new_password : '';
-  if (!currentPassword || Buffer.byteLength(currentPassword, 'utf8') > 72 || newPassword.length < 14 || Buffer.byteLength(newPassword, 'utf8') > 72) {
-    return res.status(400).json({ success: false, error: 'Enter your current password and a new password between 14 characters and 72 UTF-8 bytes.' });
+  if (!currentPassword || Buffer.byteLength(currentPassword, 'utf8') > 72 || newPassword.length < 8 || Buffer.byteLength(newPassword, 'utf8') > 72) {
+    return res.status(400).json({ success: false, error: 'Enter your current password and a new password with at least 8 characters.' });
   }
 
   try {

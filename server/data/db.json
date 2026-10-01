@@ -2,17 +2,21 @@
   "users": [
     {
       "id": "usr_admin_sanjay_primary",
+      "username": "Sanjay",
       "email": "sanjaymurugesan23@gmail.com",
-      "password_hash": "$2b$12$EdctueeCd0YsJgQqvXxmCeFCUFYEq/wbKUIiXfNMhk.1.UETTTZgy",
+      "password_hash": "$2b$12$qa033Le0WiAnoN8Psl9qpeomEjYX9VcpmwB6SNZKwzsj6MeL1ARve",
       "role": "admin",
-      "session_version": 2,
-      "updated_at": "2026-09-29T10:57:50.145Z"
+      "session_version": 4,
+      "updated_at": "2026-10-02T01:25:00.000Z"
     },
     {
       "id": "usr_31c47d51-bfb5-4383-9c6a-33501264b141",
+      "username": "Sanjay",
       "email": "sanjay@portfolio.com",
-      "password_hash": "$2b$12$EdctueeCd0YsJgQqvXxmCeFCUFYEq/wbKUIiXfNMhk.1.UETTTZgy",
-      "role": "admin"
+      "password_hash": "$2b$12$qa033Le0WiAnoN8Psl9qpeomEjYX9VcpmwB6SNZKwzsj6MeL1ARve",
+      "role": "admin",
+      "session_version": 4,
+      "updated_at": "2026-10-02T01:25:00.000Z"
     }
   ],
   "categories": [
@@ -1556,6 +1560,24 @@
     "github_url": "https://github.com/Sanjay2392002"
   },
   "activity_logs": [
+    {
+      "id": "act_793b9da1-829b-43ad-a9ed-59d613fd7ba2",
+      "action": "Admin Login",
+      "details": "Administrator Sanjay signed in.",
+      "created_at": "2026-10-01T20:05:37.160Z"
+    },
+    {
+      "id": "act_a8d78d9d-3b78-4552-b47a-5905a6ba520c",
+      "action": "Admin Login",
+      "details": "Administrator Sanjay signed in.",
+      "created_at": "2026-10-01T20:04:26.416Z"
+    },
+    {
+      "id": "act_1440baff-b246-497c-a95b-429ab0e8cd73",
+      "action": "Admin Login",
+      "details": "Administrator Sanjay signed in.",
+      "created_at": "2026-10-01T20:04:07.292Z"
+    },
     {
       "id": "act_b5935b7c-18d5-4b65-83ac-49c9d37680ed",
       "action": "Delete Inquiry",

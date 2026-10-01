@@ -59,13 +59,14 @@ export const AdminLoginPage: React.FC = () => {
 
             <div>
               <label className="block text-[13px] font-medium text-[#111111] mb-1">
-                Admin Email
+                Username or Email
               </label>
               <input
-                type="email"
+                type="text"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="Sanjay or sanjay@portfolio.com"
                 className="w-full px-3.5 py-2.5 bg-white border border-[#E5E5E5] rounded-[8px] text-[14px] text-[#111111] focus:border-black focus:outline-none"
               />
             </div>
