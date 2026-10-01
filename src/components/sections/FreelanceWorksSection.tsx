@@ -205,8 +205,12 @@ export const FreelanceWorksSection: React.FC = () => {
                       setActiveLogofolio(null);
                       setActiveIndex(null);
                     }}
+                    aria-label="Go back to logo designs"
                   >
-                    <ArrowLeft size={15} /> Back to Logo Designs
+                    <span className="brand-back-icon">
+                      <ArrowLeft size={16} strokeWidth={2.4} />
+                    </span>
+                    <span className="brand-back-text">Go back</span>
                   </button>
                 </div>
 

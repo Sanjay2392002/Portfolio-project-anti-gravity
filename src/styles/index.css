@@ -141,9 +141,58 @@
 .brand-filter:hover { color: var(--archive-ink); border-color: #d7dcd1; }
 .brand-filter.active { background: var(--archive-ink); color: white; }
 .brand-filter span { color: #bdc5bb; font-size: .7rem; }
-.brand-list-label { color: #70786f; font-size: .8rem; font-weight: 600; }
-.brand-back { display: inline-flex; align-items: center; gap: .45rem; border: 0; padding: .5rem 0; background: transparent; color: #475147; font: inherit; font-size: .82rem; cursor: pointer; }
-.brand-back:hover { color: #111; }
+.archive-controls--brand-view {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  padding: 0 !important;
+  margin-bottom: clamp(1.25rem, 2vw, 1.85rem) !important;
+}
+.brand-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: 0;
+  padding: 0.25rem 0;
+  background: transparent;
+  color: #18251f;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 550;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1), transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  user-select: none;
+}
+.brand-back:hover {
+  opacity: 0.85;
+  transform: translateX(-3px);
+}
+.brand-back-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #111111;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s;
+  flex-shrink: 0;
+}
+.brand-back:hover .brand-back-icon {
+  transform: scale(1.06);
+  background: #000000;
+}
+.brand-back-text {
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  color: #18251f;
+}
 .topic-index { display: flex; flex-wrap: wrap; gap: .55rem; width: min(100%, 1440px); margin: 1.5rem auto 2.5rem; }
 .topic-index a { display: inline-flex; align-items: center; gap: .5rem; border: 1px solid #dfe3da; border-radius: 999px; padding: .62rem .9rem; color: #475147; font-size: .78rem; text-decoration: none; transition: background .2s, color .2s; }
 .topic-index a:hover { background: #18251f; color: white; }

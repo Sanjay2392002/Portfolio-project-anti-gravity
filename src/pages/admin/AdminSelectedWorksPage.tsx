@@ -113,7 +113,7 @@ export const AdminSelectedWorksPage: React.FC = () => {
         <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[.16em] text-[#6f786f]">Portfolio content</p>
-            <h1 className="text-[28px] font-bold tracking-tight text-[#111111]">MY WORKS</h1>
+            <h1 className="text-[28px] font-bold tracking-tight text-[#111111]">SELECTED WORKS</h1>
             <p className="mt-1 text-[14px] text-[#6B6B6B]">Manage the brand cards and creatives shown on the public work page.</p>
           </div>
           <button type="button" onClick={startCreate} className="inline-flex items-center justify-center gap-2 rounded-[7px] bg-black px-4 py-2.5 text-[13px] font-medium text-white hover:bg-black/85">

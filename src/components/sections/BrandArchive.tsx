@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Search, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, X } from 'lucide-react';
 import { selectedWorkBrands, selectedWorks, type SelectedWorkCategory, type SelectedWorkItem } from '../../data/selectedWorks';
 import { FreelanceWorksSection } from './FreelanceWorksSection';
 
@@ -106,7 +106,6 @@ export const BrandArchive: React.FC = () => {
   const [works, setWorks] = useState(selectedWorks);
   const [brands, setBrands] = useState(selectedWorkBrands);
   const [activeBrand, setActiveBrand] = useState<string | null>(null);
-  const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
@@ -127,8 +126,8 @@ export const BrandArchive: React.FC = () => {
   }, []);
 
   const brandWorks = useMemo(() => works.filter((work) =>
-    work.brand === activeBrand && `${work.brand} ${work.title}`.toLowerCase().includes(query.trim().toLowerCase())
-  ), [activeBrand, query, works]);
+    work.brand === activeBrand
+  ), [activeBrand, works]);
 
   const topicGroups = useMemo(() => topicOrder.map((category) => ({
     category,
@@ -136,10 +135,7 @@ export const BrandArchive: React.FC = () => {
   })).filter((group) => group.works.length > 0), [brandWorks]);
   const displayedWorks = useMemo(() => topicGroups.flatMap((group) => group.works), [topicGroups]);
 
-  const visibleBrands = useMemo(() => brands.filter((brand) =>
-    `${brand} ${works.filter((work) => work.brand === brand).map((work) => work.title).join(' ')}`
-      .toLowerCase().includes(query.trim().toLowerCase())
-  ), [brands, query, works]);
+  const visibleBrands = brands;
 
   useEffect(() => {
     if (activeIndex === null) return;
@@ -170,27 +166,30 @@ export const BrandArchive: React.FC = () => {
 
   return (
     <main className="brand-archive" id="selected-work">
-      <div className="archive-controls">
-        {activeBrand ? (
-          <button className="brand-back" type="button" onClick={() => { setActiveBrand(null); setActiveIndex(null); setQuery(''); }}><ArrowLeft size={15} /> All brands</button>
-        ) : (
-          <div className="archive-controls-left">
-            <span className="brand-list-label">Brand Works · {brands.length}</span>
-          </div>
-        )}
-        <label className="archive-search">
-          <Search size={16} aria-hidden="true" />
-          <input value={query} onChange={(event) => { setQuery(event.target.value); setActiveIndex(null); }} placeholder={activeBrand ? 'Search this brand' : 'Find a brand or project'} aria-label={activeBrand ? 'Search this brand' : 'Search brands and projects'} />
-          {query && <button type="button" aria-label="Clear search" onClick={() => setQuery('')}><X size={15} /></button>}
-        </label>
-      </div>
+      {activeBrand && (
+        <div className="archive-controls archive-controls--brand-view">
+          <button
+            className="brand-back"
+            type="button"
+            onClick={() => {
+              setActiveBrand(null);
+              setActiveIndex(null);
+            }}
+            aria-label="Go back to all brands"
+          >
+            <span className="brand-back-icon">
+              <ArrowLeft size={16} strokeWidth={2.4} />
+            </span>
+            <span className="brand-back-text">Go back</span>
+          </button>
+        </div>
+      )}
 
       <div className="archive-heading">
         <div>
-          <span className="archive-kicker">Portfolio</span>
-          <h1>{activeBrand || 'My works'}<span className="archive-period">.</span></h1>
+          <h1>{activeBrand || 'Selected works'}<span className="archive-period">.</span></h1>
         </div>
-        <p>{activeBrand ? `${brandWorks.length} pieces for ${activeBrand}.` : 'Choose a brand to see its work.'}</p>
+        <p>{activeBrand ? `Selected works for ${activeBrand}.` : 'Choose a brand to see its work.'}</p>
       </div>
 
       {!activeBrand ? (
@@ -198,7 +197,6 @@ export const BrandArchive: React.FC = () => {
           <div className="brand-directory">
           {visibleBrands.map((brand, index) => {
             const curatedWorks = getBrandCuratedWorks(brand, works);
-            const count = works.filter((work) => work.brand === brand).length;
             const primary = curatedWorks[0];
             const secondary = curatedWorks[1];
 
@@ -211,7 +209,7 @@ export const BrandArchive: React.FC = () => {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: Math.min(index, 7) * .025 }}
-                onClick={() => { setActiveBrand(brand); setQuery(''); }}
+                onClick={() => { setActiveBrand(brand); }}
                 aria-label={`View ${brand} work`}
               >
                 <span className="brand-card-media">
@@ -264,20 +262,22 @@ export const BrandArchive: React.FC = () => {
                 <span className="brand-card-caption">
                   <strong className="brand-card-title">{brand}</strong>
                   <span className="brand-card-category">{getBrandCategory(brand)}</span>
-                  <span className="brand-card-count">{count} {count === 1 ? 'project' : 'projects'}</span>
                 </span>
               </motion.button>
             );
           })}
-          {visibleBrands.length === 0 && <p className="archive-empty">No brands or projects match that search.</p>}
+          {visibleBrands.length === 0 && <p className="archive-empty">No brands available.</p>}
         </div>
-        {!query && <FreelanceWorksSection />}
+        <FreelanceWorksSection />
       </>
       ) : (
         <>
-          <div className="archive-result-count">{brandWorks.length} {brandWorks.length === 1 ? 'piece' : 'pieces'} <span>·</span> {activeBrand}</div>
           <nav className="topic-index" aria-label="Creative types">
-            {topicGroups.map((group) => <a key={group.category} href={`#brand-topic-${group.category.toLowerCase().replace(/[^a-z]+/g, '-')}`}>{group.category}<span>{group.works.length}</span></a>)}
+            {topicGroups.map((group) => (
+              <a key={group.category} href={`#brand-topic-${group.category.toLowerCase().replace(/[^a-z]+/g, '-')}`}>
+                {group.category}
+              </a>
+            ))}
           </nav>
           <div className="brand-topic-list">
             {topicGroups.map((group) => {
@@ -290,10 +290,16 @@ export const BrandArchive: React.FC = () => {
                 : [{ collection: '', works: group.works }];
               return (
                 <section id={topicId} key={group.category} className="brand-topic" data-topic={group.category.toLowerCase().replace(/[^a-z]+/g, '-')}>
-                  <header><h2>{group.category}</h2><span>{group.works.length} {group.works.length === 1 ? 'piece' : 'pieces'}</span></header>
+                  <header>
+                    <h2>{group.category}</h2>
+                  </header>
                   {collectionGroups.map((collectionGroup) => (
                     <div className={collectionGroup.collection ? 'carousel-project-group' : undefined} key={collectionGroup.collection || group.category}>
-                      {collectionGroup.collection && <div className="carousel-project-heading"><h3>{collectionGroup.collection}</h3><span>{collectionGroup.works.length} {collectionGroup.works.length === 1 ? 'slide' : 'slides'}</span></div>}
+                      {collectionGroup.collection && (
+                        <div className="carousel-project-heading">
+                          <h3>{collectionGroup.collection}</h3>
+                        </div>
+                      )}
                       <motion.div layout className="work-masonry">
                         <AnimatePresence mode="popLayout">
                           {collectionGroup.works.map((work) => {
@@ -313,7 +319,7 @@ export const BrandArchive: React.FC = () => {
               );
             })}
           </div>
-          {brandWorks.length === 0 && <div className="archive-empty">No projects match that search.</div>}
+          {brandWorks.length === 0 && <div className="archive-empty">No projects available for this brand.</div>}
         </>
       )}
 

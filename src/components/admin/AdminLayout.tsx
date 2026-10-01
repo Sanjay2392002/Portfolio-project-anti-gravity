@@ -41,7 +41,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
   const navItems = [
     { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     { label: 'Projects', path: '/admin/projects', icon: FolderKanban },
-    { label: 'My Works', path: '/admin/selected-works', icon: BriefcaseBusiness },
+    { label: 'Selected Works', path: '/admin/selected-works', icon: BriefcaseBusiness },
     { label: 'Categories', path: '/admin/categories', icon: Tags },
     { label: 'Media Library', path: '/admin/media', icon: ImageIcon },
     { label: 'About Content', path: '/admin/about', icon: User },

@@ -47,14 +47,14 @@ export const Navbar: React.FC = () => {
         <nav className="hidden md:flex items-center space-x-8 text-[14px] font-medium tracking-[-0.01em]">
           {location.pathname === '/' ? (
             <>
-              <Link to="/work" className="transition-colors duration-200 text-[#6B6B6B] hover:text-[#111111]">MY WORKS</Link>
+              <Link to="/work" className="transition-colors duration-200 text-[#6B6B6B] hover:text-[#111111]">SELECTED WORKS</Link>
               <a href="#about" className="transition-colors duration-200 text-[#6B6B6B] hover:text-[#111111]">ABOUT</a>
               <a href="#contact" className="transition-colors duration-200 text-[#6B6B6B] hover:text-[#111111]">CONTACT</a>
             </>
           ) : (
             <>
               <Link to="/" className="transition-colors duration-200 text-[#6B6B6B] hover:text-[#111111]">HOME</Link>
-              <Link to="/work" className={`transition-colors duration-200 ${location.pathname === '/work' ? 'text-[#111111] font-semibold' : 'text-[#6B6B6B] hover:text-[#111111]'}`}>MY WORKS</Link>
+              <Link to="/work" className={`transition-colors duration-200 ${location.pathname === '/work' ? 'text-[#111111] font-semibold' : 'text-[#6B6B6B] hover:text-[#111111]'}`}>SELECTED WORKS</Link>
               <Link to="/about" className={`transition-colors duration-200 ${location.pathname === '/about' ? 'text-[#111111] font-semibold' : 'text-[#6B6B6B] hover:text-[#111111]'}`}>ABOUT</Link>
               <Link to="/contact" className={`transition-colors duration-200 ${location.pathname === '/contact' ? 'text-[#111111] font-semibold' : 'text-[#6B6B6B] hover:text-[#111111]'}`}>CONTACT</Link>
             </>
@@ -85,14 +85,14 @@ export const Navbar: React.FC = () => {
             <nav className="flex flex-col space-y-5 text-[15px] font-medium tracking-[-0.01em]">
               {location.pathname === '/' ? (
                 <>
-                  <Link to="/work" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>MY WORKS</Link>
+                  <Link to="/work" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>SELECTED WORKS</Link>
                   <a href="#about" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>ABOUT</a>
                   <a href="#contact" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>CONTACT</a>
                 </>
               ) : (
                 <>
                   <Link to="/" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>HOME</Link>
-                  <Link to="/work" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>MY WORKS</Link>
+                  <Link to="/work" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>SELECTED WORKS</Link>
                   <Link to="/about" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>ABOUT</Link>
                   <Link to="/contact" className="text-[#6B6B6B] hover:text-[#111111] transition-colors" onClick={() => setMobileMenuOpen(false)}>CONTACT</Link>
                 </>

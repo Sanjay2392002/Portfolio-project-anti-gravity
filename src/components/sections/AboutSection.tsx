@@ -32,7 +32,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
             </p>
             <div className="home-about-actions">
               <Link className="home-about-cta" to="/work" data-cursor="link">
-                <span>VIEW MY WORKS</span>
+                <span>VIEW SELECTED WORKS</span>
                 <ArrowUpRight size={16} strokeWidth={2.2} className="home-about-cta-icon" />
               </Link>
               <a
