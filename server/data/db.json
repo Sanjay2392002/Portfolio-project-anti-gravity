@@ -1501,7 +1501,7 @@
           "role": "Graphic Designer",
           "company": "Bevis Creatives",
           "period": "April 2025 to August 2026",
-          "description": "Led end-to-end Graphic design,Social Ads & Campaigns, brand collateral, exhibition architecture, and multi-channel campaign creative for consumer brands and FMCG clients."
+          "description": "At Bevis Creatives, I learnt and specialized in Graphic Design, Package Design, and Print Design, along with social media posters, ad campaigns, and brand collateral."
         },
         {
           "id": "exp_2",
@@ -1515,12 +1515,13 @@
         {
           "category": "Graphic design",
           "skills": [
+            "Graphic design",
+            "Package design",
+            "Print design",
             "Branding & Identity Systems",
             "Logo Design & Typography",
             "Social Media Posters",
             "Video Thumbnails & Covers",
-            "Packaging Design & Diecuts",
-            "Print & Editorial Design",
             "Exhibition Stall Architecture"
           ]
         },

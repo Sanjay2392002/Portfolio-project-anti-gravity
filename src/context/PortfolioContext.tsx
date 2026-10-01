@@ -21,11 +21,39 @@ interface PortfolioContextType {
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
+const fallbackAbout: AboutContent = {
+  headline: 'Hello, I’m Sanjay.',
+  subheadline: 'Graphic designer focused on social media posters, packaging design, and UI design.',
+  biography_paragraph_1: 'I create social media posters and clear user interfaces for brands and digital products.',
+  biography_paragraph_2: 'My work focuses on strong layout, clear typography, and making each message easy to understand.',
+  experiences: [
+    {
+      id: 'exp_1',
+      role: 'Graphic Designer',
+      company: 'Bevis Creatives',
+      period: 'April 2025 to August 2026',
+      description: 'At Bevis Creatives, I learnt and specialized in Graphic Design, Package Design, and Print Design, along with social media posters, ad campaigns, and brand collateral.',
+    },
+  ],
+  capabilities: [
+    {
+      category: 'DESIGN DISCIPLINES',
+      skills: ['Graphic design', 'Package design', 'Print design', 'Social media posters', 'Stories', 'Carousels', 'Thumbnails'],
+    },
+    {
+      category: 'UI DESIGN',
+      skills: ['User interfaces', 'Layout & hierarchy', 'Digital product screens'],
+    },
+  ],
+  tools: ['Adobe Photoshop', 'Adobe Illustrator', 'Adobe InDesign', 'Figma', 'Vibe coding'],
+  availability: 'Available for design work.',
+};
+
 export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [categories, setCategories] = useState<ProjectCategory[]>([]);
   const [settings, setSettings] = useState<SiteSettings | null>(fallbackSettings);
-  const [about, setAbout] = useState<AboutContent | null>(null);
+  const [about, setAbout] = useState<AboutContent | null>(fallbackAbout);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -62,11 +90,16 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setSettings(fallbackSettings);
       }
 
-      if (aboutRes && aboutRes.success) setAbout(aboutRes.data);
+      if (aboutRes && aboutRes.success && aboutRes.data) {
+        setAbout(aboutRes.data);
+      } else {
+        setAbout(fallbackAbout);
+      }
     } catch (err: any) {
       console.warn('[PortfolioContext] Using offline curated fallback data:', err);
       setProjects(fallbackProjects);
       setCategories(fallbackCategories);
+      setAbout(fallbackAbout);
     } finally {
       setLoading(false);
     }

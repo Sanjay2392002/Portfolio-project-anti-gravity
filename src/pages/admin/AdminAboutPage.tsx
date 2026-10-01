@@ -8,9 +8,9 @@ const defaults: AboutContent = {
   subheadline: 'Graphic designer focused on social media and UI design.',
   biography_paragraph_1: 'I create social media posters and clear user interfaces for brands and digital products.',
   biography_paragraph_2: 'My work focuses on strong layout, clear typography, and making each message easy to understand.',
-  experiences: [{ id: 'experience-1', role: 'Graphic Designer', company: 'Bevis Creatives', period: '', description: 'Social media posters, campaign design, and user interface work.' }],
+  experiences: [{ id: 'experience-1', role: 'Graphic Designer', company: 'Bevis Creatives', period: 'April 2025 to August 2026', description: 'At Bevis Creatives, I learnt and specialized in Graphic Design, Package Design, and Print Design, along with social media posters, ad campaigns, and brand collateral.' }],
   capabilities: [
-    { category: 'SOCIAL MEDIA', skills: ['Posters & ads', 'Stories', 'Carousels', 'Thumbnails'] },
+    { category: 'DESIGN DISCIPLINES', skills: ['Graphic design', 'Package design', 'Print design', 'Posters & ads', 'Stories', 'Carousels', 'Thumbnails'] },
     { category: 'UI DESIGN', skills: ['User interfaces', 'Layout & hierarchy', 'Digital product screens'] },
   ],
   tools: ['Adobe Photoshop', 'Adobe Illustrator', 'Adobe InDesign', 'Figma', 'Vibe coding'],

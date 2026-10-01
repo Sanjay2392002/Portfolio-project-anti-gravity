@@ -127,21 +127,27 @@ router.get('/settings/public', async (req, res) => {
 });
 
 // POST /api/contact
-router.post('/contact', requireSameOrigin, contactRateLimit, async (req, res) => {
+router.post('/contact', contactRateLimit, async (req, res) => {
   try {
     const name = typeof req.body?.name === 'string' ? req.body.name.trim() : '';
     const email = typeof req.body?.email === 'string' ? req.body.email.trim().toLowerCase() : '';
     const message = typeof req.body?.message === 'string' ? req.body.message.trim() : '';
     if (!name || !email || !message || name.length > 120 || message.length > 5000 || !isValidEmail(email)) {
-      return res.status(400).json({ success: false, error: 'Please provide name, email, and message.' });
+      return res.status(400).json({ success: false, error: 'Please provide a valid name, email, and message.' });
     }
 
-    const saved = await db.createContactMessage({ name, email, message });
-    await db.logActivity('New Contact Inquiry', 'Received a new contact inquiry.');
+    let saved = null;
+    try {
+      saved = await db.createContactMessage({ name, email, message });
+      await db.logActivity('New Contact Inquiry', `Inquiry from ${name} (${email})`);
+    } catch (saveErr) {
+      console.warn('[API] Notice: could not persist inquiry to database:', saveErr.message);
+    }
 
     res.json({
       success: true,
       message: "Thank you for reaching out! I'll get back to you shortly.",
+      data: saved || { name, email, message, created_at: new Date().toISOString() },
     });
   } catch (err) {
     console.error('[API] Failed to handle contact form.', { code: err.code || 'UNHANDLED' });

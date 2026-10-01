@@ -92,12 +92,37 @@ export const ProcessSection: React.FC = () => (
 
 export const ExperienceSection: React.FC = () => {
   const { about } = usePortfolio();
-  const experience = about ? about.experiences?.[0] : { company: 'Bevis Creatives', role: 'Graphic Designer', period: '' };
-  const areas = about ? about.capabilities?.flatMap((group) => group.skills).slice(0, 7) || [] : ['Social media posters', 'Stories', 'Carousels', 'Thumbnails', 'UI design'];
-  if (!experience) return null;
+  const rawExperience = about?.experiences?.[0];
+  const experience = {
+    company: rawExperience?.company || 'Bevis Creatives',
+    role: rawExperience?.role || 'Graphic Designer',
+    period: rawExperience?.period || 'April 2025 to August 2026',
+    description: rawExperience?.description || 'During my tenure at Bevis Creatives, I learnt and specialized in Graphic Design, Package Design, and Print Design alongside commercial social media campaigns and brand collateral.',
+  };
+
+  const coreLearnings = ['Graphic design', 'Package design', 'Print design'];
+  const capabilitiesFromAbout = about?.capabilities?.flatMap((group) => group.skills) || [];
+  const mergedAreas = [
+    ...coreLearnings,
+    ...capabilitiesFromAbout.filter((s) => !coreLearnings.some((c) => c.toLowerCase() === s.toLowerCase())),
+    'Social media posters',
+    'Stories',
+    'Carousels',
+    'Thumbnails',
+    'UI design',
+  ];
+  const areas = [...new Set(mergedAreas)].slice(0, 8);
+
   return (
     <section className="home-experience" id="experience">
-      <div className="home-experience-heading"><p className="home-eyebrow">EXPERIENCE</p><h2>{experience?.company || 'Bevis Creatives'}</h2><span>{experience ? [experience.role, experience.period].filter(Boolean).join(' · ') : 'Graphic Designer'}</span></div>
+      <div className="home-experience-heading">
+        <p className="home-eyebrow">EXPERIENCE</p>
+        <h2>{experience.company}</h2>
+        <span>{[experience.role, experience.period].filter(Boolean).join(' · ')}</span>
+        <p className="home-experience-subtext">
+          At Bevis, I learnt and worked across Graphic Design, Package Design, and Print Design, developing end-to-end commercial design assets.
+        </p>
+      </div>
       <ul aria-label="Areas of experience">
         {areas.map((item) => <li key={item}>{item}</li>)}
       </ul>
@@ -269,19 +294,21 @@ export const SkillsSoftwareSection: React.FC = () => {
   const tools = about ? about.tools : ['Adobe Photoshop', 'Adobe Illustrator', 'Adobe InDesign', 'Figma', 'Vibe coding'];
   if (!tools.length) return null;
   return (
-    <section className="home-info-section home-skills" id="skills">
-      <div className="home-info-title"><p className="home-eyebrow">TOOLS &amp; SKILLS</p><h2>Skills &amp; Software</h2></div>
-      <ul className="home-skills-list">
-        {tools.map((skill, index) => (
-          <li key={`${skill}-${index}`}>
-            <span className="home-skills-number">{String(index + 1).padStart(2, '0')}</span>
-            <div className="home-skills-item-content">
-              <SoftwareIcon name={skill} size={28} />
-              <strong>{skill}</strong>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <div className="home-skills-wrapper">
+      <section className="home-info-section home-skills" id="skills">
+        <div className="home-info-title"><p className="home-eyebrow">TOOLS &amp; SKILLS</p><h2>Skills &amp; Software</h2></div>
+        <ul className="home-skills-list">
+          {tools.map((skill, index) => (
+            <li key={`${skill}-${index}`}>
+              <span className="home-skills-number">{String(index + 1).padStart(2, '0')}</span>
+              <div className="home-skills-item-content">
+                <SoftwareIcon name={skill} size={28} />
+                <strong>{skill}</strong>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
   );
 };

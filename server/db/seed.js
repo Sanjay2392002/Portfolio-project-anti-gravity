@@ -149,14 +149,17 @@ export const seedDatabase = async () => {
         id: 'exp_1',
         role: 'Graphic Designer',
         company: 'Bevis Creatives',
-        period: '',
-        description: 'Social media posters, campaign design, and user interface work.',
+        period: 'April 2025 to August 2026',
+        description: 'At Bevis Creatives, I learnt and specialized in Graphic Design, Package Design, and Print Design, along with social media posters, ad campaigns, and brand collateral.',
       },
     ],
     capabilities: [
       {
-        category: 'SOCIAL MEDIA',
+        category: 'DESIGN DISCIPLINES',
         skills: [
+          'Graphic design',
+          'Package design',
+          'Print design',
           'Posters & ads',
           'Stories',
           'Carousels',

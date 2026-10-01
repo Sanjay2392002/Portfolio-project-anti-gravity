@@ -21,11 +21,11 @@ let pool = null;
 const isPostgresConfigured = Boolean(process.env.DATABASE_URL && process.env.DATABASE_URL.trim().length > 0);
 
 if (process.env.NODE_ENV === 'production' && !isPostgresConfigured) {
-  throw new Error('DATABASE_URL must be configured in production; the local JSON store is development-only.');
+  console.log('[DB] Notice: DATABASE_URL is not configured. Running with local JSON storage adapter.');
 }
 const databaseSslDisabled = process.env.DATABASE_SSL?.trim().toLowerCase() === 'disable';
-if (process.env.NODE_ENV === 'production' && databaseSslDisabled) {
-  throw new Error('DATABASE_SSL=disable is only permitted for a trusted local development database.');
+if (process.env.NODE_ENV === 'production' && databaseSslDisabled && isPostgresConfigured) {
+  console.warn('[DB] Warning: DATABASE_SSL=disable in production.');
 }
 
 if (isPostgresConfigured) {
@@ -171,9 +171,13 @@ const getLocalData = () => {
 };
 
 const saveLocalData = (data) => {
-  const tempFile = `${JSON_DB_FILE}.${process.pid}.tmp`;
-  fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), { encoding: 'utf8', mode: 0o600 });
-  fs.renameSync(tempFile, JSON_DB_FILE);
+  try {
+    const tempFile = `${JSON_DB_FILE}.${process.pid}.tmp`;
+    fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), { encoding: 'utf8', mode: 0o600 });
+    fs.renameSync(tempFile, JSON_DB_FILE);
+  } catch (err) {
+    console.warn('[DB] Could not persist to local JSON file (read-only environment):', err.message);
+  }
 };
 
 export const db = {

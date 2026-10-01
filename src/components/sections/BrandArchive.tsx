@@ -300,7 +300,7 @@ export const BrandArchive: React.FC = () => {
                             const index = displayedWorks.findIndex((item) => item.id === work.id);
                             return (
                               <motion.button layout key={work.id} type="button" data-cursor="view" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: .96 }} transition={{ duration: .25 }} className={`work-tile work-tile-${work.id % 5}`} onClick={() => setActiveIndex(index)} onPointerMove={tiltWork} onPointerLeave={resetTilt} aria-label={`View ${work.title}`}>
-                                <span className={`work-image-wrap${work.type === 'pdf' ? ' work-document' : ''}`}>{work.type === 'pdf' ? <span className="document-card"><span>PDF · PRESENTATION</span><strong>{work.brand}</strong><small>{work.title}</small><span className="document-open">Open presentation <ArrowRight size={14} /></span></span> : <img src={work.image} alt={work.title} loading={index < 8 ? 'eager' : 'lazy'} />}</span>
+                                <span className={`work-image-wrap${work.type === 'pdf' ? ' work-document' : ''}`}>{work.type === 'pdf' ? <span className="document-card"><span>PDF · PRESENTATION</span><strong>{work.brand}</strong><small>{work.title}</small><span className="document-open">View presentation <ArrowRight size={14} /></span></span> : <img src={work.image} alt={work.title} loading={index < 8 ? 'eager' : 'lazy'} />}</span>
                                 <span className="work-caption"><span><strong>{work.title}</strong><small>{work.brand}</small></span><span className="work-open"><ArrowRight size={16} /></span></span>
                               </motion.button>
                             );
@@ -323,8 +323,39 @@ export const BrandArchive: React.FC = () => {
             <button className="lightbox-close" onClick={() => setActiveIndex(null)} aria-label="Close preview"><X size={22} /></button>
             <button className="lightbox-arrow lightbox-previous" onClick={(event) => { event.stopPropagation(); setActiveIndex((activeIndex - 1 + displayedWorks.length) % displayedWorks.length); }} aria-label="Previous work"><ArrowLeft size={20} /></button>
             <motion.div key={activeWork.id} className="lightbox-content" initial={{ opacity: 0, scale: .97 }} animate={{ opacity: 1, scale: 1 }} onClick={(event) => event.stopPropagation()}>
-              {activeWork.type === 'pdf' ? <iframe title={`${activeWork.title} PDF presentation`} src={activeWork.image} sandbox="" referrerPolicy="no-referrer" /> : <img src={activeWork.image} alt={activeWork.title} />}
-              <div className="lightbox-caption"><span>{activeWork.brand}</span><strong>{activeWork.title}</strong><small>{activeWork.width && activeWork.height ? `${activeWork.width} × ${activeWork.height}` : ''} · {String(activeIndex + 1).padStart(2, '0')} / {String(displayedWorks.length).padStart(2, '0')}</small></div>
+              {activeWork.type === 'pdf' ? (
+                <div className="pdf-lightbox-viewer w-full flex flex-col items-center">
+                  <div className="pdf-viewer-bar w-full flex items-center justify-between mb-2 px-1">
+                    <span className="text-[12px] text-[#aaa] font-medium tracking-wide">
+                      DOCUMENT VIEWER · {activeWork.brand}
+                    </span>
+                    <a
+                      href={activeWork.image}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-black text-[12px] font-semibold hover:bg-[#e0e0e0] transition-colors"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <span>Open in New Tab</span>
+                      <ArrowUpRight size={14} />
+                    </a>
+                  </div>
+                  <iframe
+                    title={`${activeWork.title} PDF presentation`}
+                    src={`${activeWork.image}#toolbar=1&navpanes=0`}
+                    className="w-full h-[70vh] md:h-[76vh] border-0 rounded-lg bg-white"
+                  />
+                </div>
+              ) : (
+                <img src={activeWork.image} alt={activeWork.title} />
+              )}
+              <div className="lightbox-caption">
+                <span>{activeWork.brand}</span>
+                <strong>{activeWork.title}</strong>
+                <small>
+                  {activeWork.type === 'pdf' ? 'PDF Presentation' : activeWork.width && activeWork.height ? `${activeWork.width} × ${activeWork.height}` : ''} · {String(activeIndex + 1).padStart(2, '0')} / {String(displayedWorks.length).padStart(2, '0')}
+                </small>
+              </div>
             </motion.div>
             <button className="lightbox-arrow lightbox-next" onClick={(event) => { event.stopPropagation(); setActiveIndex((activeIndex + 1) % displayedWorks.length); }} aria-label="Next work"><ArrowRight size={20} /></button>
           </motion.div>
