@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Download } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
+import { MagneticHeroHeading } from './MagneticHeroHeading';
 
 interface AboutSectionProps {
   variant?: 'default' | 'home';
@@ -22,7 +23,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="home-eyebrow">A LITTLE ABOUT ME</p>
-            <h2>Hello, I’m Sanjay.</h2>
+            <MagneticHeroHeading />
             <p className="about-simple-copy">
               {about?.biography_paragraph_1 || 'I create social media posters and clear user interfaces for brands and digital products.'}
             </p>
@@ -57,7 +58,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
       <div className="about-simple-inner">
         <p className="portfolio-eyebrow">A little about me</p>
         <div>
-          <h2>Hello, I’m Sanjay.</h2>
+          <MagneticHeroHeading />
           <p className="about-simple-copy">{about?.biography_paragraph_1 || 'I’m a graphic designer focused on social media design and user interface design. I like making ideas clear, useful and visually memorable.'}</p>
           <div className="about-skills" aria-label="Design skills">
             <span>Social media design</span>

@@ -602,6 +602,10 @@
 .home-about-copy { width: 100%; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; }
 .home-about-copy .home-eyebrow { color: var(--home-accent); margin-bottom: 1.1rem; }
 .home-about-copy h2 { margin: 0 auto; color: #18251f; font-size: clamp(2.8rem, 5.5vw, 5rem); font-weight: 620; letter-spacing: -.075em; line-height: .98; text-align: center; }
+.magnetic-hero-heading { position: relative; display: inline-block; user-select: none; -webkit-user-select: none; }
+.magnetic-word { display: inline-block; transform-origin: center center; cursor: grab; touch-action: pan-y; will-change: transform; -webkit-font-smoothing: antialiased; }
+.magnetic-word.is-dragging { cursor: grabbing; }
+@media (pointer: coarse) { .magnetic-word { cursor: default; will-change: auto; } }
 .home-about-copy .about-simple-copy { max-width: 640px; margin: 1.3rem auto 0; color: #686e68; font-size: clamp(.98rem, 1.3vw, 1.12rem); line-height: 1.75; text-align: center; }
 .home-about-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 2.2rem; flex-wrap: wrap; }
 .home-about-cta, .home-about-link { display: inline-flex; align-items: center; justify-content: center; gap: .65rem; padding: .85rem 1.75rem; border-radius: 9999px; background: #18251f; color: #ffffff; font-size: .74rem; font-weight: 650; letter-spacing: .1em; text-decoration: none; box-shadow: 0 4px 14px rgba(24, 37, 31, .12); transition: background-color .25s cubic-bezier(.22, 1, .36, 1), border-color .25s cubic-bezier(.22, 1, .36, 1), color .25s cubic-bezier(.22, 1, .36, 1), transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s cubic-bezier(.22, 1, .36, 1); border: 1px solid #18251f; user-select: none; }
