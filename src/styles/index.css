@@ -605,7 +605,138 @@
 .magnetic-hero-heading { position: relative; display: inline-block; user-select: none; -webkit-user-select: none; }
 .magnetic-word { display: inline-block; transform-origin: center center; cursor: grab; touch-action: pan-y; will-change: transform; -webkit-font-smoothing: antialiased; }
 .magnetic-word.is-dragging { cursor: grabbing; }
-@media (pointer: coarse) { .magnetic-word { cursor: default; will-change: auto; } }
+
+/* --------------------------------------------------------------------------
+   Tablet & Mobile Kinetic Typography Breathing Loop
+   - Desktop retains interactive cursor magnetic & drag behavior unchanged.
+   - Tablet & Mobile run a continuous, subtle, organic breathing cycle.
+   - Returns to exactly (0, 0, 0) every cycle with zero cumulative drift.
+   - GPU compositor hardware accelerated (60/120fps).
+   -------------------------------------------------------------------------- */
+
+/* Tablet Keyframes: 8-12px horizontal (Hello), 4-7px vertical (I'm), 10-14px horizontal (Sanjay) */
+@keyframes kinetic-drift-hello-tablet {
+  0%, 22% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  42%, 49% {
+    transform: translate3d(-10px, 0, 0) rotate(-1.2deg);
+  }
+  72%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes kinetic-drift-im-tablet {
+  0%, 24% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  44%, 51% {
+    transform: translate3d(0, -5.5px, 0) rotate(0.5deg);
+  }
+  74%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes kinetic-drift-sanjay-tablet {
+  0%, 23% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  45%, 52% {
+    transform: translate3d(12.5px, 0, 0) rotate(1.8deg);
+  }
+  76%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+/* Mobile Keyframes: approximately 75% of Tablet values */
+@keyframes kinetic-drift-hello-mobile {
+  0%, 22% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  42%, 49% {
+    transform: translate3d(-7.5px, 0, 0) rotate(-0.9deg);
+  }
+  72%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes kinetic-drift-im-mobile {
+  0%, 24% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  44%, 51% {
+    transform: translate3d(0, -4px, 0) rotate(0.4deg);
+  }
+  74%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes kinetic-drift-sanjay-mobile {
+  0%, 23% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  45%, 52% {
+    transform: translate3d(9.5px, 0, 0) rotate(1.4deg);
+  }
+  76%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+/* Tablet & Touch Devices Rule: max-width 1024px OR pointer: coarse */
+@media (max-width: 1024px), (pointer: coarse) {
+  .magnetic-word {
+    cursor: default !important;
+    touch-action: pan-y;
+  }
+  .magnetic-word-hello {
+    animation: kinetic-drift-hello-tablet 7.2s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+  }
+  .magnetic-word-im {
+    animation: kinetic-drift-im-tablet 7.2s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  }
+  .magnetic-word-sanjay {
+    animation: kinetic-drift-sanjay-tablet 7.2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  }
+}
+
+/* Mobile Screen Scaling: max-width 640px */
+@media (max-width: 640px) {
+  .magnetic-word-hello {
+    animation-name: kinetic-drift-hello-mobile;
+  }
+  .magnetic-word-im {
+    animation-name: kinetic-drift-im-mobile;
+  }
+  .magnetic-word-sanjay {
+    animation-name: kinetic-drift-sanjay-mobile;
+  }
+}
+
+/* Desktop Protection: ensure no automatic animation runs on desktop */
+@media (min-width: 1025px) and (pointer: fine) {
+  .magnetic-word-hello,
+  .magnetic-word-im,
+  .magnetic-word-sanjay {
+    animation: none !important;
+  }
+}
+
+/* Accessibility: respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .magnetic-word,
+  .magnetic-word-hello,
+  .magnetic-word-im,
+  .magnetic-word-sanjay {
+    animation: none !important;
+    transform: none !important;
+  }
+}
 .home-about-copy .about-simple-copy { max-width: 640px; margin: 1.3rem auto 0; color: #686e68; font-size: clamp(.98rem, 1.3vw, 1.12rem); line-height: 1.75; text-align: center; }
 .home-about-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 2.2rem; flex-wrap: wrap; }
 .home-about-cta, .home-about-link { display: inline-flex; align-items: center; justify-content: center; gap: .65rem; padding: .85rem 1.75rem; border-radius: 9999px; background: #18251f; color: #ffffff; font-size: .74rem; font-weight: 650; letter-spacing: .1em; text-decoration: none; box-shadow: 0 4px 14px rgba(24, 37, 31, .12); transition: background-color .25s cubic-bezier(.22, 1, .36, 1), border-color .25s cubic-bezier(.22, 1, .36, 1), color .25s cubic-bezier(.22, 1, .36, 1), transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s cubic-bezier(.22, 1, .36, 1); border: 1px solid #18251f; user-select: none; }

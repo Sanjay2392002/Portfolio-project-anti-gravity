@@ -91,10 +91,20 @@ export const MagneticHeroHeading: React.FC<{ className?: string }> = ({ classNam
   const isAnimatingRef = useRef(false);
   const rafIdRef = useRef<number | null>(null);
   const isFinePointerRef = useRef(true);
+  const isDesktopModeRef = useRef(true);
   const [activeDragIndex, setActiveDragIndex] = useState<number | null>(null);
+
+  // Determine whether the device should use desktop magnetic & drag physics
+  const checkIsDesktop = useCallback(() => {
+    if (typeof window === 'undefined') return true;
+    const isFine = window.matchMedia('(pointer: fine)').matches;
+    const isWideEnough = window.innerWidth > 1024;
+    return isFine && isWideEnough;
+  }, []);
 
   // Helper to trigger requestAnimationFrame loop
   const ensureAnimationLoop = useCallback(() => {
+    if (!isDesktopModeRef.current) return;
     if (!isAnimatingRef.current) {
       isAnimatingRef.current = true;
       rafIdRef.current = requestAnimationFrame(physicsTick);
@@ -197,10 +207,10 @@ export const MagneticHeroHeading: React.FC<{ className?: string }> = ({ classNam
   }, []);
 
   /**
-   * Pointer move handler calculates cursor distance & repulsion for each word.
+   * Pointer move handler calculates cursor distance & repulsion for each word (Desktop only).
    */
   const handlePointerMove = useCallback((e: PointerEvent) => {
-    if (!isFinePointerRef.current || !containerRef.current) return;
+    if (!isDesktopModeRef.current || !containerRef.current) return;
 
     // Handle ongoing drag first
     const drag = dragRef.current;
@@ -290,8 +300,8 @@ export const MagneticHeroHeading: React.FC<{ className?: string }> = ({ classNam
    * Start dragging a word (Desktop only)
    */
   const handleWordPointerDown = (index: number, e: React.PointerEvent<HTMLSpanElement>) => {
-    // Only drag with primary mouse button on fine pointer devices
-    if (!isFinePointerRef.current || e.button !== 0) return;
+    // Only drag with primary mouse button on desktop devices with fine pointer
+    if (!isDesktopModeRef.current || e.button !== 0) return;
 
     e.preventDefault();
     dragRef.current = {
@@ -320,14 +330,53 @@ export const MagneticHeroHeading: React.FC<{ className?: string }> = ({ classNam
     }
   }, [ensureAnimationLoop]);
 
-  // Window-level event listener attachment
+  // Window-level event listener attachment & responsive mode synchronization
   useEffect(() => {
     const pointerQuery = window.matchMedia('(pointer: fine)');
-    const updatePointerType = () => {
+
+    const handleDeviceChange = () => {
+      const isDesktop = checkIsDesktop();
+      isDesktopModeRef.current = isDesktop;
       isFinePointerRef.current = pointerQuery.matches;
+
+      if (!isDesktop) {
+        // Tablet / Mobile: stop rAF loop and remove inline transform styles
+        // so that the pure CSS kinetic typography breathing animation executes smoothly
+        if (rafIdRef.current) {
+          cancelAnimationFrame(rafIdRef.current);
+          rafIdRef.current = null;
+        }
+        isAnimatingRef.current = false;
+        mouseInZoneRef.current = false;
+        if (dragRef.current.activeWordIndex !== null) {
+          dragRef.current.activeWordIndex = null;
+          setActiveDragIndex(null);
+        }
+        for (let i = 0; i < 3; i++) {
+          const s = physicsState.current[i];
+          s.currentX = 0;
+          s.currentY = 0;
+          s.currentRot = 0;
+          s.vx = 0;
+          s.vy = 0;
+          s.vRot = 0;
+          s.targetX = 0;
+          s.targetY = 0;
+          s.targetRot = 0;
+          const el = wordRefs[i].current;
+          if (el) {
+            el.style.transform = '';
+          }
+        }
+      }
     };
-    updatePointerType();
+
+    handleDeviceChange();
+    pointerQuery.addEventListener('change', handleDeviceChange);
+    window.addEventListener('resize', handleDeviceChange, { passive: true });
+
     const handleMouseLeaveWindow = () => {
+      if (!isDesktopModeRef.current) return;
       mouseInZoneRef.current = false;
       for (let i = 0; i < 3; i++) {
         physicsState.current[i].targetX = 0;
@@ -343,7 +392,8 @@ export const MagneticHeroHeading: React.FC<{ className?: string }> = ({ classNam
     document.documentElement.addEventListener('pointerleave', handleMouseLeaveWindow);
 
     return () => {
-      pointerQuery.removeEventListener('change', updatePointerType);
+      pointerQuery.removeEventListener('change', handleDeviceChange);
+      window.removeEventListener('resize', handleDeviceChange);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('pointercancel', handlePointerUp);
@@ -352,7 +402,7 @@ export const MagneticHeroHeading: React.FC<{ className?: string }> = ({ classNam
         cancelAnimationFrame(rafIdRef.current);
       }
     };
-  }, [handlePointerMove, handlePointerUp]);
+  }, [checkIsDesktop, handlePointerMove, handlePointerUp]);
 
   return (
     <h2
@@ -362,11 +412,12 @@ export const MagneticHeroHeading: React.FC<{ className?: string }> = ({ classNam
     >
       {WORDS.map((word, index) => {
         const isDragging = activeDragIndex === index;
+        const semanticClass = index === 0 ? 'magnetic-word-hello' : index === 1 ? 'magnetic-word-im' : 'magnetic-word-sanjay';
         return (
           <React.Fragment key={word.text}>
             <span
               ref={wordRefs[index]}
-              className={`magnetic-word magnetic-word-${index} ${isDragging ? 'is-dragging' : ''}`}
+              className={`magnetic-word magnetic-word-${index} ${semanticClass} ${isDragging ? 'is-dragging' : ''}`}
               onPointerDown={(e) => handleWordPointerDown(index, e)}
               data-cursor="native"
             >
