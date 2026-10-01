@@ -170,14 +170,6 @@ export const BrandArchive: React.FC = () => {
 
   return (
     <main className="brand-archive" id="selected-work">
-      <div className="archive-heading">
-        <div>
-          <span className="archive-kicker">Portfolio</span>
-          <h1>{activeBrand || 'My works'}<span className="archive-period">.</span></h1>
-        </div>
-        <p>{activeBrand ? `${brandWorks.length} pieces for ${activeBrand}.` : 'Choose a brand to see its work.'}</p>
-      </div>
-
       <div className="archive-controls">
         {activeBrand ? (
           <button className="brand-back" type="button" onClick={() => { setActiveBrand(null); setActiveIndex(null); setQuery(''); }}><ArrowLeft size={15} /> All brands</button>
@@ -191,6 +183,14 @@ export const BrandArchive: React.FC = () => {
           <input value={query} onChange={(event) => { setQuery(event.target.value); setActiveIndex(null); }} placeholder={activeBrand ? 'Search this brand' : 'Find a brand or project'} aria-label={activeBrand ? 'Search this brand' : 'Search brands and projects'} />
           {query && <button type="button" aria-label="Clear search" onClick={() => setQuery('')}><X size={15} /></button>}
         </label>
+      </div>
+
+      <div className="archive-heading">
+        <div>
+          <span className="archive-kicker">Portfolio</span>
+          <h1>{activeBrand || 'My works'}<span className="archive-period">.</span></h1>
+        </div>
+        <p>{activeBrand ? `${brandWorks.length} pieces for ${activeBrand}.` : 'Choose a brand to see its work.'}</p>
       </div>
 
       {!activeBrand ? (
