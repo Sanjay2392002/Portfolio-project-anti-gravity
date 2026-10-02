@@ -25,10 +25,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
             <p className="home-eyebrow">A LITTLE ABOUT ME</p>
             <MagneticHeroHeading />
             <p className="about-simple-copy">
-              {about?.biography_paragraph_1 || 'I create social media posters and clear user interfaces for brands and digital products.'}
+              {about?.biography_paragraph_1 || 'I am a Visual & Graphic Designer with a background in Computer Science Engineering (B.E. from SKCT). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.'}
             </p>
             <p className="about-simple-copy home-about-second">
-              {about?.biography_paragraph_2 || 'My work focuses on strong layout, clear typography, and making each message easy to understand.'}
+              {about?.biography_paragraph_2 || 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for 5+ diverse brands. I also pioneer AI-assisted workflows, reducing turnaround by 30% while delivering high-grade commercial visuals.'}
             </p>
             <div className="home-about-actions">
               <Link className="home-about-cta" to="/work" data-cursor="link">
@@ -59,10 +59,13 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
         <p className="portfolio-eyebrow">A little about me</p>
         <div>
           <MagneticHeroHeading />
-          <p className="about-simple-copy">{about?.biography_paragraph_1 || 'I’m a graphic designer focused on social media design and user interface design. I like making ideas clear, useful and visually memorable.'}</p>
+          <p className="about-simple-copy">{about?.biography_paragraph_1 || 'I am a Visual & Graphic Designer based in Coimbatore with a background in Computer Science Engineering. I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.'}</p>
           <div className="about-skills" aria-label="Design skills">
-            <span>Social media design</span>
+            <span>Social media creatives</span>
+            <span>Packaging &amp; print</span>
+            <span>Brand identity</span>
             <span>UI design</span>
+            <span>AI workflows</span>
           </div>
         </div>
       </div>

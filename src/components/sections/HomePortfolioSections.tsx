@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, ArrowUpRight, Code2 } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Code2, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { selectedWorks } from '../../data/selectedWorks';
 import { usePortfolio } from '../../context/PortfolioContext';
@@ -252,6 +252,42 @@ export const SoftwareIcon: React.FC<{ name: string; size?: number }> = ({ name, 
         aria-label="Adobe After Effects icon"
       >
         Ae
+      </span>
+    );
+  }
+
+  if (normalized.includes('firefly')) {
+    return (
+      <span
+        className="inline-flex items-center justify-center shrink-0 rounded-[6px] font-bold select-none shadow-sm"
+        style={{
+          width: size,
+          height: size,
+          backgroundColor: '#2c003e',
+          border: '1.5px solid #ff4181',
+          color: '#ff4181',
+          fontSize: Math.round(size * 0.44),
+          letterSpacing: '-0.02em',
+          lineHeight: 1,
+          fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        }}
+        title="Adobe Firefly"
+        aria-label="Adobe Firefly icon"
+      >
+        Fl
+      </span>
+    );
+  }
+
+  if (normalized.includes('seedream') || normalized.includes('ai') || normalized.includes('midjourney')) {
+    return (
+      <span
+        className="inline-flex items-center justify-center shrink-0 rounded-[6px] bg-gradient-to-br from-[#1e1035] to-[#0a1a2f] border border-[#a855f7] text-[#c084fc] shadow-sm select-none"
+        style={{ width: size, height: size }}
+        title={name}
+        aria-label={`${name} icon`}
+      >
+        <Sparkles size={Math.round(size * 0.58)} strokeWidth={2.2} />
       </span>
     );
   }

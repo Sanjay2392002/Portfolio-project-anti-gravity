@@ -85,6 +85,8 @@ router.get('/about', async (req, res) => {
   try {
     const about = await db.getSettings('about_content');
     const publicAbout = about && typeof about === 'object' && !Array.isArray(about) ? {
+      headline: typeof about.headline === 'string' ? about.headline : '',
+      subheadline: typeof about.subheadline === 'string' ? about.subheadline : '',
       biography_paragraph_1: typeof about.biography_paragraph_1 === 'string' ? about.biography_paragraph_1 : '',
       biography_paragraph_2: typeof about.biography_paragraph_2 === 'string' ? about.biography_paragraph_2 : '',
       experiences: Array.isArray(about.experiences) ? about.experiences.filter((item) => item && typeof item === 'object' && !Array.isArray(item)).slice(0, 20).map((item) => ({

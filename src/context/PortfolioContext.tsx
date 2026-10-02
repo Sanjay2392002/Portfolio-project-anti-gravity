@@ -22,31 +22,58 @@ interface PortfolioContextType {
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
 const fallbackAbout: AboutContent = {
-  headline: 'Hello, I’m Sanjay.',
-  subheadline: 'Graphic designer focused on social media posters, packaging design, and UI design.',
-  biography_paragraph_1: 'I create social media posters and clear user interfaces for brands and digital products.',
-  biography_paragraph_2: 'My work focuses on strong layout, clear typography, and making each message easy to understand.',
+  headline: 'Visual & Graphic Designer bridging engineering logic and modern brand craft.',
+  subheadline: 'Crafting high-converting social media creatives, brand identities, packaging, and digital interfaces.',
+  biography_paragraph_1: 'I am a Visual & Graphic Designer based in Coimbatore with a background in Computer Science Engineering (B.E. from Sri Krishna College of Technology). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.',
+  biography_paragraph_2: 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for 5+ diverse brands including Kings Coffee, Inthira Foods, T-Car Wash, and V-Make. I also pioneer AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.',
   experiences: [
     {
       id: 'exp_1',
-      role: 'Graphic Designer',
-      company: 'Bevis Creatives',
-      period: 'April 2025 to August 2026',
-      description: 'At Bevis Creatives, I learnt and specialized in Graphic Design, Package Design, and Print Design, along with social media posters, ad campaigns, and brand collateral.',
+      role: 'Visual Designer',
+      company: 'Bevis, Coimbatore',
+      period: 'April 2025 – Present',
+      description: 'Designed 100+ social media creatives, ad campaigns, and packaging labels across 5+ brands. Spearheaded AI-assisted design workflows cutting production time by 30% while maintaining strict brand consistency.',
+    },
+    {
+      id: 'exp_2',
+      role: 'Visual Designer & Creative Builder',
+      company: 'Independent Practice',
+      period: '2024 – Present',
+      description: 'Creating comprehensive brand identities, digital product screens, user interfaces, design systems, and AI-driven visual explorations for growing businesses.',
     },
   ],
   capabilities: [
     {
-      category: 'DESIGN DISCIPLINES',
-      skills: ['Graphic design', 'Package design', 'Print design', 'Social media posters', 'Stories', 'Carousels', 'Thumbnails'],
+      category: 'SOCIAL MEDIA & CAMPAIGNS',
+      skills: ['Posters & Ads', 'Stories', 'Carousels', 'Thumbnails', 'Campaign Identity', 'Performance Creatives'],
     },
     {
-      category: 'UI DESIGN',
-      skills: ['User interfaces', 'Layout & hierarchy', 'Digital product screens'],
+      category: 'PACKAGING & PRINT',
+      skills: ['Packaging Labels', 'Box Packaging', 'Billboards & Signage', 'Stall Architecture', 'Print Collateral'],
+    },
+    {
+      category: 'BRAND IDENTITY',
+      skills: ['Logo Presentations', 'Typography Systems', 'Color Theory', 'Brand Guidelines', 'Editorial Layout'],
+    },
+    {
+      category: 'DIGITAL & UI DESIGN',
+      skills: ['User Interfaces', 'Layout & Hierarchy', 'Digital Product Screens', 'Design Systems', 'Responsive Web'],
+    },
+    {
+      category: 'AI PRODUCTION & RETOUCHING',
+      skills: ['AI Prompt Engineering', 'Generative Visuals', 'Jewellery Visuals', 'Photo Retouching', 'Adobe Firefly & Seedream'],
     },
   ],
-  tools: ['Adobe Photoshop', 'Adobe Illustrator', 'Adobe InDesign', 'Figma', 'Vibe coding'],
-  availability: 'Available for design work.',
+  tools: [
+    'Adobe Photoshop',
+    'Adobe Illustrator',
+    'Adobe InDesign',
+    'Figma',
+    'Adobe Firefly',
+    'Seedream',
+    'Vibe coding',
+  ],
+  availability: 'Available for freelance commissions, brand partnerships, and full-time visual design roles.',
 };
 
 export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

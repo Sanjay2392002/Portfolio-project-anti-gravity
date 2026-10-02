@@ -1495,59 +1495,89 @@
       "og_image": "/assets/kings/kings-box-model.jpg"
     },
     "about_content": {
-      "headline": "A Computer Science Engineer who found a career in graphic design.",
-      "subheadline": "Crafting intentional brand identities, multi-platform campaigns, packaging, and digital experiences.",
-      "biography_paragraph_1": "I am a Computer Science Engineer who found a career in graphic design. Working in a fast-paced agency environment, I create visual identities, commercial campaigns, structural packaging, and digital experiences where mathematical precision meets pure editorial aesthetic.",
-      "biography_paragraph_2": "With 1.5 years in an agency environment, I have created social media designs, print creatives, stall designs, packaging, branding, and digital experiences across diverse sectors. I also integrate AI into my creative workflow and explore creative technology.",
+      "headline": "Visual & Graphic Designer bridging engineering logic and modern brand craft.",
+      "subheadline": "Crafting high-converting social media creatives, brand identities, packaging, and digital interfaces.",
+      "biography_paragraph_1": "I am a Visual & Graphic Designer based in Coimbatore with a background in Computer Science Engineering (B.E. from Sri Krishna College of Technology). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.",
+      "biography_paragraph_2": "At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for 5+ diverse brands including Kings Coffee, Inthira Foods, T-Car Wash, and V-Make. I also pioneer AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.",
       "experiences": [
         {
           "id": "exp_1",
-          "role": "Graphic Designer",
-          "company": "Bevis Creatives",
-          "period": "April 2025 to August 2026",
-          "description": "At Bevis Creatives, I learnt and specialized in Graphic Design, Package Design, and Print Design, along with social media posters, ad campaigns, and brand collateral."
+          "role": "Visual Designer",
+          "company": "Bevis, Coimbatore",
+          "period": "April 2025 – Present",
+          "description": "Designed 100+ social media creatives, ad campaigns, and packaging labels across 5+ brands. Spearheaded AI-assisted design workflows cutting production time by 30% while maintaining strict brand consistency."
         },
         {
           "id": "exp_2",
           "role": "Visual Designer & Creative Builder",
           "company": "Independent Practice",
-          "period": "Present",
-          "description": "Directing comprehensive brand identity systems, packaging engineering, responsive digital interfaces, and modern AI-assisted web applications."
+          "period": "2024 – Present",
+          "description": "Creating comprehensive brand identities, digital product screens, user interfaces, design systems, and AI-driven visual explorations for growing businesses."
         }
       ],
       "capabilities": [
         {
-          "category": "Graphic design",
+          "category": "SOCIAL MEDIA & CAMPAIGNS",
           "skills": [
-            "Graphic design",
-            "Package design",
-            "Print design",
-            "Branding & Identity Systems",
-            "Logo Design & Typography",
-            "Social Media Posters",
-            "Video Thumbnails & Covers",
-            "Exhibition Stall Architecture"
+            "Posters & Ads",
+            "Stories",
+            "Carousels",
+            "Thumbnails",
+            "Campaign Identity",
+            "Performance Creatives"
           ]
         },
         {
-          "category": "DIGITAL",
+          "category": "PACKAGING & PRINT",
           "skills": [
-            "Website Design & UI/UX",
-            "Digital Experiences",
-            "Design Systems & Tokens",
-            "Responsive Interfaces",
-            "AI-assisted Creative Development"
+            "Packaging Labels",
+            "Box Packaging",
+            "Billboards & Signage",
+            "Stall Architecture",
+            "Print Collateral"
+          ]
+        },
+        {
+          "category": "BRAND IDENTITY",
+          "skills": [
+            "Logo Presentations",
+            "Typography Systems",
+            "Color Theory",
+            "Brand Guidelines",
+            "Editorial Layout"
+          ]
+        },
+        {
+          "category": "DIGITAL & UI DESIGN",
+          "skills": [
+            "User Interfaces",
+            "Layout & Hierarchy",
+            "Digital Product Screens",
+            "Design Systems",
+            "Responsive Web"
+          ]
+        },
+        {
+          "category": "AI PRODUCTION & RETOUCHING",
+          "skills": [
+            "AI Prompt Engineering",
+            "Generative Visuals",
+            "Jewellery Visuals",
+            "Photo Retouching",
+            "Adobe Firefly & Seedream"
           ]
         }
       ],
       "tools": [
-        "Adobe Illustrator",
         "Adobe Photoshop",
+        "Adobe Illustrator",
         "Adobe InDesign",
         "Figma",
+        "Adobe Firefly",
+        "Seedream",
         "Vibe coding"
       ],
-      "availability": "Available for selected commissions and brand building partnerships."
+      "availability": "Available for freelance commissions, brand partnerships, and full-time visual design roles."
     },
     "hero_eyebrow": "Hi, I'm Sanjay.",
     "hero_headline": "VISUAL DESIGNER",
