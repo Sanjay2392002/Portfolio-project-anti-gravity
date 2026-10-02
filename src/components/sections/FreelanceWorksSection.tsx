@@ -17,47 +17,45 @@ const logofolio2Works = freelanceWorks.filter(
 const posterWorks = freelanceWorks.filter(
   (w) => w.category === 'Posters & Flyers'
 );
-const logoWorks = [...logofolio1Works, ...logofolio2Works];
 
-interface LogoProject {
-  id: 'logofolio-1' | 'logofolio-2';
-  title: string;
-  category: string;
-  cover: string;
-  works: FreelanceWorkItem[];
-}
+// All freelance works in unified order for lightbox navigation
+const allFreelanceWorks: FreelanceWorkItem[] = [
+  ...logofolio1Works,
+  ...logofolio2Works,
+  ...posterWorks,
+];
 
-const LOGO_PROJECTS: LogoProject[] = [
+const FREELANCE_SECTIONS = [
   {
-    id: 'logofolio-1',
+    id: 'logofolio-01',
+    num: '01',
     title: 'LOGOFOLIO 01',
-    category: 'Brand Identity System',
-    cover: '/freelance-works/logos/logo-1-01.webp',
+    subtitle: 'Brand Identity System',
+    gridClass: 'freelance-grid--logos',
     works: logofolio1Works,
   },
   {
-    id: 'logofolio-2',
+    id: 'logofolio-02',
+    num: '02',
     title: 'LOGOFOLIO 02',
-    category: 'Brand Identity System',
-    cover: '/freelance-works/logos/logo-2-01.webp',
+    subtitle: 'Brand Identity System',
+    gridClass: 'freelance-grid--logos',
     works: logofolio2Works,
+  },
+  {
+    id: 'posters-flyers',
+    num: '03',
+    title: 'POSTERS & FLYERS',
+    subtitle: 'Promotional & Event Creatives',
+    gridClass: 'freelance-grid--posters',
+    works: posterWorks,
   },
 ];
 
 /* ─── Component ──────────────────────────────────────────────────────── */
 
 export const FreelanceWorksSection: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<'logos' | 'posters'>('logos');
-  const [activeLogofolio, setActiveLogofolio] = useState<'logofolio-1' | 'logofolio-2' | null>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  // Active works for lightbox
-  const currentWorks = useMemo(() => {
-    if (activeCategory === 'posters') return posterWorks;
-    if (activeLogofolio === 'logofolio-1') return logofolio1Works;
-    if (activeLogofolio === 'logofolio-2') return logofolio2Works;
-    return logoWorks;
-  }, [activeCategory, activeLogofolio]);
 
   // Lightbox keyboard controls
   useEffect(() => {
@@ -66,14 +64,14 @@ export const FreelanceWorksSection: React.FC = () => {
       if (event.key === 'Escape') setActiveIndex(null);
       if (event.key === 'ArrowRight') {
         setActiveIndex((idx) =>
-          idx === null ? null : (idx + 1) % currentWorks.length
+          idx === null ? null : (idx + 1) % allFreelanceWorks.length
         );
       }
       if (event.key === 'ArrowLeft') {
         setActiveIndex((idx) =>
           idx === null
             ? null
-            : (idx - 1 + currentWorks.length) % currentWorks.length
+            : (idx - 1 + allFreelanceWorks.length) % allFreelanceWorks.length
         );
       }
     };
@@ -83,10 +81,10 @@ export const FreelanceWorksSection: React.FC = () => {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, [activeIndex, currentWorks.length]);
+  }, [activeIndex]);
 
   const activeWork: FreelanceWorkItem | null =
-    activeIndex !== null ? currentWorks[activeIndex] ?? null : null;
+    activeIndex !== null ? allFreelanceWorks[activeIndex] ?? null : null;
 
   return (
     <section className="freelance-section" id="freelance-works" aria-label="Freelance Works">
@@ -100,256 +98,86 @@ export const FreelanceWorksSection: React.FC = () => {
           </h2>
         </div>
         <p>
-          Independent client identity systems, logomark presentations, and promotional posters &amp;
-          flyers.
+          Independent client identity systems, logomark presentations, and promotional posters &amp; flyers.
         </p>
       </div>
 
-      {/* Toggle CTAs: Only Posters and Flyers & Logo Designs */}
-      <div className="freelance-controls">
-        <div className="freelance-tabs" role="tablist" aria-label="Freelance categories">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeCategory === 'logos'}
-            className={`freelance-tab ${activeCategory === 'logos' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveCategory('logos');
-              setActiveLogofolio(null);
-              setActiveIndex(null);
-            }}
-          >
-            Logo Designs <span>{logoWorks.length}</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeCategory === 'posters'}
-            className={`freelance-tab ${activeCategory === 'posters' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveCategory('posters');
-              setActiveLogofolio(null);
-              setActiveIndex(null);
-            }}
-          >
-            Posters &amp; Flyers <span>{posterWorks.length}</span>
-          </button>
-        </div>
+      {/* Open Folders: Logofolio 01, Logofolio 02, and Posters & Flyers */}
+      <div className="freelance-open-folders mt-10 md:mt-14">
+        {FREELANCE_SECTIONS.map((section) => (
+          <div key={section.id} id={section.id} className="freelance-group">
+            <header className="freelance-group-header">
+              <div className="freelance-group-title-wrap">
+                <span className="freelance-group-number">{section.num}</span>
+                <h3>{section.title}</h3>
+              </div>
+              <span className="freelance-group-count">
+                {section.works.length} {section.works.length === 1 ? 'piece' : 'pieces'}
+              </span>
+            </header>
+
+            <div className={`freelance-grid ${section.gridClass}`}>
+              {section.works.map((work) => {
+                const globalIndex = allFreelanceWorks.findIndex((item) => item.id === work.id);
+                const isPoster = section.id === 'posters-flyers';
+                const aspectRatio = work.width && work.height
+                  ? isPoster && work.width > work.height
+                    ? '1 / 1'
+                    : `${work.width} / ${work.height}`
+                  : undefined;
+
+                return (
+                  <motion.button
+                    key={work.id}
+                    type="button"
+                    className="freelance-tile"
+                    data-cursor="view"
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.35 }}
+                    onClick={() => setActiveIndex(globalIndex)}
+                    aria-label={`View ${work.title}`}
+                  >
+                    <span
+                      className="freelance-image-wrap"
+                      style={{ aspectRatio }}
+                    >
+                      <img
+                        src={work.image}
+                        alt={work.title}
+                        width={work.width}
+                        height={work.height}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </span>
+
+                    <span className="freelance-caption">
+                      <span>
+                        <strong>{work.title}</strong>
+                        <small>{work.subgroup || work.category}</small>
+                      </span>
+                      <span className="freelance-open" aria-hidden="true">
+                        <ArrowRight size={15} />
+                      </span>
+                    </span>
+                  </motion.button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* ── Category: Logo Designs ──────────────────────────────────── */}
-      {activeCategory === 'logos' && (
-        <>
-          {/* Logo Projects 2-Card Overview */}
-          {activeLogofolio === null && (
-            <div className="freelance-card-grid">
-              {LOGO_PROJECTS.map((project, index) => (
-                <motion.button
-                  key={project.id}
-                  type="button"
-                  className="brand-card"
-                  data-cursor="view"
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.04 }}
-                  onClick={() => {
-                    setActiveLogofolio(project.id);
-                    setActiveIndex(null);
-                    document.getElementById('freelance-works')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  aria-label={`View ${project.title}`}
-                >
-                  <span className="brand-card-media">
-                    <span className="brand-card-media-inner">
-                      <span className="brand-card-single">
-                        <img
-                          src={project.cover}
-                          alt=""
-                          loading={index < 2 ? 'eager' : 'lazy'}
-                          decoding="async"
-                          className="brand-card-img"
-                        />
-                      </span>
-                    </span>
-
-                    <span className="brand-card-overlay">
-                      <span className="brand-card-view-cta">
-                        View work <ArrowRight size={13} aria-hidden="true" />
-                      </span>
-                    </span>
-                  </span>
-
-                  <span className="brand-card-caption">
-                    <strong className="brand-card-title">{project.title}</strong>
-                    <span className="brand-card-category">{project.category}</span>
-                    <span className="brand-card-count">
-                      {project.works.length}{' '}
-                      {project.works.length === 1 ? 'piece' : 'pieces'}
-                    </span>
-                  </span>
-                </motion.button>
-              ))}
-            </div>
-          )}
-
-          {/* Drill-down: Logofolio 01 or Logofolio 02 Gallery */}
-          {activeLogofolio !== null && (() => {
-            const currentProj = LOGO_PROJECTS.find((p) => p.id === activeLogofolio);
-            if (!currentProj) return null;
-            return (
-              <>
-                <div className="freelance-drilldown-controls">
-                  <button
-                    className="brand-back"
-                    type="button"
-                    onClick={() => {
-                      setActiveLogofolio(null);
-                      setActiveIndex(null);
-                      document.getElementById('freelance-works')?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    aria-label="Go back to logo designs"
-                  >
-                    <span className="brand-back-icon">
-                      <ArrowLeft size={16} strokeWidth={2.4} />
-                    </span>
-                    <span className="brand-back-text">Go back</span>
-                  </button>
-                </div>
-
-                <div className="freelance-drilldown-header">
-                  <h3>{currentProj.title}</h3>
-                  <span>
-                    {currentProj.works.length}{' '}
-                    {currentProj.works.length === 1 ? 'piece' : 'pieces'}
-                  </span>
-                </div>
-
-                <motion.div
-                  className="freelance-drilldown-grid freelance-drilldown-grid--logos"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {currentProj.works.map((work, workIndex) => (
-                    <motion.button
-                      key={work.id}
-                      type="button"
-                      className="freelance-tile"
-                      data-cursor="view"
-                      initial={{ opacity: 0, y: 16 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: '-40px' }}
-                      transition={{ duration: 0.35 }}
-                      onClick={() => setActiveIndex(workIndex)}
-                      aria-label={`View ${work.title}`}
-                    >
-                      <span
-                        className="freelance-image-wrap"
-                        style={{
-                          aspectRatio: work.width && work.height ? `${work.width} / ${work.height}` : undefined,
-                        }}
-                      >
-                        <img
-                          src={work.image}
-                          alt={work.title}
-                          width={work.width}
-                          height={work.height}
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </span>
-
-                      <span className="freelance-caption">
-                        <span>
-                          <strong>{work.title}</strong>
-                          <small>{work.subgroup || work.category}</small>
-                        </span>
-                        <span className="freelance-open" aria-hidden="true">
-                          <ArrowRight size={15} />
-                        </span>
-                      </span>
-                    </motion.button>
-                  ))}
-                </motion.div>
-              </>
-            );
-          })()}
-        </>
-      )}
-
-      {/* ── Category: Posters & Flyers (3 images per row) ──────────── */}
-      {activeCategory === 'posters' && (
-        <>
-          <div className="freelance-drilldown-header">
-            <h3>POSTERS &amp; FLYERS</h3>
-            <span>
-              {posterWorks.length} {posterWorks.length === 1 ? 'piece' : 'pieces'}
-            </span>
-          </div>
-
-          <motion.div
-            className="freelance-drilldown-grid freelance-drilldown-grid--posters"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            {posterWorks.map((work, workIndex) => (
-              <motion.button
-                key={work.id}
-                type="button"
-                className="freelance-tile"
-                data-cursor="view"
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.35 }}
-                onClick={() => setActiveIndex(workIndex)}
-                aria-label={`View ${work.title}`}
-              >
-                <span
-                  className="freelance-image-wrap"
-                  style={{
-                    aspectRatio:
-                      work.width && work.height
-                        ? work.width > work.height
-                          ? '1 / 1'
-                          : `${work.width} / ${work.height}`
-                        : undefined,
-                  }}
-                >
-                  <img
-                    src={work.image}
-                    alt={work.title}
-                    width={work.width}
-                    height={work.height}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </span>
-
-                <span className="freelance-caption">
-                  <span>
-                    <strong>{work.title}</strong>
-                    <small>{work.subgroup || work.category}</small>
-                  </span>
-                  <span className="freelance-open" aria-hidden="true">
-                    <ArrowRight size={15} />
-                  </span>
-                </span>
-              </motion.button>
-            ))}
-          </motion.div>
-        </>
-      )}
-
-      {/* ── Lightbox Modal ─────────────────────────────────────────── */}
+      {/* Lightbox Modal */}
       <AnimatePresence>
         {activeWork && activeIndex !== null && (
           <motion.div
             className="work-lightbox"
             role="dialog"
             aria-modal="true"
-            aria-label={activeWork.title}
+            aria-label={`${activeWork.title} - ${activeWork.category}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -362,43 +190,45 @@ export const FreelanceWorksSection: React.FC = () => {
             >
               <X size={22} />
             </button>
-
             <button
               className="lightbox-arrow lightbox-previous"
-              onClick={(e) => {
-                e.stopPropagation();
-                setActiveIndex(
-                  (activeIndex - 1 + currentWorks.length) % currentWorks.length
-                );
+              onClick={(event) => {
+                event.stopPropagation();
+                setActiveIndex((activeIndex - 1 + allFreelanceWorks.length) % allFreelanceWorks.length);
               }}
               aria-label="Previous work"
             >
               <ArrowLeft size={20} />
             </button>
-
             <motion.div
               key={activeWork.id}
               className="lightbox-content"
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(event) => event.stopPropagation()}
             >
-              <img src={activeWork.image} alt={activeWork.title} />
+              <img
+                src={activeWork.image}
+                alt={activeWork.title}
+                width={activeWork.width}
+                height={activeWork.height}
+              />
               <div className="lightbox-caption">
-                <span>{activeWork.category}</span>
+                <span>{activeWork.subgroup || activeWork.category}</span>
                 <strong>{activeWork.title}</strong>
                 <small>
-                  {String(activeIndex + 1).padStart(2, '0')} /{' '}
-                  {String(currentWorks.length).padStart(2, '0')}
+                  {activeWork.width && activeWork.height
+                    ? `${activeWork.width} × ${activeWork.height}`
+                    : ''}{' '}
+                  · {String(activeIndex + 1).padStart(2, '0')} / {String(allFreelanceWorks.length).padStart(2, '0')}
                 </small>
               </div>
             </motion.div>
-
             <button
               className="lightbox-arrow lightbox-next"
-              onClick={(e) => {
-                e.stopPropagation();
-                setActiveIndex((activeIndex + 1) % currentWorks.length);
+              onClick={(event) => {
+                event.stopPropagation();
+                setActiveIndex((activeIndex + 1) % allFreelanceWorks.length);
               }}
               aria-label="Next work"
             >

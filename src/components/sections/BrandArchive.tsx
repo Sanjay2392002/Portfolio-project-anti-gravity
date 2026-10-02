@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Search, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, X } from 'lucide-react';
 import { selectedWorkBrands, selectedWorks, type SelectedWorkCategory, type SelectedWorkItem } from '../../data/selectedWorks';
 import { FreelanceWorksSection } from './FreelanceWorksSection';
 
@@ -26,62 +26,11 @@ const toSlug = (text: string): string => {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 };
 
-const BRAND_LOGOS: Record<string, string> = {
-  anivom: '/logos/anivom.png',
-  bakers: '/logos/bakers.png',
-  bea: '/logos/bea.png',
-  bevis: '/logos/bevis.png',
-  'bro knows tech': '/logos/bkt.png',
-  bkt: '/logos/bkt.png',
-  loft: '/logos/loft.png',
-  pavizham: '/logos/pavizham.png',
-  siggis: '/logos/siggis.png',
-  sms: '/logos/sms.png',
-  'senthil metric school': '/logos/sms.png',
-  'senthil matric school': '/logos/sms.png',
-  subiksham: '/logos/subiksham.png',
-  thriveni: '/logos/thriveni.svg',
-  tmg: '/logos/tmg.png',
-};
-
-const getBrandLogo = (brand: string): string | undefined => {
-  return BRAND_LOGOS[brand.trim().toLowerCase()];
-};
-
-const BRAND_CATEGORIES: Record<string, string> = {
-  anivom: 'Clothing Brand',
-  bakers: 'FMCG',
-  bea: 'Consumer Electronics',
-  bevis: 'Advertising Agency',
-  'bro knows tech': 'Tech & Media',
-  bkt: 'Tech & Media',
-  loft: 'Private Screening Theatre',
-  pavizham: 'Jewellery Brand',
-  siggis: 'FMCG',
-  sms: 'Matriculation School',
-  'senthil metric school': 'Matriculation School',
-  'senthil matric school': 'Matriculation School',
-  subiksham: 'Clothing Brand',
-  tarangi: 'Jewellery Brand',
-  thriveni: 'Mining & Earthmovers',
-  tmg: 'Clothing Brand',
-  woneten: 'Clothing Brand',
-  yaazhi: 'Jewellery Brand',
-  zen: 'Office & Workspace Solutions',
-};
-
-const getBrandCategory = (brand: string): string => {
-  return BRAND_CATEGORIES[brand.trim().toLowerCase()] || 'Creative Works';
-};
-
 export const BrandArchive: React.FC = () => {
   const [works, setWorks] = useState(selectedWorks);
   const [brands, setBrands] = useState(selectedWorkBrands);
   const [searchParams] = useSearchParams();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeNavBrand, setActiveNavBrand] = useState<string>('all');
-  const navContainerRef = useRef<HTMLDivElement>(null);
 
   // Fetch remote selected works
   useEffect(() => {
@@ -103,21 +52,11 @@ export const BrandArchive: React.FC = () => {
 
   // Build brand-wise organized sections data
   const brandSectionsData = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-
     return brands.map((brand) => {
       const allBrandWorks = works.filter((work) => work.brand === brand);
-      const filteredBrandWorks = q
-        ? allBrandWorks.filter((work) => (
-            work.title.toLowerCase().includes(q) ||
-            work.brand.toLowerCase().includes(q) ||
-            work.category.toLowerCase().includes(q) ||
-            (work.collection && work.collection.toLowerCase().includes(q))
-          ))
-        : allBrandWorks;
 
       const topicGroups = topicOrder.map((category) => {
-        const categoryWorks = filteredBrandWorks.filter((work) => getWorkCategory(work) === category);
+        const categoryWorks = allBrandWorks.filter((work) => getWorkCategory(work) === category);
         const collectionGroups = category === 'Carousels'
           ? [...new Set(categoryWorks.map((work) => work.collection || work.title))].map((collection) => ({
               collection,
@@ -139,59 +78,16 @@ export const BrandArchive: React.FC = () => {
       return {
         brand,
         slug: toSlug(brand),
-        category: getBrandCategory(brand),
-        logo: getBrandLogo(brand),
         topicGroups,
         displayedBrandWorks,
         totalWorks: allBrandWorks.length,
       };
     }).filter((section) => section.displayedBrandWorks.length > 0);
-  }, [brands, works, searchQuery]);
+  }, [brands, works]);
 
   // Flattened list of displayed works for global lightbox navigation
   const displayedWorks = useMemo(() => {
     return brandSectionsData.flatMap((section) => section.displayedBrandWorks);
-  }, [brandSectionsData]);
-
-  // Smooth scroll to a brand section
-  const scrollToBrand = (slug: string) => {
-    const element = document.getElementById(`brand-${slug}`);
-    if (element) {
-      const yOffset = -135;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-      setActiveNavBrand(slug);
-    }
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setActiveNavBrand('all');
-  };
-
-  // Scroll spy to update active brand pill in sticky navigation
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY < 120) {
-        setActiveNavBrand('all');
-        return;
-      }
-      const scrollPosition = window.scrollY + 180;
-      for (const section of brandSectionsData) {
-        const el = document.getElementById(`brand-${section.slug}`);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveNavBrand(section.slug);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
   }, [brandSectionsData]);
 
   // Deep-link to brand via URL param e.g. /work?brand=loft
@@ -200,7 +96,8 @@ export const BrandArchive: React.FC = () => {
     if (rawBrandParam) {
       const slug = toSlug(rawBrandParam);
       const timer = setTimeout(() => {
-        scrollToBrand(slug);
+        const el = document.getElementById(`brand-${slug}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
       }, 300);
       return () => clearTimeout(timer);
     }
@@ -247,119 +144,19 @@ export const BrandArchive: React.FC = () => {
         <p>A comprehensive brand-wise archive of commercial design, advertising campaigns, and visual identities.</p>
       </div>
 
-      {/* Sticky Brand Jump Navigation Bar */}
-      <div className="sticky top-[68px] z-30 bg-white/95 backdrop-blur-[16px] border-b border-[#E5E5E5] py-3 -mx-5 sm:-mx-8 md:-mx-12 px-5 sm:px-8 md:px-12 mb-8 transition-all">
-        <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
-          {/* Scrollable brand jump buttons */}
-          <div
-            ref={navContainerRef}
-            className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 max-w-full"
-          >
-            <button
-              type="button"
-              onClick={scrollToTop}
-              className={`px-3.5 py-1.5 rounded-full text-[12px] md:text-[13px] font-medium whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                activeNavBrand === 'all'
-                  ? 'bg-[#111111] text-white shadow-xs'
-                  : 'bg-[#F4F4F4] text-[#666666] hover:bg-[#EAEAEA] hover:text-[#111111]'
-              }`}
-            >
-              All Brands <span className="opacity-60 text-[11px] ml-1">({displayedWorks.length})</span>
-            </button>
-
-            {brandSectionsData.map((section) => {
-              const isActive = activeNavBrand === section.slug;
-              return (
-                <button
-                  key={section.brand}
-                  type="button"
-                  onClick={() => scrollToBrand(section.slug)}
-                  className={`px-3.5 py-1.5 rounded-full text-[12px] md:text-[13px] font-medium whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                    isActive
-                      ? 'bg-[#111111] text-white shadow-xs'
-                      : 'bg-[#F4F4F4] text-[#666666] hover:bg-[#EAEAEA] hover:text-[#111111]'
-                  }`}
-                >
-                  {section.brand}
-                  <span className="opacity-60 text-[11px] ml-1">({section.displayedBrandWorks.length})</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Quick search input */}
-          <div className="hidden sm:flex items-center gap-2 border-b border-[#D0D0D0] pb-1 min-w-[170px] lg:min-w-[210px] shrink-0">
-            <Search size={14} className="text-[#888888] shrink-0" />
-            <input
-              type="text"
-              placeholder="Search works..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-[12px] bg-transparent outline-none text-[#111111] placeholder:text-[#999999]"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                className="text-[#888888] hover:text-[#111111] cursor-pointer"
-                aria-label="Clear search"
-              >
-                <X size={13} />
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
       {/* Brand-Wise Works List */}
       <div className="brand-directory-list">
         {brandSectionsData.map((section) => (
           <section
             key={section.brand}
             id={`brand-${section.slug}`}
-            className="brand-section scroll-mt-36 pt-10 md:pt-16 pb-12 mb-8 border-t border-[#E5E5E5] first:border-t-0 first:pt-2"
+            className="brand-section scroll-mt-28 pt-10 md:pt-16 pb-12 mb-8 border-t border-[#E5E5E5] first:border-t-0 first:pt-2"
           >
-            {/* Brand Header */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 md:mb-10 pb-5 border-b border-[#EAEAEA]">
-              <div>
-                <div className="flex items-center gap-3.5 flex-wrap">
-                  {section.logo && (
-                    <div className="h-10 md:h-12 w-auto max-w-[120px] px-2 py-1 bg-[#F9F9F8] rounded-[6px] border border-[#EBEBEB] flex items-center justify-center shrink-0">
-                      <img
-                        src={section.logo}
-                        alt={`${section.brand} logo`}
-                        className="max-h-full max-w-full object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
-                        onError={(e) => {
-                          (e.currentTarget.parentElement as HTMLElement)?.style.setProperty('display', 'none');
-                        }}
-                      />
-                    </div>
-                  )}
-                  <h2 className="text-[28px] sm:text-[38px] md:text-[46px] font-bold text-[#111111] tracking-[-0.035em] leading-[1.0] uppercase m-0">
-                    {section.brand}<span className="text-[#888888]">.</span>
-                  </h2>
-                </div>
-                <div className="flex items-center gap-2 mt-2 text-[13px] md:text-[14px] text-[#6B6B6B]">
-                  <span className="font-semibold text-[#111111]">{section.category}</span>
-                  <span>·</span>
-                  <span>{section.totalWorks} {section.totalWorks === 1 ? 'project' : 'projects'}</span>
-                </div>
-              </div>
-
-              {/* Category tags for this brand */}
-              {section.topicGroups.length > 1 && (
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  {section.topicGroups.map((g) => (
-                    <a
-                      key={g.category}
-                      href={`#brand-${section.slug}-${getTopicDataAttr(g.category)}`}
-                      className="text-[11px] md:text-[12px] font-medium px-2.5 py-1 rounded-full border border-[#DFE2D9] text-[#555555] hover:border-[#111111] hover:text-[#111111] transition-colors"
-                    >
-                      {g.category} ({g.works.length})
-                    </a>
-                  ))}
-                </div>
-              )}
+            {/* Brand Header: Only Brand Name */}
+            <div className="mb-8 md:mb-12 pb-4 border-b border-[#E5E5E5]">
+              <h2 className="text-[32px] sm:text-[44px] md:text-[54px] font-bold text-[#111111] tracking-[-0.04em] leading-[1.0] uppercase m-0">
+                {section.brand}<span className="archive-period">.</span>
+              </h2>
             </div>
 
             {/* Brand Topic Groups */}
@@ -449,9 +246,7 @@ export const BrandArchive: React.FC = () => {
         ))}
 
         {brandSectionsData.length === 0 && (
-          <p className="archive-empty">
-            {searchQuery ? `No works matching "${searchQuery}".` : 'No works available.'}
-          </p>
+          <p className="archive-empty">No works available.</p>
         )}
       </div>
 
@@ -463,7 +258,7 @@ export const BrandArchive: React.FC = () => {
         href="#selected-work"
         onClick={(e) => {
           e.preventDefault();
-          scrollToTop();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         className="archive-back-top"
       >
