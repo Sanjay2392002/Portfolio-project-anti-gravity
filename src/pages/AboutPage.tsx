@@ -13,7 +13,6 @@ import {
   CheckCircle2,
   Calendar,
   Building2,
-  ExternalLink,
 } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { MagneticHeroHeading } from '../components/sections/MagneticHeroHeading';
@@ -21,48 +20,58 @@ import { SoftwareIcon } from '../components/sections/HomePortfolioSections';
 
 const metrics = [
   { value: '100+', label: 'Social Media Creatives', sub: 'Posts, stories, carousels & ad campaigns' },
-  { value: '5+', label: 'Client Brands Handled', sub: 'F&B, automotive, fashion & tech' },
+  { value: '16', label: 'Client Brands Handled', sub: 'F&B, jewellery, tech, fashion & retail' },
   { value: '30%', label: 'Turnaround Reduction', sub: 'Via AI-assisted production pipelines' },
-  { value: '1+ Year', label: 'Agency Experience', sub: 'Visual Designer at Bevis, Coimbatore' },
+  { value: '1+ Year', label: 'Agency Experience', sub: 'Graphic and Visual Designer at Bevis' },
 ];
 
-const featuredBrands = [
-  { name: 'Kings Coffee & Chai', role: 'Brand Identity, Social Media & Packaging' },
-  { name: 'Inthira Foods', role: 'Commercial Campaigns & Offline Print Collateral' },
-  { name: 'T-Car Wash', role: 'Identity Design & Performance Social Creatives' },
-  { name: 'V-Make Design', role: 'Visual Identity, Presentations & Editorial' },
-  { name: 'The Souled Store', role: 'Digital Ad Campaigns & Creative Posters' },
-  { name: 'Bevis Creatives', role: 'Brand Collateral, Packaging & Stall Architecture' },
+// Exact 16 brands from Sanjay's portfolio website archive
+const workedBrands = [
+  { name: 'BAKERS', subtitle: 'Bakers International', role: 'Fruit Crush Packaging, Exhibition Pavilions & Social Campaigns' },
+  { name: 'PAVIZHAM', subtitle: 'Pavizham Jewellers', role: 'Royal Heritage Jewellery Campaigns, Print Hoardings & E-Commerce Visuals' },
+  { name: 'Bro Knows Tech', subtitle: 'Tech Media Brand', role: 'Brand Mark Identity, High-CTR Video Thumbnails & Breakdown Carousels' },
+  { name: 'BEVIS', subtitle: 'Bevis Creatives', role: 'Mineral Water Brand Packaging, Corporate Identity & Exhibition Stalls' },
+  { name: 'LOFT', subtitle: 'Cinema & Sports Brand', role: 'Cinema & F1 Culture Posters, Monthly Sports Calendars & Pantry Identity' },
+  { name: 'SIGGIS', subtitle: 'Food & Condiments', role: 'Zero-Preservative Condiments Packaging & Social Media Creatives' },
+  { name: 'Woneten', subtitle: 'Apparel & Couture', role: 'Contemporary Ethnic & Festive Couture Fashion Campaigns' },
+  { name: 'Yaazhi', subtitle: 'Jewellery & E-Commerce', role: '3D & AI E-Commerce Jewellery Visualization System' },
+  { name: 'ZEN', subtitle: 'Zen Spaces', role: 'Architecture & Ergonomics Content, Custom Furniture Design & Thumbnails' },
+  { name: 'BEA', subtitle: 'Retail Appliances', role: 'Retail Appliance Promotional Video Artwork & High-CTR Thumbnails' },
+  { name: 'SMS', subtitle: 'Education & Learning', role: 'Educational Storytelling, Visual Metaphors & Brand Carousels' },
+  { name: 'Thriveni', subtitle: 'Industrial & Mining', role: 'Industrial Power & Mining Heavy-Duty Print Campaigns' },
+  { name: 'Tarangi', subtitle: 'Festive & Retail', role: 'Seasonal Festive Posters & Social Media Ad Campaigns' },
+  { name: 'Subiksham', subtitle: 'Commercial Retail', role: 'Commercial Retail Promotions, Print Flyers & Festive Offers' },
+  { name: 'TMG', subtitle: 'Retail & Commercial', role: 'Retail Promotions, Offer Creatives & Marketing Collaterals' },
+  { name: 'Anivom', subtitle: 'Lifestyle & Brand', role: 'Festive Story Assets & Social Media Engagement Posts' },
 ];
 
 export const AboutPage: React.FC = () => {
-  const { about, settings } = usePortfolio();
+  const { about } = usePortfolio();
 
   useEffect(() => {
     window.scrollTo(0, 0);
     const previousTitle = document.title;
-    document.title = 'About Sanjay — Visual & Graphic Designer';
+    document.title = 'About Sanjay — Graphic and Visual Designer';
     return () => {
       document.title = previousTitle;
     };
   }, []);
 
-  const headline = about?.headline || 'Visual & Graphic Designer bridging engineering logic and modern brand craft.';
-  const subheadline = about?.subheadline || 'Crafting high-converting social media creatives, brand identities, packaging, and digital interfaces.';
-  const bio1 = about?.biography_paragraph_1 || 'I am a Visual & Graphic Designer based in Coimbatore with a background in Computer Science Engineering (B.E. from Sri Krishna College of Technology). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.';
-  const bio2 = about?.biography_paragraph_2 || 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for 5+ diverse brands including Kings Coffee, Inthira Foods, T-Car Wash, and V-Make. I also pioneer AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.';
+  const headline = about?.headline || 'Graphic and Visual Designer bridging engineering logic and modern brand craft.';
+  const bio1 = about?.biography_paragraph_1 || 'I am a Graphic and Visual Designer based in Coimbatore with a background in Computer Science Engineering (B.E. from Sri Krishna College of Technology). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.';
+  const bio2 = about?.biography_paragraph_2 || 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for diverse brands including BAKERS, Pavizham Jewellers, Bro Knows Tech, LOFT, SIGGIS, Woneten, and Zen Spaces. I also pioneer AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.';
 
-  const experiences = about?.experiences?.length ? about.experiences : [
+  const experiences = [
     {
       id: 'exp_1',
-      role: 'Visual Designer',
+      role: 'Graphic and Visual Designer',
       company: 'Bevis, Coimbatore',
       period: 'April 2025 – Present',
-      description: 'Designed 100+ social media creatives, ad campaigns, and packaging labels across 5+ brands. Spearheaded AI-assisted design workflows cutting production time by 30% while maintaining strict brand consistency.',
+      description: 'Designing 100+ social media creatives, commercial campaigns, structural packaging labels, and exhibition stalls across 16 client brands. Spearheading AI-assisted design workflows cutting production time by 30% while maintaining strict brand consistency.',
     },
     {
       id: 'exp_2',
-      role: 'Visual Designer & Creative Builder',
+      role: 'Graphic and Visual Designer & Creative Builder',
       company: 'Independent Practice',
       period: '2024 – Present',
       description: 'Creating comprehensive brand identities, digital product screens, user interfaces, design systems, and AI-driven visual explorations for growing businesses.',
@@ -111,10 +120,10 @@ export const AboutPage: React.FC = () => {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#e5e5df] bg-white text-[11px] font-semibold tracking-[0.16em] uppercase text-[#5a625a] mb-6"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#e5e5df] bg-white text-[11px] font-semibold tracking-[0.16em] uppercase text-[#4d564d] mb-6 shadow-sm"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
-            Visual &amp; Graphic Designer
+            Graphic and Visual Designer
           </motion.div>
 
           <motion.div
@@ -244,11 +253,11 @@ export const AboutPage: React.FC = () => {
                 <div className="pt-3 border-t border-[#f0f2ed] grid grid-cols-1 sm:grid-cols-2 gap-2 text-[13px] text-[#4d574d]">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#2e7d32] shrink-0" />
-                    <span>Designed 100+ social media creatives across 5+ client brands</span>
+                    <span>Designed 100+ social media creatives across 16 diverse client brands</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#2e7d32] shrink-0" />
-                    <span>Engineered packaging labels, carton boxes &amp; exhibition stalls</span>
+                    <span>Engineered packaging labels, carton boxes &amp; exhibition pavilions</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#2e7d32] shrink-0" />
@@ -265,7 +274,66 @@ export const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. EDUCATION & ENGINEERING BACKGROUND */}
+      {/* 4. BRANDS WORKED WITH (FULL PORTFOLIO DIRECTORY) */}
+      <section className="px-5 sm:px-8 md:px-12 lg:px-20 max-w-[1240px] mx-auto py-12">
+        <div className="flex items-center justify-between flex-wrap gap-4 mb-3">
+          <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#6b756b]">
+            <Building2 size={14} />
+            <span>Client Brands</span>
+          </div>
+          <Link
+            to="/work"
+            className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#18251f] hover:text-[#3b4c40] tracking-wider uppercase"
+          >
+            <span>View all work in Brand Archive</span>
+            <ArrowRight size={14} />
+          </Link>
+        </div>
+        <h2 className="text-[28px] sm:text-[36px] font-bold text-[#18251f] tracking-tight mb-3">
+          Brands I Have Worked With
+        </h2>
+        <p className="text-[15px] sm:text-[16px] text-[#5d655d] max-w-[760px] mb-8 leading-[1.6]">
+          A comprehensive showcase of the 16 real brands represented across my portfolio, spanning packaging engineering, high-engagement social media campaigns, brand identity systems, and digital art.
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {workedBrands.map((b, idx) => (
+            <div
+              key={idx}
+              className="p-5 rounded-[16px] bg-white border border-[#e4e7e1] hover:border-[#b8c2b4] hover:shadow-sm transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <h3 className="text-[17px] font-bold text-[#18251f]">
+                    {b.name}
+                  </h3>
+                  <span className="text-[10px] font-bold text-[#8a948a] tracking-widest uppercase">
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                </div>
+                <p className="text-[11px] font-semibold text-[#526356] uppercase tracking-wider mb-2">
+                  {b.subtitle}
+                </p>
+                <p className="text-[12.5px] text-[#5c635b] leading-relaxed">
+                  {b.role}
+                </p>
+              </div>
+
+              <div className="pt-3 mt-3 border-t border-[#f0f2ec] flex items-center justify-between">
+                <Link
+                  to="/work"
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#2c3630] hover:text-black uppercase tracking-wider"
+                >
+                  <span>Explore works</span>
+                  <ArrowUpRight size={12} />
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 5. EDUCATION & ENGINEERING BACKGROUND */}
       <section className="px-5 sm:px-8 md:px-12 lg:px-20 max-w-[1240px] mx-auto py-10">
         <div className="p-6 sm:p-8 rounded-[18px] bg-gradient-to-br from-[#f8f9f6] to-[#f2f4ee] border border-[#e2e6de]">
           <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#6b756b] mb-2">
@@ -289,7 +357,7 @@ export const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. DESIGN DISCIPLINES & CAPABILITIES */}
+      {/* 6. DESIGN DISCIPLINES & CAPABILITIES */}
       <section className="px-5 sm:px-8 md:px-12 lg:px-20 max-w-[1240px] mx-auto py-12">
         <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#6b756b] mb-3">
           <Layers size={14} />
@@ -328,7 +396,7 @@ export const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 6. TOOLS & SOFTWARE */}
+      {/* 7. TOOLS & SOFTWARE */}
       <section className="px-5 sm:px-8 md:px-12 lg:px-20 max-w-[1240px] mx-auto py-12">
         <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#6b756b] mb-3">
           <Sparkles size={14} />
@@ -353,33 +421,6 @@ export const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 7. CLIENT BRANDS WORKED WITH */}
-      <section className="px-5 sm:px-8 md:px-12 lg:px-20 max-w-[1240px] mx-auto py-12">
-        <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#6b756b] mb-3">
-          <Building2 size={14} />
-          <span>Brands &amp; Collaborations</span>
-        </div>
-        <h2 className="text-[28px] sm:text-[36px] font-bold text-[#18251f] tracking-tight mb-6">
-          Brands I Have Created For
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {featuredBrands.map((b, idx) => (
-            <div
-              key={idx}
-              className="p-5 rounded-[14px] bg-white border border-[#e4e7e1] hover:border-[#cfd5cb] transition-colors"
-            >
-              <h3 className="text-[17px] font-bold text-[#18251f] mb-1">
-                {b.name}
-              </h3>
-              <p className="text-[13px] text-[#6a7269]">
-                {b.role}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* 8. CALL TO ACTION BANNER */}
       <section className="px-5 sm:px-8 md:px-12 lg:px-20 max-w-[1240px] mx-auto pt-8">
         <div className="p-8 sm:p-12 rounded-[22px] bg-[#18251f] text-white flex flex-col md:flex-row md:items-center md:justify-between gap-8">
@@ -388,10 +429,10 @@ export const AboutPage: React.FC = () => {
               Let&apos;s Build Together
             </p>
             <h2 className="text-[28px] sm:text-[36px] font-bold tracking-tight mb-3">
-              Have a project in mind or looking for a visual designer?
+              Have a project in mind or looking for a Graphic and Visual Designer?
             </h2>
             <p className="text-[14px] sm:text-[15px] text-[#c2cbc4] leading-[1.6]">
-              {about?.availability || 'Available for freelance commissions, brand partnerships, and full-time visual design roles.'}
+              {about?.availability || 'Available for freelance commissions, brand partnerships, and full-time Graphic and Visual Designer roles.'}
             </p>
           </div>
 
