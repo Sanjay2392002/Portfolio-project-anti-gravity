@@ -54,9 +54,14 @@ router.post('/login', loginRateLimit, async (req, res) => {
     }
 
     issueAdminSession(res, user);
-    await db.logActivity('Admin Login', `Administrator ${user.username || user.email} signed in.`);
+    try {
+      await db.logActivity('Admin Login', `Administrator ${user.username || user.email} signed in.`);
+    } catch (logErr) {
+      console.warn('[AUTH] Could not record activity log:', logErr?.message);
+    }
     return res.json({ success: true, user: { id: user.id, username: user.username || 'Sanjay', email: user.email, role: user.role } });
-  } catch {
+  } catch (err) {
+    console.error('[AUTH LOGIN ERROR]', err);
     return res.status(500).json({ success: false, error: 'Sign-in is temporarily unavailable.' });
   }
 });

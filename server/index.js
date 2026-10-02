@@ -27,6 +27,22 @@ const rawHops = process.env.TRUST_PROXY_HOPS !== undefined ? Number(process.env.
 const proxyHops = Number.isInteger(rawHops) && rawHops >= 0 && rawHops <= 5 ? rawHops : (process.env.VERCEL ? 1 : 0);
 app.set('trust proxy', proxyHops);
 
+// Ensure req.socket and remoteAddress exist in serverless environments
+app.use((req, res, next) => {
+  try {
+    if (!req.socket) {
+      req.socket = {};
+    }
+    if (!req.socket.remoteAddress) {
+      const xff = req.headers?.['x-forwarded-for'];
+      req.socket.remoteAddress = (typeof xff === 'string' && xff.split(',')[0].trim()) || req.headers?.['x-real-ip'] || '127.0.0.1';
+    }
+  } catch {
+    // Ignore polyfill fallback errors
+  }
+  next();
+});
+
 // CORS setup
 app.use(
   cors({

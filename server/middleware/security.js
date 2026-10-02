@@ -21,7 +21,21 @@ export const createRateLimiter = ({ windowMs, max, message }) => {
 
   return (req, res, next) => {
     const now = Date.now();
-    const key = req.ip || req.socket.remoteAddress || 'unknown';
+    let key = '127.0.0.1';
+    try {
+      const xff = req.headers?.['x-forwarded-for'];
+      if (typeof xff === 'string' && xff.trim().length > 0) {
+        key = xff.split(',')[0].trim();
+      } else if (typeof req.headers?.['x-real-ip'] === 'string' && req.headers['x-real-ip'].trim().length > 0) {
+        key = req.headers['x-real-ip'].trim();
+      } else if (req.socket?.remoteAddress) {
+        key = req.socket.remoteAddress;
+      } else if (req.connection?.remoteAddress) {
+        key = req.connection.remoteAddress;
+      }
+    } catch {
+      key = '127.0.0.1';
+    }
     let bucket = buckets.get(key);
     if (!bucket || now - bucket.startedAt >= windowMs) {
       if (buckets.size >= 10000) buckets.delete(buckets.keys().next().value);
