@@ -25,24 +25,24 @@ const metrics = [
   { value: '1+ Year', label: 'Agency Experience', sub: 'Graphic and Visual Designer at Bevis' },
 ];
 
-// Exact 16 brands from Sanjay's portfolio website archive
+// Exact 16 brands from Sanjay's portfolio website archive with brand logos
 const workedBrands = [
-  { name: 'BAKERS', subtitle: 'Bakers International', role: 'Fruit Crush Packaging, Exhibition Pavilions & Social Campaigns' },
-  { name: 'PAVIZHAM', subtitle: 'Pavizham Jewellers', role: 'Royal Heritage Jewellery Campaigns, Print Hoardings & E-Commerce Visuals' },
-  { name: 'Bro Knows Tech', subtitle: 'Tech Media Brand', role: 'Brand Mark Identity, High-CTR Video Thumbnails & Breakdown Carousels' },
-  { name: 'BEVIS', subtitle: 'Bevis Creatives', role: 'Mineral Water Brand Packaging, Corporate Identity & Exhibition Stalls' },
-  { name: 'LOFT', subtitle: 'Cinema & Sports Brand', role: 'Cinema & F1 Culture Posters, Monthly Sports Calendars & Pantry Identity' },
-  { name: 'SIGGIS', subtitle: 'Food & Condiments', role: 'Zero-Preservative Condiments Packaging & Social Media Creatives' },
-  { name: 'Woneten', subtitle: 'Apparel & Couture', role: 'Contemporary Ethnic & Festive Couture Fashion Campaigns' },
-  { name: 'Yaazhi', subtitle: 'Jewellery & E-Commerce', role: '3D & AI E-Commerce Jewellery Visualization System' },
-  { name: 'ZEN', subtitle: 'Zen Spaces', role: 'Architecture & Ergonomics Content, Custom Furniture Design & Thumbnails' },
-  { name: 'BEA', subtitle: 'Retail Appliances', role: 'Retail Appliance Promotional Video Artwork & High-CTR Thumbnails' },
-  { name: 'SMS', subtitle: 'Education & Learning', role: 'Educational Storytelling, Visual Metaphors & Brand Carousels' },
-  { name: 'Thriveni', subtitle: 'Industrial & Mining', role: 'Industrial Power & Mining Heavy-Duty Print Campaigns' },
-  { name: 'Tarangi', subtitle: 'Festive & Retail', role: 'Seasonal Festive Posters & Social Media Ad Campaigns' },
-  { name: 'Subiksham', subtitle: 'Commercial Retail', role: 'Commercial Retail Promotions, Print Flyers & Festive Offers' },
-  { name: 'TMG', subtitle: 'Retail & Commercial', role: 'Retail Promotions, Offer Creatives & Marketing Collaterals' },
-  { name: 'Anivom', subtitle: 'Lifestyle & Brand', role: 'Festive Story Assets & Social Media Engagement Posts' },
+  { name: 'BAKERS', logo: '/logos/bakers.png', subtitle: 'Bakers International', role: 'Fruit Crush Packaging, Exhibition Pavilions & Social Campaigns' },
+  { name: 'PAVIZHAM', logo: '/logos/pavizham-dark.png', subtitle: 'Pavizham Jewellers', role: 'Royal Heritage Jewellery Campaigns, Print Hoardings & E-Commerce Visuals' },
+  { name: 'Bro Knows Tech', logo: '/logos/bkt.png', subtitle: 'Tech Media Brand', role: 'Brand Mark Identity, High-CTR Video Thumbnails & Breakdown Carousels' },
+  { name: 'BEVIS', logo: '/logos/bevis.png', subtitle: 'Bevis Creatives', role: 'Mineral Water Brand Packaging, Corporate Identity & Exhibition Stalls' },
+  { name: 'LOFT', logo: '/logos/loft.png', subtitle: 'Cinema & Sports Brand', role: 'Cinema & F1 Culture Posters, Monthly Sports Calendars & Pantry Identity' },
+  { name: 'SIGGIS', logo: '/logos/siggis.png', subtitle: 'Food & Condiments', role: 'Zero-Preservative Condiments Packaging & Social Media Creatives' },
+  { name: 'Woneten', logo: '/logos/woneten.svg', subtitle: 'Apparel & Couture', role: 'Contemporary Ethnic & Festive Couture Fashion Campaigns' },
+  { name: 'Yaazhi', logo: '/logos/yaazhi.svg', subtitle: 'Jewellery & E-Commerce', role: '3D & AI E-Commerce Jewellery Visualization System' },
+  { name: 'ZEN', logo: '/logos/zen.svg', subtitle: 'Zen Spaces', role: 'Architecture & Ergonomics Content, Custom Furniture Design & Thumbnails' },
+  { name: 'BEA', logo: '/logos/bea.png', subtitle: 'Retail Appliances', role: 'Retail Appliance Promotional Video Artwork & High-CTR Thumbnails' },
+  { name: 'SMS', logo: '/logos/sms.png', subtitle: 'Education & Learning', role: 'Educational Storytelling, Visual Metaphors & Brand Carousels' },
+  { name: 'Thriveni', logo: '/logos/thriveni.svg', subtitle: 'Industrial & Mining', role: 'Industrial Power & Mining Heavy-Duty Print Campaigns' },
+  { name: 'Tarangi', logo: '/logos/tarangi.svg', subtitle: 'Festive & Retail', role: 'Seasonal Festive Posters & Social Media Ad Campaigns' },
+  { name: 'Subiksham', logo: '/logos/subiksham.png', subtitle: 'Commercial Retail', role: 'Commercial Retail Promotions, Print Flyers & Festive Offers' },
+  { name: 'TMG', logo: '/logos/tmg.png', subtitle: 'Retail & Commercial', role: 'Retail Promotions, Offer Creatives & Marketing Collaterals' },
+  { name: 'Anivom', logo: '/logos/anivom.png', subtitle: 'Lifestyle & Brand', role: 'Festive Story Assets & Social Media Engagement Posts' },
 ];
 
 export const AboutPage: React.FC = () => {
@@ -298,37 +298,32 @@ export const AboutPage: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {workedBrands.map((b, idx) => (
-            <div
+            <Link
               key={idx}
-              className="p-5 rounded-[16px] bg-white border border-[#e4e7e1] hover:border-[#b8c2b4] hover:shadow-sm transition-all flex flex-col justify-between"
+              to="/work"
+              className="group p-5 rounded-[18px] bg-white border border-[#e4e7e1] hover:border-[#18251f] hover:shadow-md transition-all flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <h3 className="text-[17px] font-bold text-[#18251f]">
-                    {b.name}
-                  </h3>
-                  <span className="text-[10px] font-bold text-[#8a948a] tracking-widest uppercase">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
+                {/* Brand Logo Container */}
+                <div className="h-24 sm:h-28 w-full bg-[#f8f9f6] rounded-[14px] border border-[#eaede6] flex items-center justify-center p-4 mb-3.5 group-hover:bg-[#f3f5ef] group-hover:border-[#d7ded3] transition-all">
+                  <img
+                    src={b.logo}
+                    alt={`${b.name} logo`}
+                    className="max-h-16 sm:max-h-18 max-w-[85%] object-contain transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                  />
                 </div>
-                <p className="text-[11px] font-semibold text-[#526356] uppercase tracking-wider mb-2">
-                  {b.subtitle}
-                </p>
-                <p className="text-[12.5px] text-[#5c635b] leading-relaxed">
+
+                <p className="text-[12.5px] text-[#555d55] leading-relaxed line-clamp-2">
                   {b.role}
                 </p>
               </div>
 
-              <div className="pt-3 mt-3 border-t border-[#f0f2ec] flex items-center justify-between">
-                <Link
-                  to="/work"
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#2c3630] hover:text-black uppercase tracking-wider"
-                >
-                  <span>Explore works</span>
-                  <ArrowUpRight size={12} />
-                </Link>
+              <div className="pt-3 mt-3 border-t border-[#f0f2ec] flex items-center justify-between text-[11px] font-semibold text-[#2c3630] group-hover:text-black uppercase tracking-wider">
+                <span>Explore works</span>
+                <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
