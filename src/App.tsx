@@ -1,7 +1,23 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
-import { PortfolioProvider } from './context/PortfolioContext';
+import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
 import { AuthProvider } from './context/AuthContext';
+
+const PortfolioRouteSync: React.FC = () => {
+  const location = useLocation();
+  const { refreshPortfolio } = usePortfolio();
+  const prevIsAdmin = React.useRef(location.pathname.startsWith('/admin'));
+
+  React.useEffect(() => {
+    const currentIsAdmin = location.pathname.startsWith('/admin');
+    if (prevIsAdmin.current && !currentIsAdmin) {
+      void refreshPortfolio();
+    }
+    prevIsAdmin.current = currentIsAdmin;
+  }, [location.pathname, refreshPortfolio]);
+
+  return null;
+};
 
 // Public Components & Pages
 import { ScrollToTop } from './components/common/ScrollToTop';
@@ -37,6 +53,7 @@ export const App: React.FC = () => {
     <AuthProvider>
       <PortfolioProvider>
         <div className={`min-h-screen flex flex-col bg-white text-[#111111]${isAdminRoute ? '' : ' cursor-site'}`}>
+          <PortfolioRouteSync />
           {/* Automatic scroll restoration and anchor navigation */}
           <ScrollToTop />
 

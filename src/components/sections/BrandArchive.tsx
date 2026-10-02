@@ -40,31 +40,58 @@ export const BrandArchive: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  // Fetch remote selected works
+  // Fetch remote selected works with no-store cache and re-fetch on window focus
   useEffect(() => {
     let cancelled = false;
-    fetch('/api/selected-works')
-      .then((response) => response.ok ? response.json() : Promise.reject(new Error('Could not load selected works')))
-      .then((result) => {
-        if (cancelled || !result?.success || !Array.isArray(result.data)) return;
-        const remoteWorks = result.data as SelectedWorkItem[];
-        const brandOrder = new Map(selectedWorkBrands.map((brand, index) => [brand, index]));
-        const nextBrands = [...new Set(remoteWorks.map((work) => work.brand))]
-          .sort((left, right) => (brandOrder.get(left) ?? Number.MAX_SAFE_INTEGER) - (brandOrder.get(right) ?? Number.MAX_SAFE_INTEGER) || left.localeCompare(right));
-        setWorks(remoteWorks);
-        setBrands(nextBrands);
-      })
-      .catch(() => undefined);
-    return () => { cancelled = true; };
+    const loadSelectedWorks = () => {
+      fetch('/api/selected-works', { cache: 'no-store' })
+        .then((response) => response.ok ? response.json() : Promise.reject(new Error('Could not load selected works')))
+        .then((result) => {
+          if (cancelled || !result?.success || !Array.isArray(result.data)) return;
+          const remoteWorks = result.data as SelectedWorkItem[];
+          setWorks(remoteWorks);
+
+          const brandOrderMap = new Map<string, number>();
+          for (const work of remoteWorks) {
+            const current = brandOrderMap.get(work.brand);
+            const order = typeof work.brand_order === 'number' ? work.brand_order : Number.MAX_SAFE_INTEGER;
+            if (current === undefined || order < current) {
+              brandOrderMap.set(work.brand, order);
+            }
+          }
+          const nextBrands = [...new Set(remoteWorks.map((work) => work.brand))].sort(
+            (a, b) => (brandOrderMap.get(a) ?? Number.MAX_SAFE_INTEGER) - (brandOrderMap.get(b) ?? Number.MAX_SAFE_INTEGER) || a.localeCompare(b)
+          );
+          setBrands(nextBrands);
+        })
+        .catch(() => undefined);
+    };
+
+    loadSelectedWorks();
+    const handleFocus = () => loadSelectedWorks();
+    window.addEventListener('focus', handleFocus);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('focus', handleFocus);
+    };
   }, []);
 
-  // Build brand-wise organized sections data
+  // Build brand-wise organized sections data dynamically from database
   const brandSectionsData = useMemo(() => {
     return brands.map((brand) => {
       const allBrandWorks = works.filter((work) => work.brand === brand);
 
-      const topicGroups = topicOrder.map((category) => {
-        const categoryWorks = allBrandWorks.filter((work) => getWorkCategory(work) === category);
+      // Support all categories present in the database, ordered by topicOrder then custom
+      const presentCategories = [...new Set(allBrandWorks.map(getWorkCategory))];
+      const orderedCategories = [
+        ...topicOrder.filter((cat) => presentCategories.includes(cat)),
+        ...presentCategories.filter((cat) => !topicOrder.includes(cat)).sort(),
+      ];
+
+      const topicGroups = orderedCategories.map((category) => {
+        const categoryWorks = allBrandWorks
+          .filter((work) => getWorkCategory(work) === category)
+          .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
         const collectionGroups = category === 'Carousels'
           ? [...new Set(categoryWorks.map((work) => work.collection || work.title))].map((collection) => ({
               collection,

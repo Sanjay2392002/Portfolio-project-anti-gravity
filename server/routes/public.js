@@ -25,9 +25,18 @@ const secureLinkSetting = (settings, key, fallback, allowLocal = false) => {
   }
 };
 
+// Always deliver fresh database content to public visitors without stale cache
+router.use((req, res, next) => {
+  if (req.method === 'GET') {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+  }
+  next();
+});
+
 router.get('/selected-works', async (req, res) => {
   try {
-    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     return res.json({ success: true, data: await db.getSelectedWorks() });
   } catch {
     return res.status(500).json({ success: false, error: 'Could not load selected work.' });

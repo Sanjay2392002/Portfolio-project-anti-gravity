@@ -4,7 +4,7 @@ import { selectedWorkBrands, type SelectedWorkCategory, type SelectedWorkItem } 
 import { ArrowUpRight, ImagePlus, Pencil, Plus, Search, Trash2, X } from 'lucide-react';
 
 type WorkForm = Omit<SelectedWorkItem, 'id'>;
-const categories: SelectedWorkCategory[] = ['Logo Presentation', 'Posters & Ads', 'Stories', 'Carousels', 'Thumbnails', 'Other'];
+const categories: SelectedWorkCategory[] = ['Logo Presentation', 'Posters & Ads', 'Ads & Posters', 'Stories', 'Carousels', 'Thumbnails', 'Mailer', 'Other'];
 const emptyForm: WorkForm = {
   brand: '', title: '', image: '', type: 'image', width: 1080, height: 1350,
   category: 'Posters & Ads', collection: '', sort_order: 0,

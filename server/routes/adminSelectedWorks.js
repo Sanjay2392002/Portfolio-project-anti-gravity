@@ -5,7 +5,7 @@ import { requireAdmin } from '../middleware/auth.js';
 import { requireSameOrigin } from '../middleware/security.js';
 
 const router = express.Router();
-const categories = new Set(['Logo Presentation', 'Stories', 'Posters & Ads', 'Thumbnails', 'Carousels', 'Other']);
+const categories = new Set(['Logo Presentation', 'Stories', 'Posters & Ads', 'Ads & Posters', 'Thumbnails', 'Carousels', 'Mailer', 'Other']);
 const mutableFields = new Set(['brand', 'title', 'image', 'type', 'width', 'height', 'category', 'collection', 'sort_order']);
 router.use(requireAdmin, requireSameOrigin);
 
