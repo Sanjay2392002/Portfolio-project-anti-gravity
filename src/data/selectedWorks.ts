@@ -7,6 +7,7 @@ export interface SelectedWorkItem {
   brand: string;
   title: string;
   image: string;
+  thumbnail?: string;
   type: 'image' | 'pdf';
   width: number;
   height: number;

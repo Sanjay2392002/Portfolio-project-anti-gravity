@@ -198,7 +198,7 @@ export const AdminSelectedWorksPage: React.FC = () => {
               {filteredWorks.map((work) => (
                 <article key={work.id} className="group flex min-w-0 gap-3 rounded border border-[#e8e8e8] p-3">
                   <div className="h-[92px] w-[74px] shrink-0 overflow-hidden rounded bg-[#f0f0ee]">
-                    {work.type === 'image' ? <img src={work.image} alt="" loading="lazy" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center text-[10px] font-semibold text-[#777]">PDF</div>}
+                    <img src={work.thumbnail || (work.type === 'pdf' ? work.image.replace(/\.pdf$/i, '-thumb.webp') : work.image)} alt="" loading="lazy" className="h-full w-full object-cover" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[10px] font-semibold uppercase tracking-[.12em] text-[#7b847b]">{work.brand}</p>

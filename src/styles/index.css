@@ -465,6 +465,7 @@
 .document-card strong { margin-top: .6rem; font-size: clamp(1.3rem, 3vw, 2.7rem); letter-spacing: -.05em; }
 .document-card small { max-width: 24rem; margin-top: .35rem; color: #677064; font-size: .78rem; }
 .document-open { display: inline-flex; align-items: center; gap: .4rem; margin-top: 1.1rem; border-bottom: 1px solid #7c8b70; padding-bottom: .2rem; font-size: .74rem; }
+.pdf-badge { position: absolute; top: .55rem; right: .55rem; z-index: 2; padding: .2rem .45rem; border-radius: 4px; background: rgba(17, 17, 17, .85); backdrop-filter: blur(4px); color: #fff; font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; pointer-events: none; }
 .lightbox-content iframe,
 .lightbox-content object,
 .lightbox-content embed {

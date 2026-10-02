@@ -26,6 +26,14 @@ const toSlug = (text: string): string => {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 };
 
+const getWorkThumbnail = (work: SelectedWorkItem): string => {
+  if (work.thumbnail) return work.thumbnail;
+  if (work.type === 'pdf') {
+    return work.image.replace(/\.pdf$/i, '-thumb.webp');
+  }
+  return work.image;
+};
+
 export const BrandArchive: React.FC = () => {
   const [works, setWorks] = useState(selectedWorks);
   const [brands, setBrands] = useState(selectedWorkBrands);
@@ -204,23 +212,17 @@ export const BrandArchive: React.FC = () => {
                                 onPointerLeave={resetTilt}
                                 aria-label={`View ${work.title}`}
                               >
-                                <span className={`work-image-wrap${work.type === 'pdf' ? ' work-document' : ''}`}>
-                                  {work.type === 'pdf' ? (
-                                    <span className="document-card">
-                                      <span>PDF · PRESENTATION</span>
-                                      <strong>{work.brand}</strong>
-                                      <small>{work.title}</small>
-                                      <span className="document-open">
-                                        View presentation <ArrowRight size={14} />
-                                      </span>
+                                <span className={`work-image-wrap${work.type === 'pdf' ? ' work-pdf-wrap' : ''}`}>
+                                  <img
+                                    src={getWorkThumbnail(work)}
+                                    alt={work.title}
+                                    loading={index < 8 ? 'eager' : 'lazy'}
+                                    decoding="async"
+                                  />
+                                  {work.type === 'pdf' && (
+                                    <span className="pdf-badge" aria-label="PDF Document">
+                                      PDF
                                     </span>
-                                  ) : (
-                                    <img
-                                      src={work.image}
-                                      alt={work.title}
-                                      loading={index < 8 ? 'eager' : 'lazy'}
-                                      decoding="async"
-                                    />
                                   )}
                                 </span>
                                 <span className="work-caption">
