@@ -28,7 +28,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
               {about?.biography_paragraph_1 || 'I am a Graphic and Visual Designer with a background in Computer Science Engineering (B.E. from SKCT). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.'}
             </p>
             <p className="about-simple-copy home-about-second">
-              {about?.biography_paragraph_2 || 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for diverse brands including BAKERS, Pavizham Jewellers, Bro Knows Tech, LOFT, SIGGIS, Woneten, and Zen Spaces. I also pioneer AI-assisted workflows, reducing turnaround by 30% while delivering high-grade commercial visuals.'}
+              {about?.biography_paragraph_2 || 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for diverse brands including BAKERS, Pavizham Jewellers, Bro Knows Tech, LOFT, SIGGIS, Woneten Luxe, Wallfit, and Zen Spaces. I also pioneer AI-assisted workflows, reducing turnaround by 30% while delivering high-grade commercial visuals.'}
             </p>
             <div className="home-about-actions">
               <Link className="home-about-cta" to="/work" data-cursor="link">

@@ -20,12 +20,12 @@ import { SoftwareIcon } from '../components/sections/HomePortfolioSections';
 
 const metrics = [
   { value: '100+', label: 'Social Media Creatives', sub: 'Posts, stories, carousels & ad campaigns' },
-  { value: '16', label: 'Client Brands Handled', sub: 'F&B, jewellery, tech, fashion & retail' },
+  { value: '17+', label: 'Client Brands Handled', sub: 'F&B, jewellery, tech, fashion & interior decor' },
   { value: '30%', label: 'Turnaround Reduction', sub: 'Via AI-assisted production pipelines' },
   { value: '1+ Year', label: 'Agency Experience', sub: 'Graphic and Visual Designer at Bevis' },
 ];
 
-// Exact 16 brands from Sanjay's portfolio website archive with brand logos
+// Exact brands from Sanjay's portfolio website archive with official brand logos
 const workedBrands = [
   { name: 'BAKERS', logo: '/logos/bakers.png', subtitle: 'Bakers International', role: 'Fruit Crush Packaging, Exhibition Pavilions & Social Campaigns' },
   { name: 'PAVIZHAM', logo: '/logos/pavizham-dark.png', subtitle: 'Pavizham Jewellers', role: 'Royal Heritage Jewellery Campaigns, Print Hoardings & E-Commerce Visuals' },
@@ -33,8 +33,9 @@ const workedBrands = [
   { name: 'BEVIS', logo: '/logos/bevis.png', subtitle: 'Bevis Creatives', role: 'Mineral Water Brand Packaging, Corporate Identity & Exhibition Stalls' },
   { name: 'LOFT', logo: '/logos/loft.png', subtitle: 'Cinema & Sports Brand', role: 'Cinema & F1 Culture Posters, Monthly Sports Calendars & Pantry Identity' },
   { name: 'SIGGIS', logo: '/logos/siggis.png', subtitle: 'Food & Condiments', role: 'Zero-Preservative Condiments Packaging & Social Media Creatives' },
-  { name: 'Woneten', logo: '/logos/woneten.svg', subtitle: 'Apparel & Couture', role: 'Contemporary Ethnic & Festive Couture Fashion Campaigns' },
-  { name: 'Yaazhi', logo: '/logos/yaazhi.svg', subtitle: 'Jewellery & E-Commerce', role: '3D & AI E-Commerce Jewellery Visualization System' },
+  { name: 'Woneten Luxe', logo: '/logos/woneten-luxe.png', subtitle: 'Apparel & Couture', role: 'Contemporary Ethnic & Festive Couture Fashion Campaigns' },
+  { name: 'Yaazhi', logo: '/logos/yaazhi.svg', subtitle: 'Jewellery & Conscious Luxury', role: '3D & AI E-Commerce Jewellery Visualization System' },
+  { name: 'Wallfit', logo: '/logos/wallfit.png', subtitle: 'Wall Decor & Interiors', role: 'Commercial Brand Identity, Product Display & Print Creatives' },
   { name: 'ZEN', logo: '/logos/zen.svg', subtitle: 'Zen Spaces', role: 'Architecture & Ergonomics Content, Custom Furniture Design & Thumbnails' },
   { name: 'BEA', logo: '/logos/bea.png', subtitle: 'Retail Appliances', role: 'Retail Appliance Promotional Video Artwork & High-CTR Thumbnails' },
   { name: 'SMS', logo: '/logos/sms.png', subtitle: 'Education & Learning', role: 'Educational Storytelling, Visual Metaphors & Brand Carousels' },
@@ -59,7 +60,7 @@ export const AboutPage: React.FC = () => {
 
   const headline = about?.headline || 'Graphic and Visual Designer bridging engineering logic and modern brand craft.';
   const bio1 = about?.biography_paragraph_1 || 'I am a Graphic and Visual Designer based in Coimbatore with a background in Computer Science Engineering (B.E. from Sri Krishna College of Technology). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.';
-  const bio2 = about?.biography_paragraph_2 || 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for diverse brands including BAKERS, Pavizham Jewellers, Bro Knows Tech, LOFT, SIGGIS, Woneten, and Zen Spaces. I also pioneer AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.';
+  const bio2 = about?.biography_paragraph_2 || 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for diverse brands including BAKERS, Pavizham Jewellers, Bro Knows Tech, LOFT, SIGGIS, Woneten Luxe, Wallfit, and Zen Spaces. I also pioneer AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.';
 
   const experiences = [
     {
@@ -67,7 +68,7 @@ export const AboutPage: React.FC = () => {
       role: 'Graphic and Visual Designer',
       company: 'Bevis, Coimbatore',
       period: 'April 2025 – Present',
-      description: 'Designing 100+ social media creatives, commercial campaigns, structural packaging labels, and exhibition stalls across 16 client brands. Spearheading AI-assisted design workflows cutting production time by 30% while maintaining strict brand consistency.',
+      description: 'Designing 100+ social media creatives, commercial campaigns, structural packaging labels, and exhibition stalls across 17+ client brands. Spearheading AI-assisted design workflows cutting production time by 30% while maintaining strict brand consistency.',
     },
     {
       id: 'exp_2',
@@ -293,7 +294,7 @@ export const AboutPage: React.FC = () => {
           Brands I Have Worked With
         </h2>
         <p className="text-[15px] sm:text-[16px] text-[#5d655d] max-w-[760px] mb-8 leading-[1.6]">
-          A comprehensive showcase of the 16 real brands represented across my portfolio, spanning packaging engineering, high-engagement social media campaigns, brand identity systems, and digital art.
+          A comprehensive showcase of the 17 real brands represented across my portfolio, spanning packaging engineering, high-engagement social media campaigns, brand identity systems, and digital art.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

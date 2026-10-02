@@ -151,14 +151,14 @@ export const seedDatabase = async () => {
     headline: 'Graphic and Visual Designer bridging engineering logic and modern brand craft.',
     subheadline: 'Crafting high-converting social media creatives, brand identities, packaging, and digital interfaces.',
     biography_paragraph_1: 'I am a Graphic and Visual Designer based in Coimbatore with a background in Computer Science Engineering (B.E. from Sri Krishna College of Technology). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.',
-    biography_paragraph_2: 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for diverse brands including BAKERS, Pavizham Jewellers, Bro Knows Tech, LOFT, SIGGIS, Woneten, and Zen Spaces. I also pioneer AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.',
+    biography_paragraph_2: 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for diverse brands including BAKERS, Pavizham Jewellers, Bro Knows Tech, LOFT, SIGGIS, Woneten Luxe, Wallfit, and Zen Spaces. I also pioneer AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.',
     experiences: [
       {
         id: 'exp_1',
         role: 'Graphic and Visual Designer',
         company: 'Bevis, Coimbatore',
         period: 'April 2025 – Present',
-        description: 'Designed 100+ social media creatives, ad campaigns, and packaging labels across 16 client brands. Spearheaded AI-assisted design workflows cutting production time by 30% while maintaining strict brand consistency.',
+        description: 'Designed 100+ social media creatives, ad campaigns, and packaging labels across 17+ client brands. Spearheaded AI-assisted design workflows cutting production time by 30% while maintaining strict brand consistency.',
       },
       {
         id: 'exp_2',
