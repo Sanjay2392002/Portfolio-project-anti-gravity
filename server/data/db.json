@@ -1561,6 +1561,12 @@
   },
   "activity_logs": [
     {
+      "id": "act_28d6b838-7591-4a18-be6c-f8cd5f5a1956",
+      "action": "Admin Login",
+      "details": "Administrator Sanjay signed in.",
+      "created_at": "2026-10-02T09:52:55.856Z"
+    },
+    {
       "id": "act_798f9ca7-0de9-440b-ac46-ecedde58a146",
       "action": "Admin Login",
       "details": "Administrator Sanjay signed in.",

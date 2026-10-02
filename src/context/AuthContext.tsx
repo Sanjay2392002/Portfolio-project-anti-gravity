@@ -23,7 +23,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const checkAuth = async () => {
     try {
-      const res = await fetch('/api/admin/auth/me', { credentials: 'same-origin' });
+      const res = await fetch('/api/admin/auth/me', { credentials: 'include' });
       const data = await res.json().catch(() => null);
       if (data && data.success && data.user) {
         setUser(data.user);
@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const res = await fetch('/api/admin/auth/login', {
         method: 'POST',
-        credentials: 'same-origin',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ identifier: email.trim(), email: email.trim(), username: email.trim(), password }),
       });
@@ -68,7 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     try {
-      await fetch('/api/admin/auth/logout', { method: 'POST', credentials: 'same-origin' });
+      await fetch('/api/admin/auth/logout', { method: 'POST', credentials: 'include' });
     } catch (err) {
       console.error('Logout error:', err);
     } finally {

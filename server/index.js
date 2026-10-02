@@ -51,9 +51,11 @@ app.use(
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+    exposedHeaders: ['Set-Cookie'],
   })
 );
+app.options('*', cors());
 
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');

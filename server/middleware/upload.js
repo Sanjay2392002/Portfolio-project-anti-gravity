@@ -5,30 +5,49 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { v2 as cloudinary } from 'cloudinary';
 
+import os from 'os';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const UPLOADS_DIR = path.resolve(__dirname, '../../public/uploads');
 
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+// Safe upload directory resolution (works in serverless and containerized environments)
+let UPLOADS_DIR = path.resolve(__dirname, '../../public/uploads');
+try {
+  if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  }
+} catch {
+  // Read-only filesystem in serverless environments (e.g. /var/task on Vercel)
+  UPLOADS_DIR = path.join(os.tmpdir(), 'sanjay_portfolio_uploads');
+  try {
+    if (!fs.existsSync(UPLOADS_DIR)) {
+      fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    }
+  } catch {
+    // Best-effort directory fallback
+  }
 }
 
 // Check Cloudinary configuration
 const hasCloudinary = Boolean(
-  process.env.CLOUDINARY_CLOUD_NAME &&
-  process.env.CLOUDINARY_API_KEY &&
-  process.env.CLOUDINARY_API_SECRET
+  process.env.CLOUDINARY_CLOUD_NAME?.trim() &&
+  process.env.CLOUDINARY_API_KEY?.trim() &&
+  process.env.CLOUDINARY_API_SECRET?.trim()
 );
 
 if (hasCloudinary) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-  });
-  console.log('[Upload] Configured Cloudinary integration');
+  try {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME.trim(),
+      api_key: process.env.CLOUDINARY_API_KEY.trim(),
+      api_secret: process.env.CLOUDINARY_API_SECRET.trim(),
+    });
+    console.log('[Upload] Configured Cloudinary integration');
+  } catch (err) {
+    console.warn('[Upload] Cloudinary configuration warning:', err?.message || err);
+  }
 } else {
-  console.log('[Upload] Using local filesystem upload fallback (public/uploads)');
+  console.log('[Upload] Cloudinary credentials not configured; local media fallback active');
 }
 
 // Multer disk storage for receiving files

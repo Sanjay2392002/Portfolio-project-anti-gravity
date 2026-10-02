@@ -50,6 +50,7 @@ router.post('/login', loginRateLimit, async (req, res) => {
     const user = await db.getUserByUsernameOrEmail(identifier);
     const passwordMatches = await bcrypt.compare(password, user?.password_hash || dummyHash);
     if (!user || user.role !== 'admin' || !passwordMatches) {
+      console.warn(`[AUTH] Failed login attempt for "${identifier}" - reason: ${!user ? 'user not found' : user.role !== 'admin' ? 'role is not admin' : 'password mismatch'}`);
       return res.status(401).json({ success: false, error: 'Invalid username/email or password.' });
     }
 
@@ -59,10 +60,20 @@ router.post('/login', loginRateLimit, async (req, res) => {
     } catch (logErr) {
       console.warn('[AUTH] Could not record activity log:', logErr?.message);
     }
+    console.log(`[AUTH] Administrator "${user.username || user.email}" successfully signed in.`);
     return res.json({ success: true, user: { id: user.id, username: user.username || 'Sanjay', email: user.email, role: user.role } });
   } catch (err) {
-    console.error('[AUTH LOGIN ERROR]', err);
-    return res.status(500).json({ success: false, error: 'Sign-in is temporarily unavailable.' });
+    console.error('[AUTH LOGIN ERROR]', {
+      message: err?.message,
+      stack: err?.stack,
+      identifier,
+      code: err?.code,
+    });
+    return res.status(500).json({
+      success: false,
+      error: 'Sign-in is temporarily unavailable.',
+      details: process.env.NODE_ENV !== 'production' ? err?.message : undefined,
+    });
   }
 });
 

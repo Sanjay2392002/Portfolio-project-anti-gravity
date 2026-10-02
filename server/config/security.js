@@ -22,10 +22,14 @@ export const JWT_SECRET = jwtSecret;
 export const JWT_ISSUER = 'sanjay-portfolio-api';
 export const JWT_AUDIENCE = 'sanjay-portfolio-admin';
 export const ADMIN_SESSION_SECONDS = 2 * 60 * 60;
+const defaultSameSite = isProduction
+  ? (process.env.COOKIE_SAME_SITE || 'none')
+  : 'lax';
+
 export const ADMIN_COOKIE_OPTIONS = {
   httpOnly: true,
   secure: isProduction,
-  sameSite: 'lax',
+  sameSite: defaultSameSite,
   path: '/',
 };
 
@@ -63,5 +67,6 @@ export const isTrustedOrigin = (origin) => {
   if (ALLOWED_ORIGINS.has(parsed.origin)) return true;
   if (parsed.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(parsed.hostname)) return true;
   if (parsed.hostname.endsWith('.vercel.app')) return true;
+  if (parsed.hostname.endsWith('.onrender.com')) return true;
   return true;
 };
