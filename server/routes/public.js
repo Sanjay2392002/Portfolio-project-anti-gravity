@@ -114,6 +114,10 @@ router.get('/about', async (req, res) => {
 router.get('/settings/public', async (req, res) => {
   try {
     const settings = await db.getSettings('site_settings');
+    const resumeFile = await db.getMeta('resume_file');
+    const versionedResumeDownload = typeof resumeFile?.url === 'string' && resumeFile.url.includes('/raw/upload/')
+      ? (resumeFile.url.includes('/raw/upload/fl_attachment/') ? resumeFile.url : resumeFile.url.replace('/raw/upload/', '/raw/upload/fl_attachment/'))
+      : resumeFile?.download_url;
     const publicSettings = {
       site_name: textSetting(settings, 'site_name', 'SANJAY', 100),
       hero_eyebrow: textSetting(settings, 'hero_eyebrow', "Hi, I'm Sanjay.", 200),
@@ -124,7 +128,7 @@ router.get('/settings/public', async (req, res) => {
       linkedin_url: secureLinkSetting(settings, 'linkedin_url', 'https://www.linkedin.com/in/sanjaym23'),
       behance_url: secureLinkSetting(settings, 'behance_url', 'https://www.behance.net/sanjayuiuxgd'),
       resume_url: secureLinkSetting(settings, 'resume_url', '', true),
-      resume_download_url: secureLinkSetting(await db.getMeta('resume_file'), 'download_url', secureLinkSetting(settings, 'resume_url', '', true), true),
+      resume_download_url: secureLinkSetting({ download_url: versionedResumeDownload }, 'download_url', secureLinkSetting(settings, 'resume_url', '', true), true),
       availability: textSetting(settings, 'availability', 'Available for design work.', 500),
       footer_text: textSetting(settings, 'footer_text', '© 2026 SANJAY. All rights reserved.', 500),
       seo_title: textSetting(settings, 'seo_title', 'Sanjay — Graphic Designer', 255),
