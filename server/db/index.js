@@ -259,12 +259,8 @@ export const db = {
   getUserByEmail: async (email) => {
     const normalizedEmail = String(email).trim().toLowerCase();
     if (pool) {
-      try {
-        const res = await pool.query('SELECT * FROM users WHERE lower(email) = $1', [normalizedEmail]);
-        if (res.rows[0]) return res.rows[0];
-      } catch (err) {
-        console.warn('[DB] Postgres query failed in getUserByEmail, checking local store:', err.message);
-      }
+      const res = await pool.query('SELECT * FROM users WHERE lower(email) = $1 LIMIT 1', [normalizedEmail]);
+      return res.rows[0] || null;
     }
     const data = getLocalData();
     const found = (data.users || []).find((u) => u.email.toLowerCase() === normalizedEmail);
@@ -309,12 +305,8 @@ export const db = {
 
   getUserById: async (id) => {
     if (pool) {
-      try {
-        const res = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
-        if (res.rows[0]) return res.rows[0];
-      } catch (err) {
-        console.warn('[DB] Postgres query failed in getUserById, checking local store:', err.message);
-      }
+      const res = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+      return res.rows[0] || null;
     }
     const found = (getLocalData().users || []).find((user) => user.id === id);
     if (found) return found;
@@ -323,12 +315,8 @@ export const db = {
 
   getAdminUsers: async () => {
     if (pool) {
-      try {
-        const result = await pool.query("SELECT id, email, password_hash, role FROM users WHERE role = 'admin'");
-        if (result.rows.length) return result.rows;
-      } catch (err) {
-        console.warn('[DB] Postgres query failed in getAdminUsers, checking local store:', err.message);
-      }
+      const result = await pool.query("SELECT id, email, password_hash, role FROM users WHERE role = 'admin'");
+      return result.rows;
     }
     const users = (getLocalData().users || []).filter((user) => user.role === 'admin');
     return users.length > 0 ? users : DEFAULT_FALLBACK_USERS;
