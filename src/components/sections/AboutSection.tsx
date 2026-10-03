@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Download } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { MagneticHeroHeading } from './MagneticHeroHeading';
-import { Character3D } from '../character/Character3D';
+import { selectedWorks } from '../../data/selectedWorks';
+
+const heroWorks = ['BAKERS', 'Bro Knows Tech', 'PAVIZHAM']
+  .map((brand) => {
+    const brandWorks = selectedWorks.filter((work) => work.brand.toLowerCase() === brand.toLowerCase() && work.type === 'image');
+    const posters = brandWorks.filter((work) => work.category === 'Posters & Ads');
+    return posters.length ? posters : brandWorks;
+  })
+  .filter((works) => works.length > 0);
 
 interface AboutSectionProps {
   variant?: 'default' | 'home';
@@ -13,7 +21,14 @@ interface AboutSectionProps {
 export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' }) => {
   const { about, settings } = usePortfolio();
   const reduceMotion = useReducedMotion();
+  const [presentationIndex, setPresentationIndex] = useState(0);
   const cvUrl = settings?.resume_download_url || settings?.resume_url || '/Sanjay_M_Resume.pdf';
+
+  useEffect(() => {
+    if (variant !== 'home' || reduceMotion || !heroWorks.some((works) => works.length > 1)) return;
+    const interval = window.setInterval(() => setPresentationIndex((index) => index + 1), 5000);
+    return () => window.clearInterval(interval);
+  }, [variant, reduceMotion]);
   if (variant === 'home') {
     return (
       <section id="about" className="home-landing-hero">
@@ -72,35 +87,39 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
             initial={reduceMotion ? false : { opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-            aria-label="Sanjay's 3D character presenting a graphic design concept"
+            aria-label="Selected portfolio projects"
           >
             <div className="home-landing-art-halo" aria-hidden="true" />
-            <div className="home-landing-scene-grid" aria-hidden="true" />
-            <motion.div
-              className="home-landing-design-board"
-              aria-hidden="true"
-              initial={reduceMotion ? false : { opacity: 0, y: 18, rotate: 7 }}
-              animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: [0, -7, 0], rotate: 4 }}
-              transition={reduceMotion ? { duration: 0.2 } : { opacity: { duration: 0.7, delay: 0.45 }, y: { duration: 5.5, delay: 1, repeat: Infinity, ease: 'easeInOut' }, rotate: { duration: 0.8, delay: 0.45 } }}
-            >
-              <div className="home-landing-board-toolbar"><span /><span /><span /><small>01 / CAMPAIGN</small></div>
-              <div className="home-landing-board-canvas">
-                <i className="home-landing-board-sun" />
-                <span className="home-landing-board-copy">MAKE<br />IT<br /><b>MATTER.</b></span>
-                <i className="home-landing-board-line" />
-              </div>
-              <div className="home-landing-board-palette"><i /><i /><i /><i /><small>VISUAL DIRECTION</small></div>
-            </motion.div>
-            <motion.div
-              className="home-landing-character-stage"
-              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-              animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: [0, -4, 0] }}
-              transition={reduceMotion ? { duration: 0.2 } : { opacity: { duration: 0.8, delay: 0.25 }, y: { duration: 5, delay: 1, repeat: Infinity, ease: 'easeInOut' } }}
-            >
-              <Character3D variant="full" size="hero" enableMouseLook enableTilt />
-            </motion.div>
-            <div className="home-landing-art-label"><span>DESIGN IN PROGRESS</span><strong>Ideas, made visible.</strong></div>
-            <span className="home-landing-art-orbit" aria-hidden="true">TYPE · COLOR · FORM</span>
+            {heroWorks.map((slides, index) => {
+              const work = slides[presentationIndex % slides.length];
+              return (
+                <motion.figure
+                  key={work.id}
+                  className={`home-landing-art-card home-landing-art-card-${index + 1}`}
+                  initial={reduceMotion ? false : { opacity: 0, y: 28, rotate: index === 1 ? 9 : index === 2 ? -8 : 0 }}
+                  animate={reduceMotion ? { opacity: 1 } : {
+                    opacity: 1,
+                    y: index === 0 ? [0, -7, 0] : 0,
+                    rotate: index === 1 ? 7 : index === 2 ? -6 : 0,
+                  }}
+                  transition={reduceMotion
+                    ? { duration: 0.2 }
+                    : index === 0
+                      ? { opacity: { duration: 0.7, delay: 0.35 }, y: { duration: 6, delay: 1.2, repeat: Infinity, ease: 'easeInOut' } }
+                      : { duration: 0.8, delay: 0.3 + index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={reduceMotion ? undefined : { y: -8, rotate: index === 0 ? -2 : index === 1 ? 10 : -9, scale: 1.02 }}
+                >
+                  <img
+                    src={work.thumbnail || work.image}
+                    alt={`${work.brand} — ${work.title}`}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                  />
+                  <figcaption><span>0{index + 1}</span><strong>{work.brand}</strong></figcaption>
+                </motion.figure>
+              );
+            })}
+            <div className="home-landing-art-note"><span>SELECTED WORKS</span><strong>Built to be seen.</strong></div>
+            <span className="home-landing-art-orbit" aria-hidden="true">DESIGN · BRAND · DIGITAL</span>
           </motion.div>
         </div>
         <motion.a
