@@ -832,7 +832,7 @@
 .home-footer-bottom button { border: 0; padding: 0; background: transparent; cursor: pointer; }
 .home-page section[id] { scroll-margin-top: 84px; }
 /* ==========================================================================
-   Distinctive High-Visibility Designer Cursor
+   Monochrome Inverting Designer Cursor (Black on White, White on Black)
    ========================================================================== */
 .designer-cursor-system {
   position: fixed;
@@ -870,13 +870,15 @@
   }
 }
 
-/* Outer follower (ring / badge) container */
+/* Outer follower (ring / badge) container with difference blending */
 .designer-cursor-follower {
   position: fixed;
   top: 0;
   left: 0;
   pointer-events: none;
   will-change: transform, opacity;
+  mix-blend-mode: difference;
+  isolation: isolate;
   transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -885,49 +887,48 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid #0da662;
-  background-color: rgba(13, 166, 98, 0.06);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.22), 0 0 10px rgba(13, 166, 98, 0.2);
+  border: 1.5px solid #ffffff;
+  background-color: transparent;
   transition:
     width 0.26s cubic-bezier(0.22, 1, 0.36, 1),
     height 0.26s cubic-bezier(0.22, 1, 0.36, 1),
     border-radius 0.26s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.2s ease,
     background-color 0.2s ease,
-    box-shadow 0.2s ease,
     transform 0.16s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Subtle orbit accent: delicate hairline arc in vivid mint */
+/* Subtle orbit accent: clean hairline arc */
 .designer-cursor-orbit {
   position: absolute;
   inset: -1.5px;
   border-radius: 50%;
   border: 1.5px solid transparent;
-  border-top-color: #34d399;
+  border-top-color: #ffffff;
   transform: rotate(38deg);
-  transition: border-top-color 0.2s ease, transform 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
-/* Lead dot container */
+/* Lead dot container with difference blending */
 .designer-cursor-lead {
   position: fixed;
   top: 0;
   left: 0;
   pointer-events: none;
   will-change: transform, opacity;
+  mix-blend-mode: difference;
   transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Central dot - high visibility emerald with sharp contrast boundary */
+/* Central dot - pure white with difference blend mode:
+   renders as pure BLACK in white areas, and pure WHITE in black areas */
 .designer-cursor-dot {
   position: absolute;
   top: 0;
@@ -936,47 +937,41 @@
   height: 7px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  background-color: #0da662;
+  background-color: #ffffff;
   box-sizing: border-box;
-  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.3), 0 0 8px rgba(13, 166, 98, 0.55);
-  transition:
-    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ------------------------------------------------------------------
    Interactive States: Clickable / Links / Buttons
    ------------------------------------------------------------------ */
 .designer-cursor-ring--link {
-  width: 42px;
-  height: 42px;
-  border-color: #00c853;
-  background-color: rgba(13, 166, 98, 0.14);
-  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.25), 0 0 16px rgba(0, 200, 83, 0.35);
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid #ffffff;
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 .designer-cursor-ring--link .designer-cursor-orbit {
-  border-top-color: #00e676;
+  border-top-color: #ffffff;
   transform: rotate(72deg);
 }
 
 .designer-cursor-dot--link {
   transform: translate(-50%, -50%) scale(1.25);
-  background-color: #00c853;
-  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.35), 0 0 12px rgba(0, 200, 83, 0.7);
 }
 
 /* ------------------------------------------------------------------
    Contextual States: Portfolio / Work Cards (VIEW)
+   In white areas: Black capsule with White text
+   In black areas: White capsule with Black text
    ------------------------------------------------------------------ */
 .designer-cursor-ring--view {
   width: 58px;
   height: 26px;
   border-radius: 9999px;
-  background-color: #0da662;
-  border-color: #34d399;
-  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.3), 0 4px 18px rgba(13, 166, 98, 0.5);
+  background-color: #ffffff;
+  border: 1.5px solid #ffffff;
 }
 
 .designer-cursor-view-text {
@@ -984,7 +979,7 @@
   font-weight: 800;
   letter-spacing: 0.16em;
   line-height: 1;
-  color: #ffffff;
+  color: #000000;
   user-select: none;
   pointer-events: none;
   padding-left: 0.16em;
@@ -995,40 +990,47 @@
    ------------------------------------------------------------------ */
 .designer-cursor-ring.is-pressed {
   transform: translate(-50%, -50%) scale(0.82);
-  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.35), 0 0 6px rgba(13, 166, 98, 0.3);
 }
 
 .designer-cursor-dot.is-pressed {
   transform: translate(-50%, -50%) scale(0.65);
 }
 
-/* ------------------------------------------------------------------
-   Dark Theme Adaptation (over .home-skills-wrapper, #contact, etc.)
-   ------------------------------------------------------------------ */
-.designer-cursor-system.cursor--dark .designer-cursor-ring {
-  border-color: #00e676;
-  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5), 0 0 14px rgba(0, 230, 118, 0.4);
-}
+/* Fallback for browsers that do not support mix-blend-mode: difference */
+@supports not (mix-blend-mode: difference) {
+  .designer-cursor-system.cursor--light .designer-cursor-ring {
+    border-color: #000000;
+  }
+  .designer-cursor-system.cursor--light .designer-cursor-orbit {
+    border-top-color: #000000;
+  }
+  .designer-cursor-system.cursor--light .designer-cursor-dot {
+    background-color: #000000;
+  }
+  .designer-cursor-system.cursor--light .designer-cursor-ring--view {
+    background-color: #000000;
+    border-color: #000000;
+  }
+  .designer-cursor-system.cursor--light .designer-cursor-view-text {
+    color: #ffffff;
+  }
 
-.designer-cursor-system.cursor--dark .designer-cursor-orbit {
-  border-top-color: #69f0ae;
-}
-
-.designer-cursor-system.cursor--dark .designer-cursor-dot {
-  background-color: #00e676;
-  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.6), 0 0 10px rgba(0, 230, 118, 0.7);
-}
-
-.designer-cursor-system.cursor--dark .designer-cursor-ring--link {
-  border-color: #00e676;
-  background-color: rgba(0, 230, 118, 0.18);
-  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 230, 118, 0.5);
-}
-
-.designer-cursor-system.cursor--dark .designer-cursor-ring--view {
-  background-color: #00c853;
-  border-color: #b9f6ca;
-  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5), 0 4px 22px rgba(0, 200, 83, 0.6);
+  .designer-cursor-system.cursor--dark .designer-cursor-ring {
+    border-color: #ffffff;
+  }
+  .designer-cursor-system.cursor--dark .designer-cursor-orbit {
+    border-top-color: #ffffff;
+  }
+  .designer-cursor-system.cursor--dark .designer-cursor-dot {
+    background-color: #ffffff;
+  }
+  .designer-cursor-system.cursor--dark .designer-cursor-ring--view {
+    background-color: #ffffff;
+    border-color: #ffffff;
+  }
+  .designer-cursor-system.cursor--dark .designer-cursor-view-text {
+    color: #000000;
+  }
 }
 
 /* Accessibility: respect prefers-reduced-motion */
