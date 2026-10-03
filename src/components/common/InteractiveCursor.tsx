@@ -15,38 +15,53 @@ export const InteractiveCursor: React.FC = () => {
   const targetY = useMotionValue(-100);
 
   // Center dot: high responsiveness for precise tactile aim
-  const dotX = useSpring(targetX, { damping: 42, stiffness: 850, mass: 0.12 });
-  const dotY = useSpring(targetY, { damping: 42, stiffness: 850, mass: 0.12 });
+  const dotX = useSpring(targetX, { damping: 45, stiffness: 1000, mass: 0.08 });
+  const dotY = useSpring(targetY, { damping: 45, stiffness: 1000, mass: 0.08 });
 
   // Outer ring / badge: silky fluid trailing spring with subtle organic easing
-  const ringX = useSpring(targetX, { damping: 28, stiffness: 240, mass: 0.38 });
-  const ringY = useSpring(targetY, { damping: 28, stiffness: 240, mass: 0.38 });
+  const ringX = useSpring(targetX, { damping: 28, stiffness: 280, mass: 0.32 });
+  const ringY = useSpring(targetY, { damping: 28, stiffness: 280, mass: 0.32 });
 
   const isFirstMove = useRef(true);
 
   useEffect(() => {
-    // Only enable on desktop pointer devices with fine pointer (not touch)
-    const pointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+    // Only disable if device is purely touch with no fine pointer, or user reduced motion
+    const isTouchOnly = () => {
+      return (
+        window.matchMedia('(pointer: coarse)').matches &&
+        !window.matchMedia('(any-pointer: fine)').matches
+      );
+    };
+
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     const updateEnabled = () => {
-      setEnabled(pointerQuery.matches && !motionQuery.matches);
+      setEnabled(!isTouchOnly() && !motionQuery.matches);
     };
 
     updateEnabled();
-    pointerQuery.addEventListener('change', updateEnabled);
     motionQuery.addEventListener('change', updateEnabled);
 
-    const handlePointerMove = (event: PointerEvent) => {
-      if (event.pointerType !== 'mouse') return;
+    const handlePointerMove = (event: PointerEvent | MouseEvent) => {
+      // Exclude pure touch screen taps
+      if ('pointerType' in event && event.pointerType === 'touch') return;
+
+      if (!enabled && !motionQuery.matches) {
+        setEnabled(true);
+      }
 
       if (isFirstMove.current) {
-        targetX.jump(event.clientX);
-        targetY.jump(event.clientY);
-        dotX.jump(event.clientX);
-        dotY.jump(event.clientY);
-        ringX.jump(event.clientX);
-        ringY.jump(event.clientY);
+        try {
+          targetX.jump(event.clientX);
+          targetY.jump(event.clientY);
+          dotX.jump(event.clientX);
+          dotY.jump(event.clientY);
+          ringX.jump(event.clientX);
+          ringY.jump(event.clientY);
+        } catch {
+          targetX.set(event.clientX);
+          targetY.set(event.clientY);
+        }
         isFirstMove.current = false;
       } else {
         targetX.set(event.clientX);
@@ -58,11 +73,11 @@ export const InteractiveCursor: React.FC = () => {
       }
     };
 
-    const handlePointerOver = (event: PointerEvent) => {
+    const handlePointerOver = (event: Event) => {
       const target = event.target instanceof Element ? event.target : null;
       if (!target) return;
 
-      // Dark background detection for adaptive palette
+      // Dark background detection for additional contrast boost
       const darkArea = target.closest(
         '.home-skills-wrapper, .bg-black, [class*="bg-black"], #contact, [data-theme="dark"], .lightbox-backdrop'
       );
@@ -96,8 +111,9 @@ export const InteractiveCursor: React.FC = () => {
       setMode('default');
     };
 
-    const handlePointerDown = (event: PointerEvent) => {
-      if (event.pointerType === 'mouse' && event.button === 0) {
+    const handlePointerDown = (event: PointerEvent | MouseEvent) => {
+      if ('pointerType' in event && event.pointerType === 'touch') return;
+      if (event.button === 0) {
         setPressed(true);
       }
     };
@@ -117,25 +133,32 @@ export const InteractiveCursor: React.FC = () => {
     };
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    window.addEventListener('mousemove', handlePointerMove, { passive: true });
     window.addEventListener('pointerdown', handlePointerDown, { passive: true });
+    window.addEventListener('mousedown', handlePointerDown, { passive: true });
     window.addEventListener('pointerup', handlePointerUp, { passive: true });
+    window.addEventListener('mouseup', handlePointerUp, { passive: true });
     document.addEventListener('pointerover', handlePointerOver, { passive: true });
+    document.addEventListener('mouseover', handlePointerOver, { passive: true });
     document.documentElement.addEventListener('mouseleave', handleMouseLeave);
     document.documentElement.addEventListener('mouseenter', handleMouseEnter);
     window.addEventListener('blur', handleMouseLeave);
 
     return () => {
-      pointerQuery.removeEventListener('change', updateEnabled);
       motionQuery.removeEventListener('change', updateEnabled);
       window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('mousemove', handlePointerMove);
       window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('mousedown', handlePointerDown);
       window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('mouseup', handlePointerUp);
       document.removeEventListener('pointerover', handlePointerOver);
+      document.removeEventListener('mouseover', handlePointerOver);
       document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
       document.documentElement.removeEventListener('mouseenter', handleMouseEnter);
       window.removeEventListener('blur', handleMouseLeave);
     };
-  }, [dotX, dotY, ringX, ringY, targetX, targetY, visible]);
+  }, [dotX, dotY, enabled, ringX, ringY, targetX, targetY, visible]);
 
   if (!enabled) return null;
 
