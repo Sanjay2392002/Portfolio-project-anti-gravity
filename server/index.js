@@ -172,7 +172,7 @@ if (!process.env.VERCEL) {
   process.once('SIGTERM', shutdown);
 } else {
   // Warm the serverless instance; the API middleware also awaits this promise per request.
-  void ensureServerlessInitialized();
+  void ensureServerlessInitialized().catch(() => {});
 }
 
 export default app;
