@@ -16,12 +16,20 @@ import adminProjectsRouter from './routes/adminProjects.js';
 import adminMediaRouter from './routes/adminMedia.js';
 import adminContentRouter from './routes/adminContent.js';
 import selectedWorksAdminRouter from './routes/adminSelectedWorks.js';
+import adminCvRouter from './routes/adminCv.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 let httpServer = null;
+let serverlessInitPromise = null;
+const ensureServerlessInitialized = () => {
+  if (!serverlessInitPromise) {
+    serverlessInitPromise = initializeDatabase().then(() => seedDatabase());
+  }
+  return serverlessInitPromise;
+};
 app.disable('x-powered-by');
 const rawHops = process.env.TRUST_PROXY_HOPS !== undefined ? Number(process.env.TRUST_PROXY_HOPS) : (process.env.VERCEL ? 1 : 0);
 const proxyHops = Number.isInteger(rawHops) && rawHops >= 0 && rawHops <= 5 ? rawHops : (process.env.VERCEL ? 1 : 0);
@@ -73,6 +81,13 @@ app.use(cookieParser());
 app.use(express.json({ limit: '1mb', strict: true }));
 app.use(express.urlencoded({ extended: false, limit: '100kb', parameterLimit: 50 }));
 
+// Await schema and seed setup before serving the first serverless API request.
+app.use('/api', async (req, res, next) => {
+  if (!process.env.VERCEL) return next();
+  try { await ensureServerlessInitialized(); next(); }
+  catch { return res.status(503).json({ success: false, error: 'Portfolio storage is unavailable. Check DATABASE_URL and database connectivity.' }); }
+});
+
 // Static files (uploads, public assets, and selective works)
 const publicDir = path.resolve(__dirname, '../public');
 app.use(express.static(publicDir));
@@ -89,6 +104,7 @@ app.use('/api', publicRouter);
 app.use('/api/admin/auth', authRouter);
 app.use('/api/admin/projects', adminProjectsRouter);
 app.use('/api/admin/media', adminMediaRouter);
+app.use('/api/admin/cv', adminCvRouter);
 app.use('/api/admin/selected-works', selectedWorksAdminRouter);
 app.use('/api/admin', adminContentRouter);
 
@@ -155,19 +171,8 @@ if (!process.env.VERCEL) {
   process.once('SIGINT', shutdown);
   process.once('SIGTERM', shutdown);
 } else {
-  // In Vercel serverless functions, initialize in background without app.listen or process.exitCode
-  let initPromise = null;
-  const ensureInitialized = () => {
-    if (!initPromise) {
-      initPromise = initializeDatabase()
-        .then(() => seedDatabase())
-        .catch((err) => {
-          console.warn('[Serverless DB] Initialization warning (non-fatal):', err?.message || err);
-        });
-    }
-    return initPromise;
-  };
-  ensureInitialized();
+  // Warm the serverless instance; the API middleware also awaits this promise per request.
+  void ensureServerlessInitialized();
 }
 
 export default app;
