@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Download } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { MagneticHeroHeading } from './MagneticHeroHeading';
-import { selectedWorks } from '../../data/selectedWorks';
+import { selectedWorkBrands, selectedWorks } from '../../data/selectedWorks';
 
-const heroWorks = ['BAKERS', 'Bro Knows Tech', 'PAVIZHAM']
+const heroWorks = selectedWorkBrands
   .map((brand) => {
     const brandWorks = selectedWorks.filter((work) => work.brand.toLowerCase() === brand.toLowerCase() && work.type === 'image');
     const posters = brandWorks.filter((work) => work.category === 'Posters & Ads');
@@ -22,10 +22,11 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
   const { about, settings } = usePortfolio();
   const reduceMotion = useReducedMotion();
   const [presentationIndex, setPresentationIndex] = useState(0);
+  const [loadedWorkIds, setLoadedWorkIds] = useState<Set<string>>(() => new Set());
   const cvUrl = settings?.resume_download_url || settings?.resume_url || '/Sanjay_M_Resume.pdf';
 
   useEffect(() => {
-    if (variant !== 'home' || reduceMotion || !heroWorks.some((works) => works.length > 1)) return;
+    if (variant !== 'home' || reduceMotion || heroWorks.length < 2) return;
     const interval = window.setInterval(() => setPresentationIndex((index) => index + 1), 5000);
     return () => window.clearInterval(interval);
   }, [variant, reduceMotion]);
@@ -90,11 +91,19 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
             aria-label="Selected portfolio projects"
           >
             <div className="home-landing-art-halo" aria-hidden="true" />
-            {heroWorks.map((slides, index) => {
+            {heroWorks.length > 0 && [0, 1, 2].map((index) => {
+              const slides = heroWorks[(presentationIndex * 3 + index) % heroWorks.length];
               const work = slides[presentationIndex % slides.length];
+              const imageLoaded = loadedWorkIds.has(work.id);
+              const markLoaded = () => setLoadedWorkIds((current) => {
+                if (current.has(work.id)) return current;
+                const next = new Set(current);
+                next.add(work.id);
+                return next;
+              });
               return (
                 <motion.figure
-                  key={work.id}
+                  key={`work-card-${index}`)
                   className={`home-landing-art-card home-landing-art-card-${index + 1}`}
                   initial={reduceMotion ? false : { opacity: 0, y: 28, rotate: index === 1 ? 9 : index === 2 ? -8 : 0 }}
                   animate={reduceMotion ? { opacity: 1 } : {
@@ -109,12 +118,43 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
                       : { duration: 0.8, delay: 0.3 + index * 0.12, ease: [0.22, 1, 0.36, 1] }}
                   whileHover={reduceMotion ? undefined : { y: -8, rotate: index === 0 ? -2 : index === 1 ? 10 : -9, scale: 1.02 }}
                 >
-                  <img
-                    src={work.thumbnail || work.image}
-                    alt={`${work.brand} — ${work.title}`}
-                    loading={index === 0 ? 'eager' : 'lazy'}
-                  />
-                  <figcaption><span>0{index + 1}</span><strong>{work.brand}</strong></figcaption>
+                  <div className="home-landing-art-frame">
+                    {!imageLoaded && (
+                      <div className="home-landing-card-loader" aria-hidden="true">
+                        <span className="home-landing-card-loader-mark"><i /><i /><i /></span>
+                        <small>DEVELOPING<br />CREATIVE</small>
+                      </div>
+                    )}
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.img
+                        key={work.id}
+                        src={work.thumbnail || work.image}
+                        alt={`${work.brand} — ${work.title}`}
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                        initial={reduceMotion ? false : { opacity: 0, scale: 1.045, filter: 'blur(8px)' }}
+                        animate={{ opacity: imageLoaded ? 1 : 0, scale: 1, filter: 'blur(0px)' }}
+                        exit={reduceMotion ? undefined : { opacity: 0, scale: 0.97, filter: 'blur(4px)' }}
+                        transition={{ duration: reduceMotion ? 0.15 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+                        onLoad={markLoaded}
+                        onError={markLoaded}
+                      />
+                    </AnimatePresence>
+                  </div>
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.figcaption
+                      key={work.id}
+                      initial={reduceMotion ? false : { opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
+                      transition={{ duration: reduceMotion ? 0.15 : 0.22 }}
+                    >
+                      <span>0{index + 1}</span>
+                      <div className="home-landing-art-caption-copy">
+                        <strong>{work.brand}</strong>
+                        <small>{work.title}</small>
+                      </div>
+                    </motion.figcaption>
+                  </AnimatePresence>
                 </motion.figure>
               );
             })}
