@@ -30,7 +30,7 @@ const storageUnavailable = (res) => {
 
 const currentSettings = async () => (await db.getSettings('site_settings')) || {};
 const versionedAttachmentUrl = (url) => typeof url === 'string' && url.includes('/raw/upload/')
-  ? url.replace(/\/raw\/upload\/(?:fl_attachment(?::[^/]*)?\/)?/, '/raw/upload/fl_attachment:Sanjay_M_Resume.pdf/')
+  ? url.replace(/\/raw\/upload\/(?:fl_attachment(?::[^/]*)?\/)?/, '/raw/upload/fl_attachment:Sanjay_M_Resume/')
   : url;
 
 router.get('/', async (req, res) => {
