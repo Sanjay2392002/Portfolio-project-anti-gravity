@@ -123,7 +123,7 @@ router.get('/settings/public', async (req, res) => {
       phone: typeof settings?.phone === 'string' && /^\+?[0-9(). -]{5,30}$/.test(settings.phone) ? settings.phone : '+91 7010948452',
       linkedin_url: secureLinkSetting(settings, 'linkedin_url', 'https://www.linkedin.com/in/sanjaym23'),
       behance_url: secureLinkSetting(settings, 'behance_url', 'https://www.behance.net/sanjayuiuxgd'),
-      resume_url: secureLinkSetting(settings, 'resume_url', '/cv-sanjay.pdf', true),
+      resume_url: secureLinkSetting(settings, 'resume_url', '/Sanjay_M_Resume.pdf', true),
       availability: textSetting(settings, 'availability', 'Available for design work.', 500),
       footer_text: textSetting(settings, 'footer_text', '© 2026 SANJAY. All rights reserved.', 500),
       seo_title: textSetting(settings, 'seo_title', 'Sanjay — Graphic Designer', 255),

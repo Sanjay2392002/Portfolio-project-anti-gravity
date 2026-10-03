@@ -138,7 +138,7 @@ export const seedDatabase = async () => {
     phone: '+91 7010948452',
     linkedin_url: 'https://www.linkedin.com/in/sanjaym23',
     behance_url: 'https://www.behance.net/sanjayuiuxgd',
-    resume_url: '/cv-sanjay.pdf',
+    resume_url: '/Sanjay_M_Resume.pdf',
     availability: 'Available for design work.',
     footer_text: '© 2026 SANJAY. All rights reserved.',
     seo_title: 'Sanjay — Graphic Designer',
