@@ -29,12 +29,18 @@ const storageUnavailable = (res) => {
 };
 
 const currentSettings = async () => (await db.getSettings('site_settings')) || {};
+const versionedAttachmentUrl = (url) => typeof url === 'string' && url.includes('/raw/upload/')
+  ? (url.includes('/raw/upload/fl_attachment/') ? url : url.replace('/raw/upload/', '/raw/upload/fl_attachment/'))
+  : url;
 
 router.get('/', async (req, res) => {
   if (storageUnavailable(res)) return;
   try {
     const [metadata, settings] = await Promise.all([db.getMeta('resume_file'), currentSettings()]);
-    return res.json({ success: true, data: metadata || (settings.resume_url ? { url: settings.resume_url, filename: path.basename(settings.resume_url), updated_at: null } : null) });
+    const data = metadata
+      ? { ...metadata, download_url: versionedAttachmentUrl(metadata.url) || metadata.download_url }
+      : (settings.resume_url ? { url: settings.resume_url, filename: path.basename(settings.resume_url), updated_at: null } : null);
+    return res.json({ success: true, data });
   } catch {
     return res.status(500).json({ success: false, error: 'Could not load CV details.' });
   }
@@ -66,10 +72,11 @@ router.post('/', upload.single('file'), async (req, res) => {
 
     const metadata = {
       url: uploaded.secure_url,
-      download_url: cloudinary.url(uploaded.public_id, { resource_type: 'raw', secure: true, flags: 'attachment' }),
+      download_url: versionedAttachmentUrl(uploaded.secure_url),
       public_id: uploaded.public_id,
       filename,
       bytes: uploaded.bytes,
+      version: uploaded.version,
       format: 'pdf',
       updated_at: new Date().toISOString(),
     };
