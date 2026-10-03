@@ -110,11 +110,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
                   role="link"
                   tabIndex={0}
                   aria-label={`Open ${work.title} by ${work.brand} in selected works`}
-                  drag
-                  dragConstraints={artConstraintsRef}
-                  dragElastic={0.12}
-                  dragMomentum={false}
-                  onTap={() => {
+                  data-cursor="view"
+                  onClick={() => {
                     const brandSlug = work.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
                     const params = new URLSearchParams({ brand: brandSlug, work: work.id, title: work.title });
                     navigate(`/work?${params.toString()}`);

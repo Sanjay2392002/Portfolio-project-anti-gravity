@@ -832,7 +832,8 @@
 .home-footer-bottom button { border: 0; padding: 0; background: transparent; cursor: pointer; }
 .home-page section[id] { scroll-margin-top: 84px; }
 /* ==========================================================================
-   Monochrome Inverting Designer Cursor (Black on White, White on Black)
+   Monochrome Adaptive Designer Cursor
+   Black in white/light areas, White in black/dark areas
    ========================================================================== */
 .designer-cursor-system {
   position: fixed;
@@ -870,15 +871,13 @@
   }
 }
 
-/* Outer follower (ring / badge) container with difference blending */
+/* Outer follower (ring / badge) container */
 .designer-cursor-follower {
   position: fixed;
   top: 0;
   left: 0;
   pointer-events: none;
   will-change: transform, opacity;
-  mix-blend-mode: difference;
-  isolation: isolate;
   transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -887,48 +886,44 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid #ffffff;
-  background-color: transparent;
   transition:
-    width 0.26s cubic-bezier(0.22, 1, 0.36, 1),
-    height 0.26s cubic-bezier(0.22, 1, 0.36, 1),
-    border-radius 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.2s ease,
     background-color 0.2s ease,
     transform 0.16s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Subtle orbit accent: clean hairline arc */
+/* Subtle orbit accent arc */
 .designer-cursor-orbit {
   position: absolute;
   inset: -1.5px;
   border-radius: 50%;
   border: 1.5px solid transparent;
-  border-top-color: #ffffff;
   transform: rotate(38deg);
-  transition: transform 0.3s ease;
+  transition: border-top-color 0.2s ease, transform 0.3s ease;
 }
 
-/* Lead dot container with difference blending */
+/* Lead dot container */
 .designer-cursor-lead {
   position: fixed;
   top: 0;
   left: 0;
   pointer-events: none;
   will-change: transform, opacity;
-  mix-blend-mode: difference;
   transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Central dot - pure white with difference blend mode:
-   renders as pure BLACK in white areas, and pure WHITE in black areas */
+/* Central dot */
 .designer-cursor-dot {
   position: absolute;
   top: 0;
@@ -937,44 +932,108 @@
   height: 7px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  background-color: #ffffff;
   box-sizing: border-box;
-  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition:
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.2s ease;
 }
 
 /* ------------------------------------------------------------------
-   Interactive States: Clickable / Links / Buttons
+   WHITE / LIGHT AREAS: CURSOR IS SOLID BLACK
    ------------------------------------------------------------------ */
-.designer-cursor-ring--link {
-  width: 44px;
-  height: 44px;
-  border: 1.5px solid #ffffff;
-  background-color: rgba(255, 255, 255, 0.12);
+.designer-cursor-system.cursor--light .designer-cursor-ring {
+  border: 1.5px solid #000000;
+  background-color: transparent;
 }
 
-.designer-cursor-ring--link .designer-cursor-orbit {
+.designer-cursor-system.cursor--light .designer-cursor-orbit {
+  border-top-color: #000000;
+}
+
+.designer-cursor-system.cursor--light .designer-cursor-dot {
+  background-color: #000000;
+}
+
+.designer-cursor-system.cursor--light .designer-cursor-ring--link {
+  width: 42px;
+  height: 42px;
+  border-color: #000000;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.designer-cursor-system.cursor--light .designer-cursor-ring--link .designer-cursor-orbit {
+  border-top-color: #000000;
+  transform: rotate(72deg);
+}
+
+.designer-cursor-system.cursor--light .designer-cursor-dot--link {
+  transform: translate(-50%, -50%) scale(1.25);
+  background-color: #000000;
+}
+
+.designer-cursor-system.cursor--light .designer-cursor-ring--view {
+  width: 58px;
+  height: 26px;
+  border-radius: 9999px;
+  background-color: #000000;
+  border: 1.5px solid #000000;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+}
+
+.designer-cursor-system.cursor--light .designer-cursor-view-text {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  color: #ffffff;
+  user-select: none;
+  pointer-events: none;
+  padding-left: 0.16em;
+}
+
+/* ------------------------------------------------------------------
+   BLACK / DARK AREAS: CURSOR IS SOLID WHITE
+   ------------------------------------------------------------------ */
+.designer-cursor-system.cursor--dark .designer-cursor-ring {
+  border: 1.5px solid #ffffff;
+  background-color: transparent;
+}
+
+.designer-cursor-system.cursor--dark .designer-cursor-orbit {
+  border-top-color: #ffffff;
+}
+
+.designer-cursor-system.cursor--dark .designer-cursor-dot {
+  background-color: #ffffff;
+}
+
+.designer-cursor-system.cursor--dark .designer-cursor-ring--link {
+  width: 42px;
+  height: 42px;
+  border-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.designer-cursor-system.cursor--dark .designer-cursor-ring--link .designer-cursor-orbit {
   border-top-color: #ffffff;
   transform: rotate(72deg);
 }
 
-.designer-cursor-dot--link {
+.designer-cursor-system.cursor--dark .designer-cursor-dot--link {
   transform: translate(-50%, -50%) scale(1.25);
+  background-color: #ffffff;
 }
 
-/* ------------------------------------------------------------------
-   Contextual States: Portfolio / Work Cards (VIEW)
-   In white areas: Black capsule with White text
-   In black areas: White capsule with Black text
-   ------------------------------------------------------------------ */
-.designer-cursor-ring--view {
+.designer-cursor-system.cursor--dark .designer-cursor-ring--view {
   width: 58px;
   height: 26px;
   border-radius: 9999px;
   background-color: #ffffff;
   border: 1.5px solid #ffffff;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.25);
 }
 
-.designer-cursor-view-text {
+.designer-cursor-system.cursor--dark .designer-cursor-view-text {
   font-size: 9.5px;
   font-weight: 800;
   letter-spacing: 0.16em;
@@ -994,43 +1053,6 @@
 
 .designer-cursor-dot.is-pressed {
   transform: translate(-50%, -50%) scale(0.65);
-}
-
-/* Fallback for browsers that do not support mix-blend-mode: difference */
-@supports not (mix-blend-mode: difference) {
-  .designer-cursor-system.cursor--light .designer-cursor-ring {
-    border-color: #000000;
-  }
-  .designer-cursor-system.cursor--light .designer-cursor-orbit {
-    border-top-color: #000000;
-  }
-  .designer-cursor-system.cursor--light .designer-cursor-dot {
-    background-color: #000000;
-  }
-  .designer-cursor-system.cursor--light .designer-cursor-ring--view {
-    background-color: #000000;
-    border-color: #000000;
-  }
-  .designer-cursor-system.cursor--light .designer-cursor-view-text {
-    color: #ffffff;
-  }
-
-  .designer-cursor-system.cursor--dark .designer-cursor-ring {
-    border-color: #ffffff;
-  }
-  .designer-cursor-system.cursor--dark .designer-cursor-orbit {
-    border-top-color: #ffffff;
-  }
-  .designer-cursor-system.cursor--dark .designer-cursor-dot {
-    background-color: #ffffff;
-  }
-  .designer-cursor-system.cursor--dark .designer-cursor-ring--view {
-    background-color: #ffffff;
-    border-color: #ffffff;
-  }
-  .designer-cursor-system.cursor--dark .designer-cursor-view-text {
-    color: #000000;
-  }
 }
 
 /* Accessibility: respect prefers-reduced-motion */
@@ -1849,7 +1871,6 @@
 }
 
 
-/* Hero collage cards can be repositioned and opened as individual works. */
-.home-landing-art-card { cursor: grab; touch-action: none; user-select: none; }
-.home-landing-art-card:active { cursor: grabbing; }
+/* Hero collage cards remain fixed in position and open individual works. */
+.home-landing-art-card { cursor: pointer; user-select: none; }
 .home-landing-art-card:focus-visible { outline: 2px solid #526c58; outline-offset: 5px; }

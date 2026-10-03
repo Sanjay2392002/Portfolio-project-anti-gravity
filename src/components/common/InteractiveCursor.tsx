@@ -42,6 +42,33 @@ export const InteractiveCursor: React.FC = () => {
     updateEnabled();
     motionQuery.addEventListener('change', updateEnabled);
 
+    const isDarkBackground = (el: Element | null): boolean => {
+      let curr = el;
+      while (curr && curr !== document.body && curr !== document.documentElement) {
+        if (
+          curr.matches(
+            '.home-skills-wrapper, .bg-black, [class*="bg-black"], [class*="bg-[#000000]"], [class*="bg-[#111111]"], #contact, [data-theme="dark"], .lightbox-backdrop, .home-about-cta:not(.home-about-cta-secondary)'
+          )
+        ) {
+          return true;
+        }
+        const style = window.getComputedStyle(curr);
+        const bg = style.backgroundColor;
+        if (bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') {
+          const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+          if (match) {
+            const r = parseInt(match[1], 10);
+            const g = parseInt(match[2], 10);
+            const b = parseInt(match[3], 10);
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            return brightness < 128;
+          }
+        }
+        curr = curr.parentElement;
+      }
+      return false;
+    };
+
     const handlePointerMove = (event: PointerEvent | MouseEvent) => {
       // Exclude pure touch screen taps
       if ('pointerType' in event && event.pointerType === 'touch') return;
@@ -77,11 +104,8 @@ export const InteractiveCursor: React.FC = () => {
       const target = event.target instanceof Element ? event.target : null;
       if (!target) return;
 
-      // Dark background detection for additional contrast boost
-      const darkArea = target.closest(
-        '.home-skills-wrapper, .bg-black, [class*="bg-black"], #contact, [data-theme="dark"], .lightbox-backdrop'
-      );
-      setIsDark(Boolean(darkArea));
+      // Detect whether backdrop is dark or light
+      setIsDark(isDarkBackground(target));
 
       // Native inputs, textareas, contenteditable, select, or native drag zones
       const nativeElement = target.closest(
@@ -93,7 +117,7 @@ export const InteractiveCursor: React.FC = () => {
       }
 
       // Portfolio/work items showing VIEW label
-      const viewElement = target.closest('[data-cursor="view"]');
+      const viewElement = target.closest('[data-cursor="view"], .home-landing-art-card');
       if (viewElement) {
         setMode('view');
         return;
