@@ -24,8 +24,8 @@ try {
 let pool = null;
 const isPostgresConfigured = Boolean(process.env.DATABASE_URL && process.env.DATABASE_URL.trim().length > 0);
 
-if (process.env.NODE_ENV === 'production' && !isPostgresConfigured) {
-  console.log('[DB] Notice: DATABASE_URL is not configured. Running with local JSON storage adapter.');
+if ((process.env.NODE_ENV === 'production' || process.env.VERCEL) && !isPostgresConfigured) {
+  throw new Error('DATABASE_URL must be configured in production; local JSON storage is not persistent on serverless deployments.');
 }
 const databaseSslDisabled = process.env.DATABASE_SSL?.trim().toLowerCase() === 'disable';
 if (process.env.NODE_ENV === 'production' && databaseSslDisabled && isPostgresConfigured) {
@@ -61,7 +61,8 @@ export const initializeDatabase = async () => {
     }
     await pool.query('SELECT 1');
   } catch (err) {
-    console.warn('[DB] initializeDatabase notice:', err.message);
+    console.error('[DB] Database initialization failed:', err.message);
+    throw err;
   }
 };
 
