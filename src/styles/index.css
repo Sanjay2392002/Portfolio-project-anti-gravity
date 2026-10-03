@@ -831,11 +831,12 @@
 .home-footer-bottom { border-top: 1px solid #e2e5df; padding-top: 1.1rem; font-size: .61rem; letter-spacing: .07em; }
 .home-footer-bottom button { border: 0; padding: 0; background: transparent; cursor: pointer; }
 .home-page section[id] { scroll-margin-top: 84px; }
-.site-cursor { position: fixed; z-index: 1000; display: flex; width: 14px; height: 14px; align-items: center; justify-content: center; border: 1px solid #18251f; border-radius: 50%; background: #18251f; color: white; opacity: 0; pointer-events: none; transform: translate(-50%, -50%); transition: width .24s cubic-bezier(.22,1,.36,1), height .24s cubic-bezier(.22,1,.36,1), opacity .18s, background .2s, border-color .2s, color .2s; }
+.site-cursor { position: fixed; z-index: 1000; display: flex; width: 32px; height: 32px; align-items: center; justify-content: center; overflow: visible; border: 0; border-radius: 0; background: transparent; color: #18251f; opacity: 0; pointer-events: none; transform: translate(-3px, -29px); transition: opacity .18s, color .2s; }
 .site-cursor.is-visible { opacity: 1; }
-.site-cursor--view { width: 62px; height: 62px; border-color: #18251f; background: #18251f; }
-.site-cursor--view span { font-size: .58rem; font-weight: 650; letter-spacing: .08em; }
-.site-cursor--link { width: 30px; height: 30px; border-color: var(--home-accent, #667966); background: #fcfcfa; }
+.site-cursor-pen { display: block; width: 32px; height: 32px; overflow: visible; filter: drop-shadow(0 1px 1px rgb(0 0 0 / 18%)); transition: transform .2s cubic-bezier(.22,1,.36,1), color .2s; }
+.site-cursor--view .site-cursor-pen { color: #526c58; transform: rotate(-8deg) scale(1.06); }
+.site-cursor--view span { position: absolute; top: -7px; left: 19px; border: 1px solid #d9dfd4; padding: 3px 5px; background: #fcfcfa; color: #18251f; font-size: .48rem; font-weight: 700; letter-spacing: .08em; }
+.site-cursor--link .site-cursor-pen { color: var(--home-accent, #667966); transform: rotate(-6deg) scale(1.08); }
 .site-cursor--native { opacity: 0; }
 @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .cursor-site, .cursor-site * { cursor: none !important; }
