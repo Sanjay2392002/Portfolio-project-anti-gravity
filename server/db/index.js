@@ -25,7 +25,7 @@ let pool = null;
 const isPostgresConfigured = Boolean(process.env.DATABASE_URL && process.env.DATABASE_URL.trim().length > 0);
 
 if ((process.env.NODE_ENV === 'production' || process.env.VERCEL) && !isPostgresConfigured) {
-  throw new Error('DATABASE_URL must be configured in production; local JSON storage is not persistent on serverless deployments.');
+  console.error('[DB] DATABASE_URL is required in production; local JSON storage is not persistent on serverless deployments.');
 }
 const databaseSslDisabled = process.env.DATABASE_SSL?.trim().toLowerCase() === 'disable';
 if (process.env.NODE_ENV === 'production' && databaseSslDisabled && isPostgresConfigured) {
@@ -53,7 +53,12 @@ const emptyLocalData = () => ({
 });
 
 export const initializeDatabase = async () => {
-  if (!pool) return;
+  if (!pool) {
+    if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+      throw new Error('DATABASE_URL must be configured in production; local JSON storage is not persistent on serverless deployments.');
+    }
+    return;
+  }
   try {
     const schemaPath = path.join(__dirname, 'schema.sql');
     if (fs.existsSync(schemaPath)) {
