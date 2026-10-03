@@ -115,9 +115,10 @@ router.get('/settings/public', async (req, res) => {
   try {
     const settings = await db.getSettings('site_settings');
     const resumeFile = await db.getMeta('resume_file');
-    const versionedResumeDownload = typeof resumeFile?.url === 'string' && resumeFile.url.includes('/raw/upload/')
-      ? (resumeFile.url.includes('/raw/upload/fl_attachment/') ? resumeFile.url : resumeFile.url.replace('/raw/upload/', '/raw/upload/fl_attachment/'))
-      : resumeFile?.download_url;
+    const resumeSourceUrl = resumeFile?.url || resumeFile?.download_url || settings?.resume_url;
+    const versionedResumeDownload = typeof resumeSourceUrl === 'string' && resumeSourceUrl.includes('/raw/upload/')
+      ? resumeSourceUrl.replace(/\/raw\/upload\/(?:fl_attachment(?::[^/]*)?\/)?/, '/raw/upload/fl_attachment:Sanjay_M_Resume.pdf/')
+      : resumeSourceUrl;
     const publicSettings = {
       site_name: textSetting(settings, 'site_name', 'SANJAY', 100),
       hero_eyebrow: textSetting(settings, 'hero_eyebrow', "Hi, I'm Sanjay.", 200),
