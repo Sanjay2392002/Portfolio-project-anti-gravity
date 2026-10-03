@@ -15,7 +15,7 @@ export const AdminSettingsPage: React.FC = () => {
   const [passwordSaving, setPasswordSaving] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [cv, setCv] = useState<{ url: string; filename: string; bytes?: number; updated_at?: string | null } | null>(null);
+  const [cv, setCv] = useState<{ url: string; download_url?: string; filename: string; bytes?: number; updated_at?: string | null } | null>(null);
   const [cvUploading, setCvUploading] = useState(false);
   const [cvError, setCvError] = useState<string | null>(null);
   const [cvMessage, setCvMessage] = useState<string | null>(null);
@@ -327,7 +327,7 @@ export const AdminSettingsPage: React.FC = () => {
             <div><p className="text-[14px] font-medium">{cv.filename}</p><p className="mt-1 text-[12px] text-[#777]">{cv.updated_at ? `Updated ${new Date(cv.updated_at).toLocaleDateString()}` : 'Current CV'}</p></div>
             <div className="flex flex-wrap gap-2">
               <a href={cv.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-[6px] border border-[#E5E5E5] bg-white px-3 py-2 text-[12px] font-medium"><ExternalLink size={14} /> Preview</a>
-              <a href={cv.url} download={cv.filename} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-[6px] border border-[#E5E5E5] bg-white px-3 py-2 text-[12px] font-medium"><FileText size={14} /> Download</a>
+              <a href={cv.download_url || cv.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-[6px] border border-[#E5E5E5] bg-white px-3 py-2 text-[12px] font-medium"><FileText size={14} /> Download</a>
               <button type="button" onClick={removeCv} className="inline-flex items-center gap-2 rounded-[6px] border border-[#E5E5E5] bg-white px-3 py-2 text-[12px] font-medium text-[#9B2727]"><Trash2 size={14} /> Remove</button>
             </div>
           </div> : <p className="text-[13px] text-[#777]">No CV uploaded yet.</p>}
