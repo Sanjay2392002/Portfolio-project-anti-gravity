@@ -1648,10 +1648,20 @@
   font-size: clamp(4.3rem, 7.15vw, 7.4rem);
   font-weight: 650;
   letter-spacing: -.085em;
-  line-height: .84;
+  line-height: .98;
+  overflow: visible;
 }
-.home-landing-heading > span { display: block; white-space: nowrap; }
-.home-landing-heading > span:nth-child(2) { margin-top: .08em; color: #4f6655; }
+.home-landing-heading > span {
+  display: block;
+  white-space: nowrap;
+  overflow: visible;
+}
+.home-landing-heading > span:nth-child(2) {
+  margin-top: .04em;
+  color: #4f6655;
+  padding-bottom: 0.22em;
+  overflow: visible;
+}
 .home-landing-period { color: #c6a66f; }
 .home-landing-bio {
   max-width: 560px;

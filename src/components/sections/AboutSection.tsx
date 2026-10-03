@@ -53,8 +53,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
                 Hello, I’m
               </motion.span>
               <motion.span
-                initial={reduceMotion ? false : { opacity: 0, y: 34, clipPath: 'inset(0 0 100% 0)' }}
-                animate={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)' }}
+                initial={reduceMotion ? false : { opacity: 0, y: 34 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
                 aria-hidden="true"
               >
