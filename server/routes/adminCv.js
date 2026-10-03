@@ -66,6 +66,7 @@ router.post('/', upload.single('file'), async (req, res) => {
 
     const metadata = {
       url: uploaded.secure_url,
+      download_url: cloudinary.url(uploaded.public_id, { resource_type: 'raw', secure: true, flags: 'attachment' }),
       public_id: uploaded.public_id,
       filename,
       bytes: uploaded.bytes,
