@@ -10,7 +10,8 @@ interface AboutSectionProps {
 }
 
 export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' }) => {
-  const { about } = usePortfolio();
+  const { about, settings } = usePortfolio();
+  const cvUrl = settings?.resume_download_url || settings?.resume_url || '/Sanjay_M_Resume.pdf';
   if (variant === 'home') {
     return (
       <section id="about" className="about-simple home-about-preview">
@@ -37,8 +38,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
               </Link>
               <a
                 className="home-about-cta home-about-cta-secondary"
-                href="/Sanjay_M_Resume.pdf"
-                download="Sanjay_M_Resume.pdf"
+                href={cvUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-cursor="link"
