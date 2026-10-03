@@ -103,7 +103,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
               });
               return (
                 <motion.figure
-                  key={`work-card-${index}`)
+                  key={index}
                   className={`home-landing-art-card home-landing-art-card-${index + 1}`}
                   initial={reduceMotion ? false : { opacity: 0, y: 28, rotate: index === 1 ? 9 : index === 2 ? -8 : 0 }}
                   animate={reduceMotion ? { opacity: 1 } : {
