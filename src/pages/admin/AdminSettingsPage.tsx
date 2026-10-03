@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AdminLayout } from '../../components/admin/AdminLayout';
 import { SiteSettings } from '../../types/settings';
-import { Save } from 'lucide-react';
+import { ExternalLink, FileText, Save, Trash2, Upload } from 'lucide-react';
 
 export const AdminSettingsPage: React.FC = () => {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -15,6 +15,10 @@ export const AdminSettingsPage: React.FC = () => {
   const [passwordSaving, setPasswordSaving] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [cv, setCv] = useState<{ url: string; filename: string; bytes?: number; updated_at?: string | null } | null>(null);
+  const [cvUploading, setCvUploading] = useState(false);
+  const [cvError, setCvError] = useState<string | null>(null);
+  const [cvMessage, setCvMessage] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -28,6 +32,47 @@ export const AdminSettingsPage: React.FC = () => {
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
   }, []);
+
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/admin/cv').then(async (response) => {
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.error || 'Could not load CV details.');
+      if (!cancelled) setCv(result.data || null);
+    }).catch((loadError) => { if (!cancelled) setCvError(loadError instanceof Error ? loadError.message : 'Could not load CV details.'); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const uploadCv = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setCvUploading(true); setCvError(null); setCvMessage(null);
+    try {
+      const body = new FormData(); body.append('file', file);
+      const response = await fetch('/api/admin/cv', { method: 'POST', body });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.error || 'Could not upload the CV.');
+      setCv(result.data); setCvMessage('CV uploaded and published.');
+      setSettings((current) => current ? { ...current, resume_url: result.data.url } : current);
+    } catch (uploadError) {
+      setCvError(uploadError instanceof Error ? uploadError.message : 'Could not upload the CV.');
+    } finally {
+      setCvUploading(false); event.target.value = '';
+    }
+  };
+
+  const removeCv = async () => {
+    if (!window.confirm('Remove the current CV from the public portfolio?')) return;
+    setCvError(null); setCvMessage(null);
+    try {
+      const response = await fetch('/api/admin/cv', { method: 'DELETE' });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.error || 'Could not remove the CV.');
+      setCv(null); setCvMessage('CV removed.');
+      setSettings((current) => current ? { ...current, resume_url: '' } : current);
+    } catch (removeError) { setCvError(removeError instanceof Error ? removeError.message : 'Could not remove the CV.'); }
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -272,6 +317,27 @@ export const AdminSettingsPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        <section className="bg-white p-6 rounded-[12px] border border-[#E5E5E5] space-y-4 shadow-xs">
+          <div className="flex items-start gap-3 border-b border-[#E5E5E5] pb-3">
+            <FileText size={18} className="mt-0.5 text-[#6B6B6B]" />
+            <div><h2 className="text-[14px] font-bold uppercase tracking-wider">CV / Resume</h2><p className="mt-1 text-[13px] text-[#6B6B6B]">Upload a PDF to replace the CV linked from your public portfolio.</p></div>
+          </div>
+          {cv ? <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-[8px] bg-[#F9F9F9] p-4">
+            <div><p className="text-[14px] font-medium">{cv.filename}</p><p className="mt-1 text-[12px] text-[#777]">{cv.updated_at ? `Updated ${new Date(cv.updated_at).toLocaleDateString()}` : 'Current CV'}</p></div>
+            <div className="flex flex-wrap gap-2">
+              <a href={cv.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-[6px] border border-[#E5E5E5] bg-white px-3 py-2 text-[12px] font-medium"><ExternalLink size={14} /> Preview</a>
+              <a href={cv.url} download={cv.filename} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-[6px] border border-[#E5E5E5] bg-white px-3 py-2 text-[12px] font-medium"><FileText size={14} /> Download</a>
+              <button type="button" onClick={removeCv} className="inline-flex items-center gap-2 rounded-[6px] border border-[#E5E5E5] bg-white px-3 py-2 text-[12px] font-medium text-[#9B2727]"><Trash2 size={14} /> Remove</button>
+            </div>
+          </div> : <p className="text-[13px] text-[#777]">No CV uploaded yet.</p>}
+          <label className="inline-flex cursor-pointer items-center gap-2 rounded-[8px] bg-black px-4 py-2.5 text-[13px] font-medium text-white hover:bg-black/90">
+            <Upload size={15} /><span>{cvUploading ? 'Uploading…' : cv ? 'Replace CV' : 'Upload CV'}</span>
+            <input type="file" accept="application/pdf,.pdf" onChange={uploadCv} disabled={cvUploading} className="sr-only" />
+          </label>
+          {cvMessage && <p role="status" className="text-[13px] text-[#26734d]">{cvMessage}</p>}
+          {cvError && <p role="alert" className="text-[13px] text-[#b42318]">{cvError}</p>}
+        </section>
 
         {/* SEO Defaults */}
         <div className="bg-white p-6 rounded-[12px] border border-[#E5E5E5] space-y-4 shadow-xs">
