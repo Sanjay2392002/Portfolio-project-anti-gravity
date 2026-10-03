@@ -47,7 +47,7 @@ const workedBrands = [
 ];
 
 export const AboutPage: React.FC = () => {
-  const { about } = usePortfolio();
+  const { about, settings } = usePortfolio();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -165,16 +165,15 @@ export const AboutPage: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-wrap items-center gap-3.5 mt-8 pt-2"
           >
-            <a
-              href="/Sanjay_M_Resume.pdf"
-              download="Sanjay_M_Resume.pdf"
+{settings?.resume_url && <a
+              href={settings.resume_download_url || settings.resume_url}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-[#18251f] text-white text-[13px] font-semibold tracking-wider uppercase hover:bg-black transition-all shadow-sm hover:shadow-md"
             >
               <Download size={15} strokeWidth={2.2} />
               <span>Download CV</span>
-            </a>
+            </a>}
 
             <Link
               to="/work"
