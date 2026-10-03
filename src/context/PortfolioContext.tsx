@@ -22,21 +22,21 @@ interface PortfolioContextType {
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
 const fallbackAbout: AboutContent = {
-  headline: 'Graphic and Visual Designer bridging engineering logic and modern brand craft.',
+  headline: 'Graphic Designer bridging engineering logic and modern brand craft.',
   subheadline: 'Crafting high-converting social media creatives, brand identities, packaging, and digital interfaces.',
-  biography_paragraph_1: 'I am a Graphic and Visual Designer based in Coimbatore with a background in Computer Science Engineering (B.E. from Sri Krishna College of Technology). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.',
+  biography_paragraph_1: 'I am a Graphic Designer based in Erode with a background in Computer Science Engineering (B.E. from Sri Krishna College of Technology). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.',
   biography_paragraph_2: 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for diverse brands including BAKERS, Pavizham Jewellers, Bro Knows Tech, LOFT, SIGGIS, Woneten Luxe, Wallfit, and Zen Spaces. I also pioneer AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.',
   experiences: [
     {
       id: 'exp_1',
-      role: 'Graphic and Visual Designer',
-      company: 'Bevis, Coimbatore',
-      period: 'April 2025 – Present',
+      role: 'Graphic Designer',
+      company: 'Bevis Creative - Advertising agency',
+      period: 'April 2025 – August 2026',
       description: 'Designed 100+ social media creatives, ad campaigns, and packaging labels across 17+ client brands. Spearheaded AI-assisted design workflows cutting production time by 30% while maintaining strict brand consistency.',
     },
     {
       id: 'exp_2',
-      role: 'Graphic and Visual Designer & Creative Builder',
+      role: 'Graphic Designer & Creative Builder',
       company: 'Independent Practice',
       period: '2024 – Present',
       description: 'Creating comprehensive brand identities, digital product screens, user interfaces, design systems, and AI-driven visual explorations for growing businesses.',

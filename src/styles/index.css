@@ -1359,7 +1359,7 @@
 
 
 
-/* Editorial landing hero: type-led introduction with a layered portfolio collage */
+/* Landing hero: type-led introduction with Sanjay's interactive design character */
 .home-landing-hero {
   position: relative;
   display: flex;
@@ -1421,7 +1421,7 @@
 .home-landing-bio-secondary { margin-top: .85rem; color: #858b83; font-size: .9rem; }
 .home-landing-actions { justify-content: flex-start; margin-top: 1.65rem; gap: .7rem; }
 .home-landing-actions .home-about-cta { padding-inline: 1.2rem; font-size: .68rem; }
-.home-landing-art { position: relative; min-height: clamp(430px, 45vw, 600px); isolation: isolate; }
+.home-landing-art { position: relative; min-height: clamp(590px, 50vw, 680px); isolation: isolate; }
 .home-landing-art-halo {
   position: absolute;
   z-index: -1;
@@ -1433,42 +1433,98 @@
   background: radial-gradient(circle, rgb(218 225 213 / 82%) 0, rgb(236 239 232 / 42%) 52%, rgb(236 239 232 / 0%) 72%);
   transform: translate(-50%, -50%);
 }
-.home-landing-art-card {
+.home-landing-scene-grid {
   position: absolute;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-sizing: border-box;
-  aspect-ratio: .75;
-  margin: 0;
-  border: 1px solid rgb(255 255 255 / 86%);
-  border-radius: 3px;
-  padding: .42rem .42rem .15rem;
-  background: #fff;
-  box-shadow: 0 26px 65px rgb(25 37 29 / 17%), 0 3px 10px rgb(25 37 29 / 8%);
-  transform-origin: center;
+  inset: 8% 0 5%;
+  opacity: .34;
+  background-image: radial-gradient(#738174 0.7px, transparent 0.7px);
+  background-size: 18px 18px;
+  mask-image: radial-gradient(ellipse at 60% 50%, #000 0, transparent 72%);
 }
-.home-landing-art-card img { display: block; width: 100%; height: calc(100% - 2.25rem); object-fit: cover; background: #eceee8; }
-.home-landing-art-card figcaption { display: flex; min-height: 2.25rem; align-items: center; justify-content: space-between; gap: .5rem; padding-inline: .25rem; color: #17231c; }
-.home-landing-art-card figcaption span { color: #8c948a; font-size: .58rem; letter-spacing: .12em; }
-.home-landing-art-card figcaption strong { overflow: hidden; font-size: .7rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
-.home-landing-art-card-1 { z-index: 3; top: 8%; left: 26%; width: 51%; }
-.home-landing-art-card-2 { z-index: 2; top: 13%; left: 3%; width: 41%; }
-.home-landing-art-card-3 { z-index: 1; right: 1%; bottom: 5%; width: 40%; }
-.home-landing-art-note {
+.home-landing-design-board {
+  position: absolute;
+  z-index: 2;
+  top: 19%;
+  right: 2%;
+  width: clamp(150px, 17vw, 205px);
+  border: 1px solid rgb(255 255 255 / 88%);
+  padding: .55rem;
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 26px 65px rgb(25 37 29 / 15%), 0 3px 10px rgb(25 37 29 / 7%);
+  transform-origin: 60% 75%;
+}
+.home-landing-board-toolbar { display: flex; height: 1.1rem; align-items: center; gap: .22rem; padding-inline: .12rem; color: #788177; }
+.home-landing-board-toolbar > span { width: .28rem; height: .28rem; border-radius: 50%; background: #c9d0c5; }
+.home-landing-board-toolbar > span:first-child { background: #d4ae73; }
+.home-landing-board-toolbar small { margin-left: auto; font-size: .38rem; font-weight: 700; letter-spacing: .1em; }
+.home-landing-board-canvas {
+  position: relative;
+  display: flex;
+  min-height: clamp(150px, 17vw, 205px);
+  overflow: hidden;
+  align-items: flex-end;
+  padding: .8rem;
+  background: #e3e9df;
+}
+.home-landing-board-canvas::before {
+  position: absolute;
+  top: -18%;
+  right: -13%;
+  width: 77%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #bfcbb9;
+  content: "";
+}
+.home-landing-board-sun {
+  position: absolute;
+  top: 13%;
+  left: 13%;
+  width: 28%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #d1ad73;
+}
+.home-landing-board-copy {
+  position: relative;
+  z-index: 1;
+  color: #17231c;
+  font-size: clamp(1.1rem, 2.25vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -.08em;
+  line-height: .86;
+}
+.home-landing-board-copy b { color: #526c58; }
+.home-landing-board-line { position: absolute; right: 13%; bottom: 16%; width: 35%; height: 1px; background: #17231c; }
+.home-landing-board-palette { display: flex; align-items: center; gap: .25rem; padding: .45rem .12rem .1rem; }
+.home-landing-board-palette > i { width: .5rem; height: .5rem; border-radius: 50%; background: #18251f; }
+.home-landing-board-palette > i:nth-child(2) { background: #526c58; }
+.home-landing-board-palette > i:nth-child(3) { background: #d1ad73; }
+.home-landing-board-palette > i:nth-child(4) { background: #d9dfd4; }
+.home-landing-board-palette small { margin-left: auto; color: #737d73; font-size: .38rem; font-weight: 700; letter-spacing: .1em; }
+.home-landing-character-stage {
+  position: absolute;
+  z-index: 3;
+  inset: 0 12% -1% 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.home-landing-character-stage .hero-character-wrapper { max-width: 360px; }
+.home-landing-character-stage .hero-character-wrapper > div:first-child { width: clamp(270px, 31vw, 370px) !important; }
+.home-landing-art-label {
   position: absolute;
   z-index: 4;
-  bottom: 9%;
-  left: 1%;
+  bottom: 7%;
+  left: 0;
   display: grid;
-  gap: .3rem;
-  border: 1px solid #e1e5dc;
-  padding: .75rem .9rem;
-  background: rgb(252 252 250 / 92%);
-  box-shadow: 0 10px 28px rgb(25 37 29 / 7%);
+  gap: .25rem;
+  border-left: 2px solid #526c58;
+  padding: .55rem .8rem;
+  background: rgb(252 252 250 / 88%);
 }
-.home-landing-art-note span { color: #737d73; font-size: .55rem; font-weight: 700; letter-spacing: .15em; }
-.home-landing-art-note strong { color: #18251f; font-size: .9rem; font-weight: 600; letter-spacing: -.03em; }
+.home-landing-art-label span { color: #737d73; font-size: .5rem; font-weight: 700; letter-spacing: .15em; }
+.home-landing-art-label strong { color: #18251f; font-size: .86rem; font-weight: 600; letter-spacing: -.03em; }
 .home-landing-art-orbit {
   position: absolute;
   z-index: 4;
@@ -1522,16 +1578,12 @@
   .home-landing-bio-secondary { margin-top: .7rem; font-size: .84rem; }
   .home-landing-actions { align-items: stretch; gap: .55rem; }
   .home-landing-actions .home-about-cta { gap: .4rem; padding: .78rem .82rem; font-size: .57rem; letter-spacing: .07em; }
-  .home-landing-art { min-height: clamp(340px, 94vw, 430px); margin-top: -.25rem; }
-  .home-landing-art-card { padding: .28rem .28rem .1rem; }
-  .home-landing-art-card img { height: calc(100% - 1.85rem); }
-  .home-landing-art-card figcaption { min-height: 1.85rem; padding-inline: .15rem; }
-  .home-landing-art-card figcaption span { font-size: .48rem; }
-  .home-landing-art-card figcaption strong { font-size: .58rem; }
-  .home-landing-art-card-1 { top: 7%; left: 25%; width: 53%; }
-  .home-landing-art-card-2 { top: 12%; left: 2%; width: 42%; }
-  .home-landing-art-card-3 { right: 0; bottom: 4%; width: 42%; }
-  .home-landing-art-note { bottom: 7%; left: 0; padding: .55rem .65rem; }
-  .home-landing-art-note strong { font-size: .75rem; }
-  .home-landing-art-orbit { top: 3%; right: -1%; width: 4rem; height: 4rem; font-size: .4rem; }
+  .home-landing-art { min-height: clamp(490px, 120vw, 600px); margin-top: -.25rem; }
+  .home-landing-character-stage { inset-inline: -5% 8%; }
+  .home-landing-character-stage .hero-character-wrapper > div:first-child { width: clamp(250px, 76vw, 330px) !important; }
+  .home-landing-design-board { top: 12%; right: 0; width: clamp(132px, 38vw, 168px); }
+  .home-landing-board-canvas { min-height: clamp(132px, 38vw, 168px); }
+  .home-landing-art-label { bottom: 5%; left: 0; padding: .5rem .65rem; }
+  .home-landing-art-label strong { font-size: .75rem; }
+  .home-landing-art-orbit { top: 2%; right: -1%; width: 3.8rem; height: 3.8rem; font-size: .38rem; }
 }

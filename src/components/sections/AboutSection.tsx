@@ -4,14 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, Download } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { MagneticHeroHeading } from './MagneticHeroHeading';
-import { selectedWorks } from '../../data/selectedWorks';
-
-const heroWorkForBrand = (brand: string) => selectedWorks.find((work) => work.brand.toLowerCase() === brand.toLowerCase() && work.type === 'image' && work.category === 'Posters & Ads')
-  || selectedWorks.find((work) => work.brand.toLowerCase() === brand.toLowerCase() && work.type === 'image');
-
-const heroWorks = ['BAKERS', 'Bro Knows Tech', 'PAVIZHAM']
-  .map(heroWorkForBrand)
-  .filter((work): work is NonNullable<typeof work> => Boolean(work));
+import { Character3D } from '../character/Character3D';
 
 interface AboutSectionProps {
   variant?: 'default' | 'home';
@@ -31,7 +24,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="home-landing-eyebrow"><span aria-hidden="true" /> GRAPHIC &amp; VISUAL DESIGNER <i>·</i> COIMBATORE</p>
+            <p className="home-landing-eyebrow"><span aria-hidden="true" /> GRAPHIC DESIGNER <i>·</i> ERODE</p>
             <h1 className="home-landing-heading" aria-label="Hello, I’m Sanjay.">
               <motion.span
                 initial={reduceMotion ? false : { opacity: 0, y: 28 }}
@@ -51,7 +44,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
               </motion.span>
             </h1>
             <p className="home-landing-bio">
-              {about?.biography_paragraph_1 || 'I am a Graphic and Visual Designer based in Coimbatore with a background in Computer Science Engineering. I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.'}
+              {about?.biography_paragraph_1 || 'I am a Graphic Designer based in Erode with a background in Computer Science Engineering. I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.'}
             </p>
             <p className="home-landing-bio home-landing-bio-secondary">
               {about?.biography_paragraph_2 || 'I create commercial design assets for brands across social media, packaging, and print, with thoughtful AI-assisted workflows that bring ideas to life faster.'}
@@ -79,36 +72,35 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
             initial={reduceMotion ? false : { opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-            aria-label="Selected portfolio projects"
+            aria-label="Sanjay's 3D character presenting a graphic design concept"
           >
             <div className="home-landing-art-halo" aria-hidden="true" />
-            {heroWorks.map((work, index) => (
-              <motion.figure
-                key={work.id}
-                className={`home-landing-art-card home-landing-art-card-${index + 1}`}
-                initial={reduceMotion ? false : { opacity: 0, y: 28, rotate: index === 1 ? 9 : index === 2 ? -8 : 0 }}
-                animate={reduceMotion ? { opacity: 1 } : {
-                  opacity: 1,
-                  y: index === 0 ? [0, -7, 0] : 0,
-                  rotate: index === 1 ? 7 : index === 2 ? -6 : 0,
-                }}
-                transition={reduceMotion
-                  ? { duration: 0.2 }
-                  : index === 0
-                    ? { opacity: { duration: 0.7, delay: 0.35 }, y: { duration: 6, delay: 1.2, repeat: Infinity, ease: 'easeInOut' } }
-                    : { duration: 0.8, delay: 0.3 + index * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={reduceMotion ? undefined : { y: -8, rotate: index === 0 ? -2 : index === 1 ? 10 : -9, scale: 1.02 }}
-              >
-                <img
-                  src={work.thumbnail || work.image}
-                  alt={`${work.brand} — ${work.title}`}
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                />
-                <figcaption><span>0{index + 1}</span><strong>{work.brand}</strong></figcaption>
-              </motion.figure>
-            ))}
-            <div className="home-landing-art-note"><span>SELECTED WORKS</span><strong>Built to be seen.</strong></div>
-            <span className="home-landing-art-orbit" aria-hidden="true">DESIGN · BRAND · DIGITAL</span>
+            <div className="home-landing-scene-grid" aria-hidden="true" />
+            <motion.div
+              className="home-landing-design-board"
+              aria-hidden="true"
+              initial={reduceMotion ? false : { opacity: 0, y: 18, rotate: 7 }}
+              animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: [0, -7, 0], rotate: 4 }}
+              transition={reduceMotion ? { duration: 0.2 } : { opacity: { duration: 0.7, delay: 0.45 }, y: { duration: 5.5, delay: 1, repeat: Infinity, ease: 'easeInOut' }, rotate: { duration: 0.8, delay: 0.45 } }}
+            >
+              <div className="home-landing-board-toolbar"><span /><span /><span /><small>01 / CAMPAIGN</small></div>
+              <div className="home-landing-board-canvas">
+                <i className="home-landing-board-sun" />
+                <span className="home-landing-board-copy">MAKE<br />IT<br /><b>MATTER.</b></span>
+                <i className="home-landing-board-line" />
+              </div>
+              <div className="home-landing-board-palette"><i /><i /><i /><i /><small>VISUAL DIRECTION</small></div>
+            </motion.div>
+            <motion.div
+              className="home-landing-character-stage"
+              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+              animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: [0, -4, 0] }}
+              transition={reduceMotion ? { duration: 0.2 } : { opacity: { duration: 0.8, delay: 0.25 }, y: { duration: 5, delay: 1, repeat: Infinity, ease: 'easeInOut' } }}
+            >
+              <Character3D variant="full" size="hero" enableMouseLook enableTilt />
+            </motion.div>
+            <div className="home-landing-art-label"><span>DESIGN IN PROGRESS</span><strong>Ideas, made visible.</strong></div>
+            <span className="home-landing-art-orbit" aria-hidden="true">TYPE · COLOR · FORM</span>
           </motion.div>
         </div>
         <motion.a
@@ -130,7 +122,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
         <p className="portfolio-eyebrow">A little about me</p>
         <div>
           <MagneticHeroHeading />
-          <p className="about-simple-copy">{about?.biography_paragraph_1 || 'I am a Graphic and Visual Designer based in Coimbatore with a background in Computer Science Engineering. I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.'}</p>
+          <p className="about-simple-copy">{about?.biography_paragraph_1 || 'I am a Graphic Designer based in Erode with a background in Computer Science Engineering. I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.'}</p>
           <div className="about-skills" aria-label="Design skills">
             <span>Social media creatives</span>
             <span>Packaging &amp; print</span>

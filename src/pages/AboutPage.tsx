@@ -22,7 +22,7 @@ const metrics = [
   { value: '100+', label: 'Social Media Creatives', sub: 'Posts, stories, carousels & ad campaigns' },
   { value: '17+', label: 'Client Brands Handled', sub: 'F&B, jewellery, tech, fashion & interior decor' },
   { value: '30%', label: 'Turnaround Reduction', sub: 'Via AI-assisted production pipelines' },
-  { value: '1+ Year', label: 'Agency Experience', sub: 'Graphic and Visual Designer at Bevis' },
+  { value: '1+ Year', label: 'Agency Experience', sub: 'Graphic Designer at Bevis Creative' },
 ];
 
 // Exact brands from Sanjay's portfolio website archive with official brand logos
@@ -30,7 +30,7 @@ const workedBrands = [
   { name: 'BAKERS', logo: '/logos/bakers.png', subtitle: 'Bakers International', role: 'Fruit Crush Packaging, Exhibition Pavilions & Social Campaigns' },
   { name: 'PAVIZHAM', logo: '/logos/pavizham-dark.png', subtitle: 'Pavizham Jewellers', role: 'Royal Heritage Jewellery Campaigns, Print Hoardings & E-Commerce Visuals' },
   { name: 'Bro Knows Tech', logo: '/logos/bkt.png', subtitle: 'Tech Media Brand', role: 'Brand Mark Identity, High-CTR Video Thumbnails & Breakdown Carousels' },
-  { name: 'BEVIS', logo: '/logos/bevis.png', subtitle: 'Bevis Creatives', role: 'Mineral Water Brand Packaging, Corporate Identity & Exhibition Stalls' },
+  { name: 'BEVIS', logo: '/logos/bevis.png', subtitle: 'Bevis Creative - Advertising agency', role: 'Mineral Water Brand Packaging, Corporate Identity & Exhibition Stalls' },
   { name: 'LOFT', logo: '/logos/loft.png', subtitle: 'Cinema & Sports Brand', role: 'Cinema & F1 Culture Posters, Monthly Sports Calendars & Pantry Identity' },
   { name: 'SIGGIS', logo: '/logos/siggis.png', subtitle: 'Food & Condiments', role: 'Zero-Preservative Condiments Packaging & Social Media Creatives' },
   { name: 'Woneten Luxe', logo: '/logos/woneten-luxe.png', subtitle: 'Apparel & Couture', role: 'Contemporary Ethnic & Festive Couture Fashion Campaigns' },
@@ -52,31 +52,19 @@ export const AboutPage: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     const previousTitle = document.title;
-    document.title = 'About Sanjay — Graphic and Visual Designer';
+    document.title = 'About Sanjay — Graphic Designer';
     return () => {
       document.title = previousTitle;
     };
   }, []);
 
-  const headline = about?.headline || 'Graphic and Visual Designer bridging engineering logic and modern brand craft.';
-  const bio1 = about?.biography_paragraph_1 || 'I am a Graphic and Visual Designer based in Coimbatore with a background in Computer Science Engineering (B.E. from Sri Krishna College of Technology). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.';
-  const bio2 = about?.biography_paragraph_2 || 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for diverse brands including BAKERS, Pavizham Jewellers, Bro Knows Tech, LOFT, SIGGIS, Woneten Luxe, Wallfit, and Zen Spaces. I also pioneer AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.';
+  const headline = about?.headline || 'Graphic Designer bridging engineering logic and modern brand craft.';
+  const bio1 = about?.biography_paragraph_1 || 'I am a Graphic Designer based in Erode with a background in Computer Science Engineering (B.E. from Sri Krishna College of Technology). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.';
+  const bio2 = about?.biography_paragraph_2 || 'At Bevis Creative, I designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for diverse brands including BAKERS, Pavizham Jewellers, Bro Knows Tech, LOFT, SIGGIS, Woneten Luxe, Wallfit, and Zen Spaces. I also pioneered AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.';
 
-  const experiences = [
-    {
-      id: 'exp_1',
-      role: 'Graphic and Visual Designer',
-      company: 'Bevis, Coimbatore',
-      period: 'April 2025 – Present',
-      description: 'Designing 100+ social media creatives, commercial campaigns, structural packaging labels, and exhibition stalls across 17+ client brands. Spearheading AI-assisted design workflows cutting production time by 30% while maintaining strict brand consistency.',
-    },
-    {
-      id: 'exp_2',
-      role: 'Graphic and Visual Designer & Creative Builder',
-      company: 'Independent Practice',
-      period: '2024 – Present',
-      description: 'Creating comprehensive brand identities, digital product screens, user interfaces, design systems, and AI-driven visual explorations for growing businesses.',
-    },
+  const experiences = about?.experiences?.length ? about.experiences : [
+    { id: 'exp_1', role: 'Graphic Designer', company: 'Bevis Creative - Advertising agency', period: 'April 2025 – August 2026', description: 'Designed 100+ social media creatives, ad campaigns, and packaging labels across 17+ client brands. Spearheaded AI-assisted design workflows cutting production time by 30% while maintaining strict brand consistency.' },
+    { id: 'exp_2', role: 'Graphic Designer & Creative Builder', company: 'Independent Practice', period: '2024 – Present', description: 'Creating comprehensive brand identities, digital product screens, user interfaces, design systems, and AI-driven visual explorations for growing businesses.' },
   ];
 
   const capabilities = about?.capabilities?.length ? about.capabilities : [
@@ -124,7 +112,7 @@ export const AboutPage: React.FC = () => {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#e5e5df] bg-white text-[11px] font-semibold tracking-[0.16em] uppercase text-[#4d564d] mb-6 shadow-sm"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
-            Graphic and Visual Designer
+            Graphic Designer
           </motion.div>
 
           <motion.div
@@ -424,10 +412,10 @@ export const AboutPage: React.FC = () => {
               Let&apos;s Build Together
             </p>
             <h2 className="text-[28px] sm:text-[36px] font-bold tracking-tight mb-3">
-              Have a project in mind or looking for a Graphic and Visual Designer?
+              Have a project in mind or looking for a Graphic Designer?
             </h2>
             <p className="text-[14px] sm:text-[15px] text-[#c2cbc4] leading-[1.6]">
-              {about?.availability || 'Available for freelance commissions, brand partnerships, and full-time Graphic and Visual Designer roles.'}
+              {about?.availability || 'Available for freelance commissions, brand partnerships, and full-time Graphic Designer roles.'}
             </p>
           </div>
 

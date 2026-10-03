@@ -94,10 +94,10 @@ export const ExperienceSection: React.FC = () => {
   const { about } = usePortfolio();
   const rawExperience = about?.experiences?.[0];
   const experience = {
-    company: rawExperience?.company || 'Bevis Creatives',
+    company: rawExperience?.company || 'Bevis Creative - Advertising agency',
     role: rawExperience?.role || 'Graphic Designer',
-    period: rawExperience?.period || 'April 2025 to August 2026',
-    description: rawExperience?.description || 'During my tenure at Bevis Creatives, I learnt and specialized in Graphic Design, Package Design, and Print Design alongside commercial social media campaigns and brand collateral.',
+    period: rawExperience?.period || 'April 2025 – August 2026',
+    description: rawExperience?.description || 'Designed social media campaigns, packaging, and print assets during my time at Bevis Creative.',
   };
 
   const coreLearnings = ['Graphic design', 'Package design', 'Print design'];
@@ -120,7 +120,7 @@ export const ExperienceSection: React.FC = () => {
         <h2>{experience.company}</h2>
         <span>{[experience.role, experience.period].filter(Boolean).join(' · ')}</span>
         <p className="home-experience-subtext">
-          At Bevis, I learnt and worked across Graphic Design, Package Design, and Print Design, developing end-to-end commercial design assets.
+          {experience.description}
         </p>
       </div>
       <ul aria-label="Areas of experience">

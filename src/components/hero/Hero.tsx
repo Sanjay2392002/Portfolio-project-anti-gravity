@@ -26,7 +26,7 @@ export const Hero: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.08 }}
           >
-            SANJAY <span>—</span> VISUAL DESIGNER
+            SANJAY <span>—</span> GRAPHIC DESIGNER
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 22 }}
@@ -42,7 +42,7 @@ export const Hero: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.28 }}
           >
-            I create social media posters and clear, thoughtful user interfaces for brands and digital products.
+            I create thoughtful graphic design, social media campaigns, and visual identities for brands.
           </motion.p>
           <motion.a
             href="#about"

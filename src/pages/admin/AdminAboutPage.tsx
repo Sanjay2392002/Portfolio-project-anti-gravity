@@ -4,11 +4,11 @@ import { AboutContent, CapabilityGroup, ExperienceItem } from '../../types/setti
 import { Plus, Save, Trash2 } from 'lucide-react';
 
 const defaults: AboutContent = {
-  headline: 'Hello, I’m Sanjay.',
+  headline: 'Graphic Designer based in Erode.',
   subheadline: 'Graphic designer focused on social media and UI design.',
-  biography_paragraph_1: 'I create social media posters and clear user interfaces for brands and digital products.',
+  biography_paragraph_1: 'I am a Graphic Designer based in Erode. I create social media posters and clear user interfaces for brands and digital products.',
   biography_paragraph_2: 'My work focuses on strong layout, clear typography, and making each message easy to understand.',
-  experiences: [{ id: 'experience-1', role: 'Graphic Designer', company: 'Bevis Creatives', period: 'April 2025 to August 2026', description: 'At Bevis Creatives, I learnt and specialized in Graphic Design, Package Design, and Print Design, along with social media posters, ad campaigns, and brand collateral.' }],
+  experiences: [{ id: 'experience-1', role: 'Graphic Designer', company: 'Bevis Creatives', period: 'April 2025 to August 2026', description: 'At Bevis Creative, I worked across graphic, package, and print design, including social media posters, advertising campaigns, and brand collateral.' }],
   capabilities: [
     { category: 'DESIGN DISCIPLINES', skills: ['Graphic design', 'Package design', 'Print design', 'Posters & ads', 'Stories', 'Carousels', 'Thumbnails'] },
     { category: 'UI DESIGN', skills: ['User interfaces', 'Layout & hierarchy', 'Digital product screens'] },

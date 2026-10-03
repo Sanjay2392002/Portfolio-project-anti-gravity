@@ -15,7 +15,7 @@ export const fallbackSettings: SiteSettings = {
   availability: 'Available for select commissions',
   footer_text: '© 2026 SANJAY. All rights reserved.',
   seo_title: 'Sanjay — Graphic Designer',
-  seo_description: 'Portfolio of Sanjay, graphic designer focused on social media design and user interface design.',
+  seo_description: 'Portfolio of Sanjay, Graphic Designer based in Erode and focused on social media and user interface design.',
   og_image: '/assets/kings/kings-box-model.jpg',
 };
 

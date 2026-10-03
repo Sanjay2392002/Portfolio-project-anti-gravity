@@ -19,13 +19,65 @@ try {
 
 export const seedDatabase = async () => {
   try {
+  // Apply Sanjay's confirmed role, location, and agency dates once to existing persistent profiles.
+  const identityMigrationKey = 'portfolio_identity_update_20261003';
+  if (!(await db.getMeta(identityMigrationKey))) {
+    const about = await db.getSettings('about_content');
+    if (about && typeof about === 'object') {
+      const nextAbout = { ...about };
+      let changed = false;
+      if (nextAbout.headline === 'Graphic and Visual Designer bridging engineering logic and modern brand craft.') {
+        nextAbout.headline = 'Graphic Designer bridging engineering logic and modern brand craft.';
+        changed = true;
+      }
+      if (typeof nextAbout.biography_paragraph_1 === 'string') {
+        const updated = nextAbout.biography_paragraph_1.replace('Graphic and Visual Designer based in Coimbatore', 'Graphic Designer based in Erode');
+        if (updated !== nextAbout.biography_paragraph_1) { nextAbout.biography_paragraph_1 = updated; changed = true; }
+      }
+      if (typeof nextAbout.biography_paragraph_2 === 'string') {
+        const updated = nextAbout.biography_paragraph_2.replace('At Bevis, I have designed', 'At Bevis Creative, I designed').replace('I also pioneer AI-assisted workflows', 'I also pioneered AI-assisted workflows');
+        if (updated !== nextAbout.biography_paragraph_2) { nextAbout.biography_paragraph_2 = updated; changed = true; }
+      }
+      if (Array.isArray(nextAbout.experiences)) {
+        nextAbout.experiences = nextAbout.experiences.map((experience) => {
+          if (!experience || typeof experience !== 'object') return experience;
+          const isBevisRole = /bevis/i.test(experience.company || '');
+          const updated = {
+            ...experience,
+            role: String(experience.role || '').replace(/Graphic and Visual Designer/g, 'Graphic Designer'),
+            ...(isBevisRole ? { company: 'Bevis Creative - Advertising agency', period: 'April 2025 – August 2026' } : {}),
+          };
+          if (updated.role !== experience.role || updated.company !== experience.company || updated.period !== experience.period) changed = true;
+          return updated;
+        });
+      }
+      if (typeof nextAbout.availability === 'string') {
+        const updated = nextAbout.availability.replace(/Graphic and Visual Designer/g, 'Graphic Designer');
+        if (updated !== nextAbout.availability) { nextAbout.availability = updated; changed = true; }
+      }
+      if (changed) await db.setSettings('about_content', nextAbout);
+    }
+    const siteSettings = await db.getSettings('site_settings');
+    if (siteSettings && typeof siteSettings === 'object') {
+      const nextSettings = { ...siteSettings };
+      let changed = false;
+      for (const key of ['hero_headline', 'seo_title', 'seo_description']) {
+        if (typeof nextSettings[key] !== 'string') continue;
+        const updated = nextSettings[key].replace(/Graphic and Visual Designer/g, 'Graphic Designer').replace(/GRAPHIC AND VISUAL DESIGNER/g, 'GRAPHIC DESIGNER');
+        if (updated !== nextSettings[key]) { nextSettings[key] = updated; changed = true; }
+      }
+      if (changed) await db.setSettings('site_settings', nextSettings);
+    }
+    await db.setMeta(identityMigrationKey, true);
+  }
+
     const adminEmail = (process.env.ADMIN_EMAIL || 'sanjaymurugesan23@gmail.com').trim().toLowerCase();
     const adminUsername = (process.env.ADMIN_USERNAME || 'Sanjay').trim();
-    const rawAdminPassword = (process.env.ADMIN_PASSWORD || 'Sanjay2392@!').trim();
-    const adminPassword = (rawAdminPassword.length >= 8 && Buffer.byteLength(rawAdminPassword, 'utf8') <= 72)
+    const rawAdminPassword = (process.env.ADMIN_PASSWORD || '').trim();
+    const adminPassword = rawAdminPassword.length >= 8 && Buffer.byteLength(rawAdminPassword, 'utf8') <= 72
       ? rawAdminPassword
-      : 'Sanjay2392@!';
-    const strongBootstrapPassword = typeof adminPassword === 'string' && adminPassword.length >= 8 && Buffer.byteLength(adminPassword, 'utf8') <= 72;
+      : null;
+    if (!adminPassword) throw new Error('Set ADMIN_PASSWORD to a value between 8 and 72 UTF-8 bytes before seeding an administrator.');
     if (!isValidEmail(adminEmail)) {
       console.warn('[SEED] ADMIN_EMAIL is not a valid email address; using default.');
     }
@@ -148,21 +200,21 @@ export const seedDatabase = async () => {
 
   // 4. About Content
   await db.setSettings('about_content', {
-    headline: 'Graphic and Visual Designer bridging engineering logic and modern brand craft.',
+    headline: 'Graphic Designer bridging engineering logic and modern brand craft.',
     subheadline: 'Crafting high-converting social media creatives, brand identities, packaging, and digital interfaces.',
-    biography_paragraph_1: 'I am a Graphic and Visual Designer based in Coimbatore with a background in Computer Science Engineering (B.E. from Sri Krishna College of Technology). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.',
-    biography_paragraph_2: 'At Bevis, I have designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for diverse brands including BAKERS, Pavizham Jewellers, Bro Knows Tech, LOFT, SIGGIS, Woneten Luxe, Wallfit, and Zen Spaces. I also pioneer AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.',
+    biography_paragraph_1: 'I am a Graphic Designer based in Erode with a background in Computer Science Engineering (B.E. from Sri Krishna College of Technology). I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.',
+    biography_paragraph_2: 'At Bevis Creative, I designed 100+ social media creatives, ad campaigns, packaging labels, and exhibition stalls for diverse brands including BAKERS, Pavizham Jewellers, Bro Knows Tech, LOFT, SIGGIS, Woneten Luxe, Wallfit, and Zen Spaces. I also pioneered AI-assisted workflows (Adobe Firefly, Seedream, ChatGPT, Gemini), reducing turnaround by 30% while delivering high-quality commercial visuals, e-commerce jewellery assets, and professional photo retouching.',
     experiences: [
       {
         id: 'exp_1',
-        role: 'Graphic and Visual Designer',
-        company: 'Bevis, Coimbatore',
-        period: 'April 2025 – Present',
+        role: 'Graphic Designer',
+        company: 'Bevis Creative - Advertising agency',
+        period: 'April 2025 – August 2026',
         description: 'Designed 100+ social media creatives, ad campaigns, and packaging labels across 17+ client brands. Spearheaded AI-assisted design workflows cutting production time by 30% while maintaining strict brand consistency.',
       },
       {
         id: 'exp_2',
-        role: 'Graphic and Visual Designer & Creative Builder',
+        role: 'Graphic Designer & Creative Builder',
         company: 'Independent Practice',
         period: '2024 – Present',
         description: 'Creating comprehensive brand identities, digital product screens, user interfaces, design systems, and AI-driven visual explorations for growing businesses.',
