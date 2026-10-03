@@ -117,7 +117,7 @@ router.get('/settings/public', async (req, res) => {
     const resumeFile = await db.getMeta('resume_file');
     const resumeSourceUrl = resumeFile?.url || resumeFile?.download_url || settings?.resume_url;
     const versionedResumeDownload = typeof resumeSourceUrl === 'string' && resumeSourceUrl.includes('/raw/upload/')
-      ? resumeSourceUrl.replace(/\/raw\/upload\/(?:fl_attachment(?::[^/]*)?\/)?/, '/raw/upload/fl_attachment:Sanjay_M_Resume.pdf/')
+      ? resumeSourceUrl.replace(/\/raw\/upload\/(?:fl_attachment(?::[^/]*)?\/)?/, '/raw/upload/fl_attachment:Sanjay_M_Resume/')
       : resumeSourceUrl;
     const publicSettings = {
       site_name: textSetting(settings, 'site_name', 'SANJAY', 100),
