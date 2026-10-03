@@ -55,7 +55,7 @@ router.post('/', upload.single('file'), async (req, res) => {
     const uploaded = await new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream({
         folder: process.env.CLOUDINARY_FOLDER || 'sanjay_portfolio',
-        public_id: 'resume',
+        public_id: 'resume.pdf',
         resource_type: 'raw',
         overwrite: true,
         use_filename: false,
