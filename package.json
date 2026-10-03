@@ -10,7 +10,8 @@
     "build": "vite build",
     "start": "node server/index.js",
     "seed": "node server/db/seed.js",
-    "db:migrate-local": "node server/db/migrate-local.js"
+    "db:migrate-local": "node server/db/migrate-local.js",
+    "optimize:images": "node scripts/optimize-portfolio-images.mjs"
   },
   "dependencies": {
     "@types/three": "^0.186.0",
