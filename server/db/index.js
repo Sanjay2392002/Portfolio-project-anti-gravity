@@ -275,15 +275,16 @@ export const db = {
   getUserByUsernameOrEmail: async (identifier) => {
     const term = String(identifier).trim().toLowerCase();
     if (pool) {
-      try {
-        const res = await pool.query(
-          'SELECT * FROM users WHERE lower(email) = $1 OR lower(COALESCE(username, \'\')) = $1',
-          [term]
-        );
-        if (res.rows[0]) return res.rows[0];
-      } catch (err) {
-        console.warn('[DB] Postgres query failed in getUserByUsernameOrEmail, checking local store:', err.message);
-      }
+      const configuredUsername = String(process.env.ADMIN_USERNAME || 'Sanjay').trim().toLowerCase();
+      const configuredEmail = String(process.env.ADMIN_EMAIL || 'sanjaymurugesan23@gmail.com').trim().toLowerCase();
+      const res = await pool.query(
+        `SELECT * FROM users
+         WHERE lower(email) = $1 OR ($1 = $2 AND lower(email) = $3)
+         ORDER BY CASE WHEN lower(email) = $1 THEN 0 ELSE 1 END
+         LIMIT 1`,
+        [term, configuredUsername, configuredEmail]
+      );
+      return res.rows[0] || null;
     }
     const data = getLocalData();
     const found = (data.users || []).find((u) => {
