@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Download } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { MagneticHeroHeading } from './MagneticHeroHeading';
@@ -20,6 +20,8 @@ interface AboutSectionProps {
 
 export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' }) => {
   const { about, settings } = usePortfolio();
+  const navigate = useNavigate();
+  const artConstraintsRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const [presentationIndex, setPresentationIndex] = useState(0);
   const [loadedWorkIds, setLoadedWorkIds] = useState<Set<string>>(() => new Set());
@@ -84,6 +86,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
           </motion.div>
 
           <motion.div
+            ref={artConstraintsRef}
             className="home-landing-art"
             initial={reduceMotion ? false : { opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -104,6 +107,26 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
               return (
                 <motion.figure
                   key={index}
+                  role="link"
+                  tabIndex={0}
+                  aria-label={`Open ${work.title} by ${work.brand} in selected works`}
+                  drag
+                  dragConstraints={artConstraintsRef}
+                  dragElastic={0.12}
+                  dragMomentum={false}
+                  onTap={() => {
+                    const brandSlug = work.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                    const params = new URLSearchParams({ brand: brandSlug, work: work.id, title: work.title });
+                    navigate(`/work?${params.toString()}`);
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      const brandSlug = work.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                      const params = new URLSearchParams({ brand: brandSlug, work: work.id, title: work.title });
+                      navigate(`/work?${params.toString()}`);
+                    }
+                  }}
                   className={`home-landing-art-card home-landing-art-card-${index + 1}`}
                   initial={reduceMotion ? false : { opacity: 0, y: 28, rotate: index === 1 ? 9 : index === 2 ? -8 : 0 }}
                   animate={reduceMotion ? { opacity: 1 } : {

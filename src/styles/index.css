@@ -1627,3 +1627,9 @@
   .home-landing-card-loader::before,
   .home-landing-card-loader-mark i { animation: none; }
 }
+
+
+/* Hero collage cards can be repositioned and opened as individual works. */
+.home-landing-art-card { cursor: grab; touch-action: none; user-select: none; }
+.home-landing-art-card:active { cursor: grabbing; }
+.home-landing-art-card:focus-visible { outline: 2px solid #526c58; outline-offset: 5px; }
