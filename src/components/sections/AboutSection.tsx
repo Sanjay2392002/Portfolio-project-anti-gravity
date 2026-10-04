@@ -64,9 +64,6 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
             <p className="home-landing-bio">
               {about?.biography_paragraph_1 || 'I am a Graphic Designer based in Erode with a background in Computer Science Engineering. I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.'}
             </p>
-            <p className="home-landing-bio home-landing-bio-secondary">
-              {about?.biography_paragraph_2 || 'I create commercial design assets for brands across social media, packaging, and print, with thoughtful AI-assisted workflows that bring ideas to life faster.'}
-            </p>
             <div className="home-about-actions home-landing-actions">
               <Link className="home-about-cta" to="/work" data-cursor="link">
                 <span>VIEW SELECTED WORKS</span>
