@@ -88,15 +88,28 @@ app.use('/api', async (req, res, next) => {
   catch { return res.status(503).json({ success: false, error: 'Portfolio storage is unavailable. Check DATABASE_URL and database connectivity.' }); }
 });
 
-// Static files (uploads, public assets, and selective works)
-const publicDir = path.resolve(__dirname, '../public');
-app.use(express.static(publicDir));
-app.use('/uploads', express.static(path.join(publicDir, 'uploads')));
-app.use('/assets', express.static(path.join(publicDir, 'assets')));
+// Static files & production client serving (Local development only; on Vercel, the Edge CDN serves dist/ and public/)
+if (!process.env.VERCEL) {
+  const publicDir = path.resolve(__dirname, '../public');
+  app.use(express.static(publicDir));
+  app.use('/uploads', express.static(path.join(publicDir, 'uploads')));
+  app.use('/assets', express.static(path.join(publicDir, 'assets')));
 
-const selectedWorksDir = path.resolve(__dirname, '../Selected works/Selected works');
-if (fs.existsSync(selectedWorksDir)) {
-  app.use('/selected-works', express.static(selectedWorksDir));
+  const selectedWorksDir = path.resolve(__dirname, '../Selected works/Selected works');
+  if (fs.existsSync(selectedWorksDir)) {
+    app.use('/selected-works', express.static(selectedWorksDir));
+  }
+
+  const distDir = path.resolve(__dirname, '../dist');
+  if (fs.existsSync(distDir)) {
+    app.use(express.static(distDir));
+    app.get('*', (req, res, next) => {
+      if (req.path.startsWith('/api')) {
+        return next();
+      }
+      res.sendFile(path.join(distDir, 'index.html'));
+    });
+  }
 }
 
 // API Routes
@@ -114,18 +127,6 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api', (req, res) => res.status(404).json({ success: false, error: 'API route not found.' }));
-
-// Production Client Serving
-const distDir = path.resolve(__dirname, '../dist');
-if (fs.existsSync(distDir)) {
-  app.use(express.static(distDir));
-  app.get('*', (req, res, next) => {
-    if (req.path.startsWith('/api')) {
-      return next();
-    }
-    res.sendFile(path.join(distDir, 'index.html'));
-  });
-}
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -57,7 +57,7 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
 
         {/* Metric Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
           <div className="p-5 bg-white rounded-[10px] border border-[#E5E5E5] shadow-xs">
             <div className="text-[12px] font-semibold text-[#8A8A8A] uppercase tracking-wider">TOTAL WORK</div>
             <div className="text-[32px] font-bold text-[#111111] mt-2">{total}</div>
@@ -104,7 +104,7 @@ export const AdminDashboardPage: React.FC = () => {
         {/* Quick Tables Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Projects Table (2 cols) */}
-          <div className="lg:col-span-2 bg-white rounded-[12px] border border-[#E5E5E5] p-6 shadow-xs">
+          <div className="lg:col-span-2 bg-white rounded-[12px] border border-[#E5E5E5] p-5 sm:p-6 shadow-xs">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-[16px] font-bold text-[#111111] uppercase tracking-tight">Recent Projects</h2>
               <Link to="/admin/projects" className="text-[13px] text-black hover:underline font-medium">
@@ -113,7 +113,7 @@ export const AdminDashboardPage: React.FC = () => {
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-[13px]">
+              <table className="w-full min-w-[500px] text-left text-[13px]">
                 <thead>
                   <tr className="border-b border-[#E5E5E5] text-[#8A8A8A] uppercase text-[11px] tracking-wider">
                     <th className="pb-3">Project</th>

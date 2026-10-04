@@ -145,7 +145,7 @@ export const AdminSettingsPage: React.FC = () => {
   return (
     <AdminLayout>
       <form onSubmit={handleSave} className="space-y-6 max-w-[900px] pb-20">
-        <div className="flex items-center justify-between pb-4 border-b border-[#E5E5E5]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E5E5E5]">
           <div>
             <h1 className="text-[28px] font-bold text-[#111111] tracking-tight">SITE SETTINGS</h1>
             <p className="text-[14px] text-[#6B6B6B]">Global portfolio configuration, contact, and metadata.</p>
@@ -153,7 +153,7 @@ export const AdminSettingsPage: React.FC = () => {
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-[8px] bg-black text-white text-[13px] font-medium hover:bg-black/90 transition-colors disabled:opacity-50"
+            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-[8px] bg-black text-white text-[13px] font-medium hover:bg-black/90 transition-colors disabled:opacity-50 self-start sm:self-auto"
           >
             <Save size={14} />
             <span>{saving ? 'Saving...' : 'Save Settings'}</span>

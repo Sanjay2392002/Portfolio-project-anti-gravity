@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+early_access: false
+
+reviews:
+  profile: "assertive"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - "main"
+      - "master"
+  path_filters:
+    - "!node_modules/**"
+    - "!dist/**"
+    - "!build/**"
+    - "!server/data/db.json"
+    - "!package-lock.json"
+  path_instructions:
+    - path: "server/**/*.js"
+      instructions: |
+        - Ensure strict security checks: validate all inputs, verify JWT tokens, and enforce role checks.
+        - Ensure SQL queries using pg use parameterized queries ($1, $2) to completely prevent SQL injection.
+        - Verify bcrypt password hashing (min 14 chars, max 72 bytes) as documented in ADMIN_SETUP.md.
+        - Never leak secrets, JWT_SECRET, Cloudinary credentials, or passwords in responses or logs.
+        - Ensure proper HTTP status codes and error responses without stack traces.
+    - path: "src/**/*.{ts,tsx}"
+      instructions: |
+        - Follow React 19 and TypeScript strict typing conventions.
+        - Ensure smooth animations with framer-motion and safe Three.js canvas destruction/cleanup on unmount.
+        - Ensure Tailwind CSS classes are clean, responsive, and avoid excessive layout shifts.
+        - Ensure accessibility (ARIA tags, keyboard navigation, semantic HTML).
+    - path: "scripts/**/*.{js,mjs}"
+      instructions: |
+        - Verify safe path resolution, file existence checks, and error handling for image optimization (sharp).
+
+chat:
+  auto_reply: true

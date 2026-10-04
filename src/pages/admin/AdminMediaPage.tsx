@@ -113,7 +113,7 @@ export const AdminMediaPage: React.FC = () => {
         </div>
 
         {/* Search */}
-        <div className="bg-white p-4 rounded-[10px] border border-[#E5E5E5] flex items-center justify-between">
+        <div className="bg-white p-4 rounded-[10px] border border-[#E5E5E5] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="relative w-full sm:w-80">
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8A8A8A]" />
             <input
@@ -124,7 +124,7 @@ export const AdminMediaPage: React.FC = () => {
               className="w-full pl-9 pr-4 py-1.5 bg-[#F9F9F9] border border-[#E5E5E5] rounded-[6px] text-[13px] focus:outline-none focus:border-black"
             />
           </div>
-          <div className="text-[12px] text-[#8A8A8A]">{filtered.length} assets</div>
+          <div className="text-[12px] text-[#8A8A8A] self-end sm:self-auto">{filtered.length} assets</div>
         </div>
 
         {/* Media Grid */}

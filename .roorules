@@ -1,0 +1,39 @@
+# Project Rules & Agent Guidelines (Roo Code / Cline)
+
+## 1. Project Overview & Architecture
+- **Repository**: Sanjay's Full-Stack 3D Interactive Portfolio
+- **Frontend**: React 19, TypeScript, Vite, Tailwind CSS, Three.js, Framer Motion, Lucide React
+- **Backend**: Node.js, Express 4, PostgreSQL (prod) / `server/data/db.json` (local dev)
+- **Authentication**: JWT with HTTP-only cookies, bcryptjs password hashing (min 14 chars, max 72 bytes)
+- **Media**: Local uploads / Cloudinary + Sharp image optimization pipeline
+- **Build & Verification**:
+  - `npm run build`: Type-checks and builds client with Vite
+  - `npm run dev`: Runs concurrent API and Vite client
+
+## 2. CodeRabbit Review Handoff Rules
+When fixing issues flagged by CodeRabbit or triggered via "Fix with AI":
+1. **Understand Root Cause**: Read the comment and the surrounding code context before touching files.
+2. **Surgical Edits**: Fix only the reported issue; avoid unrelated refactors or formatting changes.
+3. **Preserve Type Safety**: Adhere strictly to TypeScript interfaces in `src/` and shared types in `shared/`.
+4. **Security Priority**: Always prioritize fixing any security vulnerabilities (SQL injection, auth bypass, CSRF, insecure cookie handling, secret exposure).
+5. **Verify**: Ensure `npm run build` succeeds after applying the fix.
+
+## 3. Ralph Loop Autonomous Execution Rules
+When executing a Ralph Loop cycle:
+1. **Check State**: Read `progress.txt` to see which tasks have already been completed.
+2. **Find Next Task**: Read `PRD.md` and select the earliest uncompleted task.
+3. **Single Task Focus**: Execute *only* that specific task. Do not jump ahead to subsequent tasks.
+4. **Verify Task**: Test or build (`npm run build`) to ensure no regressions were introduced.
+5. **Log Progress**: Append a new timestamped entry to `progress.txt` using the format:
+   `[YYYY-MM-DD HH:MM] Completed: Task N - <Task Title>`
+6. **Completion**: If and only if all tasks in `PRD.md` are finished, append the session's completion marker to `progress.txt`.
+
+## 4. GSD (Get Shit Done) Collaboration
+- When running tasks via GSD checkpoints, keep commits atomic.
+- Check the SCM GSD Agent panel to review line-level diffs before accepting changes.
+- Ensure state rollbacks (`Discard All`) leave the repository in a clean, working state.
+
+## 5. Coding Standards
+- Do not remove or weaken existing docstrings and comments.
+- Maintain responsive Tailwind design principles across mobile and desktop.
+- For Three.js canvases, always handle animation loops and window resize events cleanly, disposing geometries and materials upon component unmount.

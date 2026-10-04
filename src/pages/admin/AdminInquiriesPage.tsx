@@ -76,14 +76,14 @@ export const AdminInquiriesPage: React.FC = () => {
     <AdminLayout>
       <div className="space-y-6 max-w-[1000px] pb-24">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-[#E5E5E5]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#E5E5E5]">
           <div>
             <h1 className="text-[28px] font-bold text-[#111111] tracking-tight">CONTACT INQUIRIES</h1>
             <p className="text-[14px] text-[#6B6B6B]">
               Direct project inquiries received from the portfolio contact form.
             </p>
           </div>
-          <div className="px-3.5 py-1.5 rounded-full bg-black text-white text-[12px] font-semibold font-mono">
+          <div className="px-3.5 py-1.5 rounded-full bg-black text-white text-[12px] font-semibold font-mono self-start sm:self-auto">
             {messages.length} {messages.length === 1 ? 'Message' : 'Messages'}
           </div>
         </div>
@@ -124,7 +124,7 @@ export const AdminInquiriesPage: React.FC = () => {
                     </a>
                   </div>
 
-                  <div className="flex items-center space-x-3 text-[12px] text-[#8A8A8A]">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[12px] text-[#8A8A8A] mt-2 sm:mt-0">
                     <button type="button" onClick={() => void handleReadChange(msg)} className="inline-flex items-center gap-1 rounded px-2 py-1 hover:bg-[#f5f5f5]">
                       <CheckCircle2 size={13} /> {msg.read ? 'Mark unread' : 'Mark read'}
                     </button>
