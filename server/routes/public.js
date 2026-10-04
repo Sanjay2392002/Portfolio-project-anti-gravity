@@ -2,6 +2,7 @@ import express from 'express';
 import { db } from '../db/index.js';
 import { createRateLimiter, requireSameOrigin } from '../middleware/security.js';
 import { isValidEmail } from '../utils/validation.js';
+import { sendContactNotification } from '../utils/email.js';
 
 const router = express.Router();
 const contactRateLimit = createRateLimiter({
@@ -148,19 +149,39 @@ router.post('/contact', contactRateLimit, async (req, res) => {
   try {
     const name = typeof req.body?.name === 'string' ? req.body.name.trim() : '';
     const email = typeof req.body?.email === 'string' ? req.body.email.trim().toLowerCase() : '';
+    const phone = typeof req.body?.phone === 'string' ? req.body.phone.trim() : '';
     const message = typeof req.body?.message === 'string' ? req.body.message.trim() : '';
+
     if (!name || !email || !message || name.length > 120 || message.length > 5000 || !isValidEmail(email)) {
       return res.status(400).json({ success: false, error: 'Please provide a valid name, email, and message.' });
     }
 
+    // 1. Database insertion MUST happen before email notification
     let saved = null;
     try {
       saved = await db.createContactMessage({ name, email, message });
       await db.logActivity('New Contact Inquiry', `Inquiry from ${name} (${email})`);
     } catch (saveErr) {
-      console.warn('[API] Notice: could not persist inquiry to database:', saveErr.message);
+      console.error('[API] Failed to persist inquiry to database:', saveErr.message);
+      // If database insertion fails: DO NOT send email, return appropriate error response
+      return res.status(500).json({ success: false, error: 'Failed to send message.' });
     }
 
+    // 2. If database insertion succeeds, trigger Resend email notification
+    try {
+      await sendContactNotification({
+        name,
+        email,
+        phone,
+        message,
+        createdAt: saved?.created_at,
+      });
+    } catch (emailErr) {
+      // If email notification fails: DO NOT fail visitor submission; log safely on backend
+      console.error('[API] Notice: Contact notification email dispatch failed:', emailErr.message);
+    }
+
+    // 3. Return existing success response to visitor
     res.json({
       success: true,
       message: "Thank you for reaching out! I'll get back to you shortly.",
@@ -171,5 +192,6 @@ router.post('/contact', contactRateLimit, async (req, res) => {
     res.status(500).json({ success: false, error: 'Failed to send message.' });
   }
 });
+
 
 export default router;

@@ -32,3 +32,10 @@ Improve UX and feedback across the admin interface.
 - Add toast notifications or clear inline error states for failed admin actions (project updates, settings save).
 - Verify session expiry handles redirect to `/admin/login` cleanly without breaking state.
 - Ensure audit logging captures administrative changes without saving passwords or tokens.
+
+## Task 6: Resend Email Notification Integration for Contact Inquiries
+Add production-grade email notifications for contact inquiries using Resend.
+- Validate submissions and persist to database prior to email dispatch.
+- Protect against CRLF header injection and HTML injection.
+- Handle Resend API failures gracefully without failing the visitor's submission.
+- Preserve Vercel serverless function lightweight footprint.

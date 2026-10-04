@@ -11,8 +11,10 @@
     "start": "node server/index.js",
     "seed": "node server/db/seed.js",
     "db:migrate-local": "node server/db/migrate-local.js",
-    "optimize:images": "node scripts/optimize-portfolio-images.mjs"
+    "optimize:images": "node scripts/optimize-portfolio-images.mjs",
+    "test": "node scripts/test-contact-scenarios.mjs"
   },
+
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.5.1",
@@ -22,7 +24,8 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
-    "pg": "^8.13.3"
+    "pg": "^8.13.3",
+    "resend": "^6.32.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
