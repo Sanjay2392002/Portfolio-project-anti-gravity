@@ -24,6 +24,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState<boolean>(true);
 
   const checkAuth = async () => {
+    setLoading(true);
     try {
       const res = await fetch('/api/admin/auth/me', { credentials: 'include' });
       const data = await res.json().catch(() => null);
