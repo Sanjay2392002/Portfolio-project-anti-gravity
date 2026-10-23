@@ -24,7 +24,14 @@ const passwordRateLimit = createRateLimiter({
   max: 5,
   message: 'Too many password-change attempts. Please try again later.',
 });
-const dummyHash = bcrypt.hashSync('timing-only-not-a-real-account', 12);
+// Generate the timing-only hash on demand, not during every serverless cold start.
+let dummyHashPromise;
+const getDummyHash = () => {
+  if (!dummyHashPromise) {
+    dummyHashPromise = bcrypt.hash('timing-only-not-a-real-account', 12);
+  }
+  return dummyHashPromise;
+};
 
 const issueAdminSession = (res, user) => {
   const token = jwt.sign(
@@ -48,7 +55,8 @@ router.post('/login', loginRateLimit, async (req, res) => {
 
   try {
     const user = await db.getUserByUsernameOrEmail(identifier);
-    const passwordMatches = await bcrypt.compare(password, user?.password_hash || dummyHash);
+    const passwordHash = user?.password_hash || await getDummyHash();
+    const passwordMatches = await bcrypt.compare(password, passwordHash);
     if (!user || user.role !== 'admin' || !passwordMatches) {
       console.warn(`[AUTH] Failed login attempt for "${identifier}" - reason: ${!user ? 'user not found' : user.role !== 'admin' ? 'role is not admin' : 'password mismatch'}`);
       return res.status(401).json({ success: false, error: 'Invalid username/email or password.' });
