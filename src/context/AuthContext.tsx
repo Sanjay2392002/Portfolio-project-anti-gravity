@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 interface User {
   id: string;
@@ -18,10 +19,12 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const location = useLocation();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const checkAuth = async () => {
+    setLoading(true);
     try {
       const res = await fetch('/api/admin/auth/me', { credentials: 'include' });
       const data = await res.json().catch(() => null);
@@ -38,8 +41,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    checkAuth();
-  }, []);
+    if (location.pathname.startsWith('/admin')) {
+      void checkAuth();
+    } else {
+      setLoading(false);
+    }
+  }, [location.pathname]);
 
   const login = async (email: string, password: string) => {
     try {
