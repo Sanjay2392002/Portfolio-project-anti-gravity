@@ -144,6 +144,67 @@ router.get('/settings/public', async (req, res) => {
   }
 });
 
+// GET /api/portfolio-data — one public request for the initial portfolio payload.
+router.get('/portfolio-data', async (req, res) => {
+  try {
+    const [projects, categories, settings, about, resumeFile] = await Promise.all([
+      db.getProjects(false),
+      db.getCategories(),
+      db.getSettings('site_settings'),
+      db.getSettings('about_content'),
+      db.getMeta('resume_file'),
+    ]);
+
+    const resumeSourceUrl = resumeFile?.url || resumeFile?.download_url || settings?.resume_url;
+    const versionedResumeDownload = typeof resumeSourceUrl === 'string' && resumeSourceUrl.includes('/raw/upload/')
+      ? resumeSourceUrl.replace(/\/raw\/upload\/(?:fl_attachment(?::[^/]*)?\/)?/, '/raw/upload/fl_attachment:Sanjay_M_Resume/')
+      : resumeSourceUrl;
+
+    const publicSettings = {
+      site_name: textSetting(settings, 'site_name', 'SANJAY', 100),
+      hero_eyebrow: textSetting(settings, 'hero_eyebrow', "Hi, I'm Sanjay.", 200),
+      hero_headline: textSetting(settings, 'hero_headline', 'GRAPHIC DESIGNER', 500),
+      hero_description: textSetting(settings, 'hero_description', 'I create social media posters and clear user interfaces for brands and digital products.', 5000),
+      email: isValidEmail(settings?.email) ? settings.email : 'sanjaymurugesan23@gmail.com',
+      phone: typeof settings?.phone === 'string' && /^\+?[0-9(). -]{5,30}$/.test(settings.phone) ? settings.phone : '+91 7010948452',
+      linkedin_url: secureLinkSetting(settings, 'linkedin_url', 'https://www.linkedin.com/in/sanjaym23'),
+      behance_url: secureLinkSetting(settings, 'behance_url', 'https://www.behance.net/sanjayuiuxgd'),
+      resume_url: secureLinkSetting(settings, 'resume_url', '', true),
+      resume_download_url: secureLinkSetting({ download_url: versionedResumeDownload }, 'download_url', secureLinkSetting(settings, 'resume_url', '', true), true),
+      availability: textSetting(settings, 'availability', 'Available for design work.', 500),
+      footer_text: textSetting(settings, 'footer_text', '© 2026 SANJAY. All rights reserved.', 500),
+      seo_title: textSetting(settings, 'seo_title', 'Sanjay — Graphic Designer', 255),
+      seo_description: textSetting(settings, 'seo_description', 'Portfolio of Sanjay, graphic designer focused on social media design and user interface design.', 5000),
+      og_image: secureLinkSetting(settings, 'og_image', '', true),
+    };
+
+    const publicAbout = about && typeof about === 'object' && !Array.isArray(about) ? {
+      headline: typeof about.headline === 'string' ? about.headline : '',
+      subheadline: typeof about.subheadline === 'string' ? about.subheadline : '',
+      biography_paragraph_1: typeof about.biography_paragraph_1 === 'string' ? about.biography_paragraph_1 : '',
+      biography_paragraph_2: typeof about.biography_paragraph_2 === 'string' ? about.biography_paragraph_2 : '',
+      experiences: Array.isArray(about.experiences) ? about.experiences.filter((item) => item && typeof item === 'object' && !Array.isArray(item)).slice(0, 20).map((item) => ({
+        id: typeof item.id === 'string' ? item.id : '',
+        role: typeof item.role === 'string' ? item.role : '',
+        company: typeof item.company === 'string' ? item.company : '',
+        period: typeof item.period === 'string' ? item.period : '',
+        description: typeof item.description === 'string' ? item.description : '',
+      })) : [],
+      capabilities: Array.isArray(about.capabilities) ? about.capabilities.filter((group) => group && typeof group === 'object' && !Array.isArray(group)).slice(0, 20).map((group) => ({
+        category: typeof group.category === 'string' ? group.category : '',
+        skills: Array.isArray(group.skills) ? group.skills.filter((skill) => typeof skill === 'string').slice(0, 30) : [],
+      })) : [],
+      tools: Array.isArray(about.tools) ? about.tools.filter((tool) => typeof tool === 'string').slice(0, 30) : [],
+      availability: typeof about.availability === 'string' ? about.availability : '',
+    } : null;
+
+    res.json({ success: true, data: { projects, categories, settings: publicSettings, about: publicAbout } });
+  } catch (err) {
+    console.error('[API] Failed to fetch portfolio data.', { code: err.code || 'UNHANDLED' });
+    res.status(500).json({ success: false, error: 'Failed to fetch portfolio data' });
+  }
+});
+
 // POST /api/contact
 router.post('/contact', contactRateLimit, async (req, res) => {
   try {
