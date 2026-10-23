@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
 interface User {
@@ -20,6 +20,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
+  const wasAdminRoute = useRef(false);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -41,11 +42,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    if (location.pathname.startsWith('/admin')) {
+    const isAdminRoute = location.pathname.startsWith('/admin');
+
+    // Verify the session when entering the admin area, not on every admin-page navigation.
+    if (isAdminRoute && !wasAdminRoute.current) {
       void checkAuth();
-    } else {
+    } else if (!isAdminRoute) {
+      setUser(null);
       setLoading(false);
     }
+
+    wasAdminRoute.current = isAdminRoute;
   }, [location.pathname]);
 
   const login = async (email: string, password: string) => {
