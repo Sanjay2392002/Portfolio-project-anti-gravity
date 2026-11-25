@@ -1,8 +1,10 @@
+import fs from 'fs';
 import express from 'express';
 import { db } from '../db/index.js';
 import { requireAdmin } from '../middleware/auth.js';
 import { requireSameOrigin } from '../middleware/security.js';
 import { isValidEmail } from '../utils/validation.js';
+import { resumeUpload, processResumeUpload } from '../middleware/upload.js';
 
 const router = express.Router();
 router.use(requireAdmin, requireSameOrigin);
@@ -190,10 +192,64 @@ router.put('/settings', async (req, res) => {
   const message = validateSettings(req.body);
   if (message) return res.status(400).json({ success: false, error: message });
   try {
-    const updated = await db.setSettings('site_settings', req.body);
+    const existing = (await db.getSettings('site_settings')) || {};
+    const payload = { ...req.body };
+    // Safeguard: never overwrite a valid existing resume_url with an empty or blank string
+    if ((!payload.resume_url || typeof payload.resume_url !== 'string' || payload.resume_url.trim() === '') && existing.resume_url) {
+      payload.resume_url = existing.resume_url;
+    }
+    const toSave = {
+      ...defaultSiteSettings,
+      ...existing,
+      ...payload,
+    };
+    const updated = await db.setSettings('site_settings', toSave);
     await db.logActivity('Update Settings', 'Updated site settings.');
     return res.json({ success: true, data: updated });
   } catch { return res.status(500).json({ success: false, error: 'Could not save site settings.' }); }
+});
+
+// POST /api/admin/resume (Dedicated, atomic upload and database persistence for resume)
+router.post('/resume', resumeUpload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: 'Please choose a PDF resume file to upload.' });
+    }
+
+    const processed = await processResumeUpload(req.file);
+    if (!processed?.url) {
+      return res.status(500).json({ success: false, error: 'Could not generate a valid URL for the uploaded resume.' });
+    }
+
+    const currentSettings = (await db.getSettings('site_settings')) || {};
+    const updatedSettings = {
+      ...defaultSiteSettings,
+      ...currentSettings,
+      resume_url: processed.url,
+    };
+
+    const saved = await db.setSettings('site_settings', updatedSettings);
+    await db.logActivity('Update Resume', `Updated active resume to ${processed.url} (storage: ${processed.storage || 'local'}).`);
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        resume_url: processed.url,
+        storage: processed.storage,
+        bytes: processed.bytes,
+      },
+      message: 'Resume uploaded and saved successfully.',
+    });
+  } catch (err) {
+    if (req.file?.path && fs.existsSync(req.file.path)) {
+      try { fs.unlinkSync(req.file.path); } catch { /* best effort cleanup */ }
+    }
+    const status = err.status || 500;
+    return res.status(status).json({
+      success: false,
+      error: status >= 500 ? 'Could not upload and save resume.' : err.message,
+    });
+  }
 });
 
 router.get('/activity', async (req, res) => {

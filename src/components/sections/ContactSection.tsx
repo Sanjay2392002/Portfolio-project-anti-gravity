@@ -153,8 +153,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ variant = 'defau
               className="mb-10"
             >
               <a
-                href="/Sanjay_M_Resume.pdf"
-                download="Sanjay_M_Resume.pdf"
+                href={settings?.resume_url || '/Sanjay_M_Resume.pdf'}
+                download={settings?.resume_url?.startsWith('http') ? undefined : 'Sanjay_M_Resume.pdf'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="contact-cv-cta"

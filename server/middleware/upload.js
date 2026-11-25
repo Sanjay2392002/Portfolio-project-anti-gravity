@@ -63,6 +63,31 @@ const storage = multer.diskStorage({
   },
 });
 
+// Multer disk storage specifically for PDF resumes
+const resumeStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, UPLOADS_DIR);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `resume_${Date.now()}_${crypto.randomBytes(6).toString('hex')}.pdf`;
+    cb(null, uniqueName);
+  },
+});
+
+export const resumeUpload = multer({
+  storage: resumeStorage,
+  limits: { fileSize: 15 * 1024 * 1024, files: 1, fields: 5 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'application/pdf' || file.originalname.toLowerCase().endsWith('.pdf')) {
+      cb(null, true);
+    } else {
+      const error = new Error('Only PDF documents (.pdf) are supported for resume uploads.');
+      error.status = 400;
+      cb(error);
+    }
+  },
+});
+
 export const upload = multer({
   storage,
   limits: { fileSize: 20 * 1024 * 1024, files: 1, fields: 5, fieldSize: 16 * 1024, parts: 7 },
@@ -122,5 +147,58 @@ export const processMediaUpload = async (file) => {
     height: null,
     format: path.extname(file.originalname).replace('.', ''),
     bytes: file.size,
+  };
+};
+
+export const processResumeUpload = async (file) => {
+  if (!file || !file.path) {
+    throw new Error('No resume file was uploaded.');
+  }
+
+  const buffer = fs.readFileSync(file.path);
+  // Verify PDF magic header bytes: %PDF- (0x25, 0x50, 0x44, 0x46)
+  const isPdf = buffer.length >= 4 && buffer[0] === 0x25 && buffer[1] === 0x50 && buffer[2] === 0x44 && buffer[3] === 0x46;
+  if (!isPdf) {
+    try { fs.unlinkSync(file.path); } catch { /* best effort cleanup */ }
+    const error = new Error('The uploaded file content is not a valid PDF document.');
+    error.status = 400;
+    throw error;
+  }
+
+  if (hasCloudinary) {
+    try {
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: process.env.CLOUDINARY_FOLDER || 'sanjay_portfolio_resumes',
+        resource_type: 'auto',
+        public_id: `resume_${Date.now()}`,
+        use_filename: true,
+        unique_filename: true,
+      });
+
+      try {
+        fs.unlinkSync(file.path);
+      } catch {
+        // ignore
+      }
+
+      if (!result?.secure_url) {
+        throw new Error('Cloudinary did not return a valid secure URL for the uploaded PDF.');
+      }
+
+      return {
+        url: result.secure_url,
+        bytes: result.bytes || file.size,
+        storage: 'cloudinary',
+      };
+    } catch (err) {
+      console.warn('[Cloudinary] Resume PDF upload failed; attempting local fallback:', err?.message || err);
+    }
+  }
+
+  // Local asset fallback
+  return {
+    url: `/uploads/${file.filename}`,
+    bytes: file.size,
+    storage: 'local',
   };
 };

@@ -47,7 +47,9 @@ const workedBrands = [
 ];
 
 export const AboutPage: React.FC = () => {
-  const { about } = usePortfolio();
+  const { about, settings } = usePortfolio();
+  const resumeUrl = settings?.resume_url || '/Sanjay_M_Resume.pdf';
+  const isExternalResume = resumeUrl.startsWith('http://') || resumeUrl.startsWith('https://');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -166,8 +168,8 @@ export const AboutPage: React.FC = () => {
             className="flex flex-wrap items-center gap-3.5 mt-8 pt-2"
           >
             <a
-              href="/Sanjay_M_Resume.pdf"
-              download="Sanjay_M_Resume.pdf"
+              href={resumeUrl}
+              download={isExternalResume ? undefined : 'Sanjay_M_Resume.pdf'}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-[#18251f] text-white text-[13px] font-semibold tracking-wider uppercase hover:bg-black transition-all shadow-sm hover:shadow-md"
