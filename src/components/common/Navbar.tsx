@@ -10,7 +10,8 @@ export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
-  const siteName = settings?.site_name || 'SANJAY';
+  const savedSiteName = settings?.site_name?.trim() || 'SANJAY';
+  const siteName = savedSiteName.toUpperCase() === 'SANJAY' ? "SANJAY'S PORTFOLIO" : savedSiteName;
 
   useEffect(() => {
     const handleScroll = () => {

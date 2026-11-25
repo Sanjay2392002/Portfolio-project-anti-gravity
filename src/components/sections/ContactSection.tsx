@@ -9,6 +9,7 @@ interface ContactSectionProps {
 
 export const ContactSection: React.FC<ContactSectionProps> = ({ variant = 'default' }) => {
   const { settings } = usePortfolio();
+  const cvUrl = settings?.resume_download_url || settings?.resume_url || '/Sanjay_M_Resume.pdf';
   const isHome = variant === 'home';
   const easeApple = [0.22, 1, 0.36, 1] as const;
 
@@ -153,8 +154,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ variant = 'defau
               className="mb-10"
             >
               <a
-                href={settings?.resume_url || '/Sanjay_M_Resume.pdf'}
-                download={settings?.resume_url?.startsWith('http') ? undefined : 'Sanjay_M_Resume.pdf'}
+                href={cvUrl}
+                download={cvUrl?.startsWith('http') ? undefined : 'Sanjay_M_Resume.pdf'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="contact-cv-cta"

@@ -16,7 +16,7 @@ export const Footer: React.FC = () => {
     return (
       <footer className="home-footer">
         <div className="home-footer-main">
-          <div className="home-footer-brand"><strong>{siteName}</strong><span>Visual Designer</span></div>
+          <div className="home-footer-brand"><strong>{siteName}</strong><span>Graphic Designer</span></div>
           <nav aria-label="Footer navigation">
             <Link to="/work">SELECTED WORKS</Link>
             <a href="#about">ABOUT</a>

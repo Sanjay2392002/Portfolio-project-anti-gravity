@@ -8,9 +8,9 @@ export const HomePage: React.FC = () => {
     const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
     const previousTitle = document.title;
     const previousDescription = description?.content;
-    document.title = 'Sanjay — Graphic and Visual Designer';
+    document.title = 'Sanjay — Graphic Designer';
     if (description) {
-      description.content = 'Sanjay is a Graphic and Visual Designer creating brand identities, campaigns, packaging, and digital experiences.';
+      description.content = 'Sanjay is a Graphic Designer creating brand identities, campaigns, packaging, and digital experiences.';
     }
     return () => {
       document.title = previousTitle;

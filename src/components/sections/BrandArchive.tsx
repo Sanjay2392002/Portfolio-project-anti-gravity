@@ -138,6 +138,20 @@ export const BrandArchive: React.FC = () => {
     }
   }, [searchParams]);
 
+  // Open a requested work directly when arriving from a landing card.
+  useEffect(() => {
+    const workId = searchParams.get('work');
+    const workTitle = searchParams.get('title');
+    const brandSlug = searchParams.get('brand');
+    if (!workId && !workTitle) return;
+
+    const index = displayedWorks.findIndex((work) =>
+      (work.id === workId || (workTitle && work.title === workTitle)) &&
+      (!brandSlug || toSlug(work.brand) === toSlug(brandSlug))
+    );
+    if (index >= 0) setActiveIndex(index);
+  }, [searchParams, displayedWorks]);
+
   // Lightbox keyboard navigation
   useEffect(() => {
     if (activeIndex === null) return;

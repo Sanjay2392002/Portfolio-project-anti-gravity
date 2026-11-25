@@ -8,6 +8,7 @@ export interface SiteSettings {
   linkedin_url: string;
   behance_url: string;
   resume_url: string;
+  resume_download_url?: string;
   availability: string;
   footer_text: string;
   seo_title: string;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { AdminLayout } from '../../components/admin/AdminLayout';
 import { SiteSettings } from '../../types/settings';
-import { Save, Upload, FileText, ExternalLink, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Save, Upload, FileText, ExternalLink, CheckCircle2, AlertCircle, Trash2 } from 'lucide-react';
 
 export const AdminSettingsPage: React.FC = () => {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -33,7 +33,7 @@ export const AdminSettingsPage: React.FC = () => {
     return () => { cancelled = true; };
   }, []);
 
-  const handleSave = async (e: React.FormEvent) => {
+const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!settings) return;
     setSaving(true);

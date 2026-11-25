@@ -24,8 +24,8 @@ try {
 let pool = null;
 const isPostgresConfigured = Boolean(process.env.DATABASE_URL && process.env.DATABASE_URL.trim().length > 0);
 
-if (process.env.NODE_ENV === 'production' && !isPostgresConfigured) {
-  console.log('[DB] Notice: DATABASE_URL is not configured. Running with local JSON storage adapter.');
+if ((process.env.NODE_ENV === 'production' || process.env.VERCEL) && !isPostgresConfigured) {
+  console.error('[DB] DATABASE_URL is required in production; local JSON storage is not persistent on serverless deployments.');
 }
 const databaseSslDisabled = process.env.DATABASE_SSL?.trim().toLowerCase() === 'disable';
 if (process.env.NODE_ENV === 'production' && databaseSslDisabled && isPostgresConfigured) {
@@ -53,7 +53,12 @@ const emptyLocalData = () => ({
 });
 
 export const initializeDatabase = async () => {
-  if (!pool) return;
+  if (!pool) {
+    if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+      throw new Error('DATABASE_URL must be configured in production; local JSON storage is not persistent on serverless deployments.');
+    }
+    return;
+  }
   try {
     const schemaPath = path.join(__dirname, 'schema.sql');
     if (fs.existsSync(schemaPath)) {
@@ -61,7 +66,8 @@ export const initializeDatabase = async () => {
     }
     await pool.query('SELECT 1');
   } catch (err) {
-    console.warn('[DB] initializeDatabase notice:', err.message);
+    console.error('[DB] Database initialization failed:', err.message);
+    throw err;
   }
 };
 
@@ -253,12 +259,8 @@ export const db = {
   getUserByEmail: async (email) => {
     const normalizedEmail = String(email).trim().toLowerCase();
     if (pool) {
-      try {
-        const res = await pool.query('SELECT * FROM users WHERE lower(email) = $1', [normalizedEmail]);
-        if (res.rows[0]) return res.rows[0];
-      } catch (err) {
-        console.warn('[DB] Postgres query failed in getUserByEmail, checking local store:', err.message);
-      }
+      const res = await pool.query('SELECT * FROM users WHERE lower(email) = $1 LIMIT 1', [normalizedEmail]);
+      return res.rows[0] || null;
     }
     const data = getLocalData();
     const found = (data.users || []).find((u) => u.email.toLowerCase() === normalizedEmail);
@@ -269,15 +271,16 @@ export const db = {
   getUserByUsernameOrEmail: async (identifier) => {
     const term = String(identifier).trim().toLowerCase();
     if (pool) {
-      try {
-        const res = await pool.query(
-          'SELECT * FROM users WHERE lower(email) = $1 OR lower(COALESCE(username, \'\')) = $1',
-          [term]
-        );
-        if (res.rows[0]) return res.rows[0];
-      } catch (err) {
-        console.warn('[DB] Postgres query failed in getUserByUsernameOrEmail, checking local store:', err.message);
-      }
+      const configuredUsername = String(process.env.ADMIN_USERNAME || 'Sanjay').trim().toLowerCase();
+      const configuredEmail = String(process.env.ADMIN_EMAIL || 'sanjaymurugesan23@gmail.com').trim().toLowerCase();
+      const res = await pool.query(
+        `SELECT * FROM users
+         WHERE lower(email) = $1 OR ($1 = $2 AND lower(email) = $3)
+         ORDER BY CASE WHEN lower(email) = $1 THEN 0 ELSE 1 END
+         LIMIT 1`,
+        [term, configuredUsername, configuredEmail]
+      );
+      return res.rows[0] || null;
     }
     const data = getLocalData();
     const found = (data.users || []).find((u) => {
@@ -302,12 +305,8 @@ export const db = {
 
   getUserById: async (id) => {
     if (pool) {
-      try {
-        const res = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
-        if (res.rows[0]) return res.rows[0];
-      } catch (err) {
-        console.warn('[DB] Postgres query failed in getUserById, checking local store:', err.message);
-      }
+      const res = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+      return res.rows[0] || null;
     }
     const found = (getLocalData().users || []).find((user) => user.id === id);
     if (found) return found;
@@ -316,12 +315,8 @@ export const db = {
 
   getAdminUsers: async () => {
     if (pool) {
-      try {
-        const result = await pool.query("SELECT id, email, password_hash, role FROM users WHERE role = 'admin'");
-        if (result.rows.length) return result.rows;
-      } catch (err) {
-        console.warn('[DB] Postgres query failed in getAdminUsers, checking local store:', err.message);
-      }
+      const result = await pool.query("SELECT id, email, password_hash, role FROM users WHERE role = 'admin'");
+      return result.rows;
     }
     const users = (getLocalData().users || []).filter((user) => user.role === 'admin');
     return users.length > 0 ? users : DEFAULT_FALLBACK_USERS;

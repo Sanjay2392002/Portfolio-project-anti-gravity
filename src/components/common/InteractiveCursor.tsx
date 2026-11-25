@@ -62,6 +62,14 @@ export const InteractiveCursor: React.FC = () => {
       style={{ left: x, top: y }}
       aria-hidden="true"
     >
+      <svg className="site-cursor-pen" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M26 3 9.5 17.5 3 29l11.5-6.5L29 6l-3-3Z" fill="#fcfcfa" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+        <path d="m9.5 17.5 5 5" fill="none" stroke="currentColor" strokeWidth="1.4" />
+        <path d="m9.5 17.5-4-4m4 4 4-4m1 9 4 4m-4-4 4-4" fill="none" stroke="#526c58" strokeWidth="1.1" strokeLinecap="round" />
+        <circle cx="9.5" cy="17.5" r="2" fill="#fcfcfa" stroke="currentColor" strokeWidth="1.3" />
+        <circle cx="13.5" cy="13.5" r="1.4" fill="#fcfcfa" stroke="#526c58" strokeWidth="1.1" />
+        <circle cx="14.5" cy="22.5" r="1.8" fill="#fcfcfa" stroke="currentColor" strokeWidth="1.2" />
+      </svg>
       {mode === 'view' && <span>VIEW</span>}
     </motion.div>
   );
