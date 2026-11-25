@@ -54,8 +54,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
                 Hello, I’m
               </motion.span>
               <motion.span
-                initial={reduceMotion ? false : { opacity: 0, y: 34, clipPath: 'inset(0 0 100% 0)' }}
-                animate={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)' }}
+                initial={reduceMotion ? false : { opacity: 0, y: 34 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
                 aria-hidden="true"
               >
@@ -64,9 +64,6 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
             </h1>
             <p className="home-landing-bio">
               {about?.biography_paragraph_1 || 'I am a Graphic Designer based in Erode with a background in Computer Science Engineering. I combine structured thinking and technical agility with visual design to create impactful brand identities, commercial campaigns, and user interfaces.'}
-            </p>
-            <p className="home-landing-bio home-landing-bio-secondary">
-              {about?.biography_paragraph_2 || 'I create commercial design assets for brands across social media, packaging, and print, with thoughtful AI-assisted workflows that bring ideas to life faster.'}
             </p>
             <div className="home-about-actions home-landing-actions">
               <Link className="home-about-cta" to="/work" data-cursor="link">
@@ -112,11 +109,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ variant = 'default' 
                   role="link"
                   tabIndex={0}
                   aria-label={`Open ${work.title} by ${work.brand} in selected works`}
-                  drag
-                  dragConstraints={artConstraintsRef}
-                  dragElastic={0.12}
-                  dragMomentum={false}
-                  onTap={() => {
+                  data-cursor="view"
+                  onClick={() => {
                     const brandSlug = work.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
                     const params = new URLSearchParams({ brand: brandSlug, work: work.id, title: work.title });
                     navigate(`/work?${params.toString()}`);

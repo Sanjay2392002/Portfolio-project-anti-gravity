@@ -33,33 +33,35 @@ export const AdminActivityPage: React.FC = () => {
         </div>
 
         <div className="bg-white rounded-[12px] border border-[#E5E5E5] overflow-hidden shadow-xs">
-          <table className="w-full text-left text-[13px]">
-            <thead>
-              <tr className="bg-[#F9F9F9] border-b border-[#E5E5E5] text-[#8A8A8A] uppercase text-[11px] tracking-wider">
-                <th className="py-3 px-4">Action</th>
-                <th className="py-3 px-4">Details</th>
-                <th className="py-3 px-4 text-right">Timestamp</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#E5E5E5]">
-              {logs.map((log) => (
-                <tr key={log.id} className="hover:bg-[#FDFDFD] transition-colors">
-                  <td className="py-3 px-4 font-semibold text-[#111111]">{log.action}</td>
-                  <td className="py-3 px-4 text-[#6B6B6B]">{log.details}</td>
-                  <td className="py-3 px-4 text-right font-mono text-[12px] text-[#8A8A8A]">
-                    {new Date(log.created_at).toLocaleString()}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[500px] text-left text-[13px]">
+              <thead>
+                <tr className="bg-[#F9F9F9] border-b border-[#E5E5E5] text-[#8A8A8A] uppercase text-[11px] tracking-wider">
+                  <th className="py-3 px-4">Action</th>
+                  <th className="py-3 px-4">Details</th>
+                  <th className="py-3 px-4 text-right">Timestamp</th>
                 </tr>
-              ))}
-              {logs.length === 0 && !loading && (
-                <tr>
-                  <td colSpan={3} className="py-12 text-center text-[#8A8A8A]">
-                    No activity recorded yet.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-[#E5E5E5]">
+                {logs.map((log) => (
+                  <tr key={log.id} className="hover:bg-[#FDFDFD] transition-colors">
+                    <td className="py-3 px-4 font-semibold text-[#111111]">{log.action}</td>
+                    <td className="py-3 px-4 text-[#6B6B6B]">{log.details}</td>
+                    <td className="py-3 px-4 text-right font-mono text-[12px] text-[#8A8A8A]">
+                      {new Date(log.created_at).toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
+                {logs.length === 0 && !loading && (
+                  <tr>
+                    <td colSpan={3} className="py-12 text-center text-[#8A8A8A]">
+                      No activity recorded yet.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </AdminLayout>

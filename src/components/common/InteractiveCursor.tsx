@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 type CursorMode = 'default' | 'view' | 'link' | 'native';
@@ -7,70 +7,228 @@ export const InteractiveCursor: React.FC = () => {
   const [enabled, setEnabled] = useState(false);
   const [visible, setVisible] = useState(false);
   const [mode, setMode] = useState<CursorMode>('default');
+  const [pressed, setPressed] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  // Raw mouse coordinates
   const targetX = useMotionValue(-100);
   const targetY = useMotionValue(-100);
-  const x = useSpring(targetX, { damping: 28, stiffness: 260, mass: 0.35 });
-  const y = useSpring(targetY, { damping: 28, stiffness: 260, mass: 0.35 });
+
+  // Center dot: high responsiveness for precise tactile aim
+  const dotX = useSpring(targetX, { damping: 45, stiffness: 1000, mass: 0.08 });
+  const dotY = useSpring(targetY, { damping: 45, stiffness: 1000, mass: 0.08 });
+
+  // Outer ring / badge: silky fluid trailing spring with subtle organic easing
+  const ringX = useSpring(targetX, { damping: 28, stiffness: 280, mass: 0.32 });
+  const ringY = useSpring(targetY, { damping: 28, stiffness: 280, mass: 0.32 });
+
+  const isFirstMove = useRef(true);
 
   useEffect(() => {
-    const pointerQuery = window.matchMedia('(pointer: fine)');
+    // Only disable if device is purely touch with no fine pointer, or user reduced motion
+    const isTouchOnly = () => {
+      return (
+        window.matchMedia('(pointer: coarse)').matches &&
+        !window.matchMedia('(any-pointer: fine)').matches
+      );
+    };
+
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const updateEnabled = () => setEnabled(pointerQuery.matches && !motionQuery.matches);
+
+    const updateEnabled = () => {
+      setEnabled(!isTouchOnly() && !motionQuery.matches);
+    };
+
     updateEnabled();
-    pointerQuery.addEventListener('change', updateEnabled);
     motionQuery.addEventListener('change', updateEnabled);
 
-    const handleMove = (event: PointerEvent) => {
-      if (event.pointerType !== 'mouse') return;
-      targetX.set(event.clientX);
-      targetY.set(event.clientY);
-      setVisible(true);
+    const isDarkBackground = (el: Element | null): boolean => {
+      let curr = el;
+      while (curr && curr !== document.body && curr !== document.documentElement) {
+        if (
+          curr.matches(
+            '.home-skills-wrapper, .bg-black, [class*="bg-black"], [class*="bg-[#000000]"], [class*="bg-[#111111]"], #contact, [data-theme="dark"], .lightbox-backdrop, .home-about-cta:not(.home-about-cta-secondary)'
+          )
+        ) {
+          return true;
+        }
+        const style = window.getComputedStyle(curr);
+        const bg = style.backgroundColor;
+        if (bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') {
+          const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+          if (match) {
+            const r = parseInt(match[1], 10);
+            const g = parseInt(match[2], 10);
+            const b = parseInt(match[3], 10);
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            return brightness < 128;
+          }
+        }
+        curr = curr.parentElement;
+      }
+      return false;
     };
-    const handleOver = (event: PointerEvent) => {
+
+    const handlePointerMove = (event: PointerEvent | MouseEvent) => {
+      // Exclude pure touch screen taps
+      if ('pointerType' in event && event.pointerType === 'touch') return;
+
+      if (!enabled && !motionQuery.matches) {
+        setEnabled(true);
+      }
+
+      if (isFirstMove.current) {
+        try {
+          targetX.jump(event.clientX);
+          targetY.jump(event.clientY);
+          dotX.jump(event.clientX);
+          dotY.jump(event.clientY);
+          ringX.jump(event.clientX);
+          ringY.jump(event.clientY);
+        } catch {
+          targetX.set(event.clientX);
+          targetY.set(event.clientY);
+        }
+        isFirstMove.current = false;
+      } else {
+        targetX.set(event.clientX);
+        targetY.set(event.clientY);
+      }
+
+      if (!visible) {
+        setVisible(true);
+      }
+    };
+
+    const handlePointerOver = (event: Event) => {
       const target = event.target instanceof Element ? event.target : null;
-      const textEntry = target?.closest('input, textarea, select, [contenteditable="true"]');
-      if (textEntry) {
+      if (!target) return;
+
+      // Detect whether backdrop is dark or light
+      setIsDark(isDarkBackground(target));
+
+      // Native inputs, textareas, contenteditable, select, or native drag zones
+      const nativeElement = target.closest(
+        'input, textarea, select, [contenteditable="true"], [data-cursor="native"], .magnetic-word'
+      );
+      if (nativeElement) {
         setMode('native');
         return;
       }
 
-      const interactive = target?.closest<HTMLElement>('[data-cursor], a, button');
-      setMode(interactive?.dataset.cursor === 'view' ? 'view' : interactive ? 'link' : 'default');
-    };
-    const handleLeave = () => {
-      setVisible(false);
+      // Portfolio/work items showing VIEW label
+      const viewElement = target.closest('[data-cursor="view"], .home-landing-art-card');
+      if (viewElement) {
+        setMode('view');
+        return;
+      }
+
+      // Clickable/link elements: interactive hover state
+      const interactiveElement = target.closest(
+        'a, button, [role="button"], [data-cursor="link"], [data-cursor="character"], label[for], summary, .cursor-pointer'
+      );
+      if (interactiveElement) {
+        setMode('link');
+        return;
+      }
+
       setMode('default');
     };
 
-    window.addEventListener('pointermove', handleMove, { passive: true });
-    document.addEventListener('pointerover', handleOver, { passive: true });
-    document.documentElement.addEventListener('pointerleave', handleLeave);
-    return () => {
-      pointerQuery.removeEventListener('change', updateEnabled);
-      motionQuery.removeEventListener('change', updateEnabled);
-      window.removeEventListener('pointermove', handleMove);
-      document.removeEventListener('pointerover', handleOver);
-      document.documentElement.removeEventListener('pointerleave', handleLeave);
+    const handlePointerDown = (event: PointerEvent | MouseEvent) => {
+      if ('pointerType' in event && event.pointerType === 'touch') return;
+      if (event.button === 0) {
+        setPressed(true);
+      }
     };
-  }, [targetX, targetY]);
+
+    const handlePointerUp = () => {
+      setPressed(false);
+    };
+
+    const handleMouseLeave = () => {
+      setVisible(false);
+      setPressed(false);
+      setMode('default');
+    };
+
+    const handleMouseEnter = () => {
+      setVisible(true);
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    window.addEventListener('mousemove', handlePointerMove, { passive: true });
+    window.addEventListener('pointerdown', handlePointerDown, { passive: true });
+    window.addEventListener('mousedown', handlePointerDown, { passive: true });
+    window.addEventListener('pointerup', handlePointerUp, { passive: true });
+    window.addEventListener('mouseup', handlePointerUp, { passive: true });
+    document.addEventListener('pointerover', handlePointerOver, { passive: true });
+    document.addEventListener('mouseover', handlePointerOver, { passive: true });
+    document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+    document.documentElement.addEventListener('mouseenter', handleMouseEnter);
+    window.addEventListener('blur', handleMouseLeave);
+
+    return () => {
+      motionQuery.removeEventListener('change', updateEnabled);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('mousemove', handlePointerMove);
+      window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('mousedown', handlePointerDown);
+      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('mouseup', handlePointerUp);
+      document.removeEventListener('pointerover', handlePointerOver);
+      document.removeEventListener('mouseover', handlePointerOver);
+      document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
+      document.documentElement.removeEventListener('mouseenter', handleMouseEnter);
+      window.removeEventListener('blur', handleMouseLeave);
+    };
+  }, [dotX, dotY, enabled, ringX, ringY, targetX, targetY, visible]);
 
   if (!enabled) return null;
 
+  const isHidden = !visible || mode === 'native';
+  const showDot = !isHidden && mode !== 'view';
+  const themeClass = isDark ? 'cursor--dark' : 'cursor--light';
+
   return (
-    <motion.div
-      className={`site-cursor site-cursor--${mode}${visible ? ' is-visible' : ''}`}
-      style={{ left: x, top: y }}
-      aria-hidden="true"
-    >
-      <svg className="site-cursor-pen" viewBox="0 0 32 32" aria-hidden="true">
-        <path d="M26 3 9.5 17.5 3 29l11.5-6.5L29 6l-3-3Z" fill="#fcfcfa" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-        <path d="m9.5 17.5 5 5" fill="none" stroke="currentColor" strokeWidth="1.4" />
-        <path d="m9.5 17.5-4-4m4 4 4-4m1 9 4 4m-4-4 4-4" fill="none" stroke="#526c58" strokeWidth="1.1" strokeLinecap="round" />
-        <circle cx="9.5" cy="17.5" r="2" fill="#fcfcfa" stroke="currentColor" strokeWidth="1.3" />
-        <circle cx="13.5" cy="13.5" r="1.4" fill="#fcfcfa" stroke="#526c58" strokeWidth="1.1" />
-        <circle cx="14.5" cy="22.5" r="1.8" fill="#fcfcfa" stroke="currentColor" strokeWidth="1.2" />
-      </svg>
-      {mode === 'view' && <span>VIEW</span>}
-    </motion.div>
+    <div className={`designer-cursor-system ${themeClass}`} aria-hidden="true">
+      {/* Outer fluid trailing ring / contextual badge */}
+      <motion.div
+        className="designer-cursor-follower"
+        style={{
+          x: ringX,
+          y: ringY,
+          opacity: isHidden ? 0 : 1,
+        }}
+      >
+        <div
+          className={`designer-cursor-ring designer-cursor-ring--${mode}${
+            pressed ? ' is-pressed' : ''
+          }`}
+        >
+          {mode === 'view' ? (
+            <span className="designer-cursor-view-text">VIEW</span>
+          ) : (
+            <span className="designer-cursor-orbit" />
+          )}
+        </div>
+      </motion.div>
+
+      {/* Crisp, immediate center dot */}
+      <motion.div
+        className="designer-cursor-lead"
+        style={{
+          x: dotX,
+          y: dotY,
+          opacity: showDot ? 1 : 0,
+        }}
+      >
+        <div
+          className={`designer-cursor-dot designer-cursor-dot--${mode}${
+            pressed ? ' is-pressed' : ''
+          }`}
+        />
+      </motion.div>
+    </div>
   );
 };

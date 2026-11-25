@@ -305,7 +305,7 @@ export const AdminProjectEditorPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             {!isNew && slug && (
               <Link
                 to={`/project/${slug}`}
@@ -509,7 +509,7 @@ export const AdminProjectEditorPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center gap-2">
               <select
                 value={selectedBlockToAdd}
                 onChange={(e: any) => setSelectedBlockToAdd(e.target.value)}

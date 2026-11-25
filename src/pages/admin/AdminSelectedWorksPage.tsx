@@ -181,7 +181,7 @@ export const AdminSelectedWorksPage: React.FC = () => {
         )}
 
         <section className="rounded-[10px] border border-[#e5e5e5] bg-white p-4 shadow-sm sm:p-5">
-          <div className="mb-4 grid gap-3 sm:grid-cols-[1fr_210px_190px]">
+          <div className="mb-4 grid gap-3 grid-cols-1 sm:grid-cols-[1fr_210px_190px]">
             <label className="flex items-center gap-2 rounded border border-[#e2e2e2] px-3 text-[#777]">
               <Search size={15} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search brand or work" className="min-w-0 flex-1 py-2 text-[13px] text-[#111] outline-none" />
             </label>
@@ -194,7 +194,7 @@ export const AdminSelectedWorksPage: React.FC = () => {
           </div>
 
           {loading ? <p className="py-12 text-center text-[13px] text-[#777]">Loading work items…</p> : filteredWorks.length ? (
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
               {filteredWorks.map((work) => (
                 <article key={work.id} className="group flex min-w-0 gap-3 rounded border border-[#e8e8e8] p-3">
                   <div className="h-[92px] w-[74px] shrink-0 overflow-hidden rounded bg-[#f0f0ee]">

@@ -226,7 +226,8 @@ export const AdminProjectsPage: React.FC = () => {
 
         {/* Projects List Table */}
         <div className="bg-white rounded-[12px] border border-[#E5E5E5] overflow-hidden shadow-xs">
-          <table className="w-full text-left text-[13px]">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[720px] text-left text-[13px]">
             <thead>
               <tr className="border-b border-[#E5E5E5] bg-[#F9F9F9] text-[#8A8A8A] uppercase text-[11px] tracking-wider">
                 <th className="py-3 px-4 w-12 text-center">Order</th>
@@ -390,6 +391,7 @@ export const AdminProjectsPage: React.FC = () => {
               )}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </AdminLayout>

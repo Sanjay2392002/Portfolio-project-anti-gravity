@@ -91,34 +91,30 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setLoading(true);
       setError(null);
 
-      const [projectsRes, categoriesRes, settingsRes, aboutRes] = await Promise.all([
-        fetch('/api/projects', { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ success: false })),
-        fetch('/api/categories', { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ success: false })),
-        fetch('/api/settings/public', { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ success: false })),
-        fetch('/api/about', { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ success: false })),
-      ]);
+      const response = await fetch('/api/portfolio-data');
+      const payload = await response.json().catch(() => null);
+      const data = payload?.success ? payload.data : null;
 
-      if (projectsRes && projectsRes.success && Array.isArray(projectsRes.data)) {
-        setProjects(projectsRes.data);
+      if (Array.isArray(data?.projects)) {
+        setProjects(data.projects);
       } else if (projects.length === 0) {
-        // Fallback only if request failed completely on initial load
         setProjects(fallbackProjects);
       }
 
-      if (categoriesRes && categoriesRes.success && Array.isArray(categoriesRes.data)) {
-        setCategories(categoriesRes.data);
+      if (Array.isArray(data?.categories)) {
+        setCategories(data.categories);
       } else if (categories.length === 0) {
         setCategories(fallbackCategories);
       }
 
-      if (settingsRes && settingsRes.success && settingsRes.data) {
-        setSettings(settingsRes.data);
+      if (data?.settings) {
+        setSettings(data.settings);
       } else if (!settings) {
         setSettings(fallbackSettings);
       }
 
-      if (aboutRes && aboutRes.success && aboutRes.data) {
-        setAbout(aboutRes.data);
+      if (data?.about) {
+        setAbout(data.about);
       } else if (!about) {
         setAbout(fallbackAbout);
       }
@@ -132,14 +128,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   useEffect(() => {
     fetchPublicData();
 
-    // Re-fetch live data whenever window gains focus (e.g. returning from CMS)
-    const handleFocus = () => {
-      fetchPublicData();
-    };
-    window.addEventListener('focus', handleFocus);
-    return () => {
-      window.removeEventListener('focus', handleFocus);
-    };
+
   }, []);
 
   const getProjectBySlug = async (slug: string): Promise<Project | null> => {
